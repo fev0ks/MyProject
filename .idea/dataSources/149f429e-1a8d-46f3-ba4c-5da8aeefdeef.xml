@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - scientific_work@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
+    <root id="1"/>
+    <schema id="2" parent="1" name="scientific_work">
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="lrnsql_07_11"/>
+    <schema id="5" parent="1" name="mysql"/>
+    <schema id="6" parent="1" name="performance_schema"/>
+    <schema id="7" parent="1" name="sys"/>
+    <schema id="8" parent="1" name="vocabularydb"/>
+    <table id="9" parent="2" name="algoritms"/>
+    <table id="10" parent="2" name="folder"/>
+    <table id="11" parent="2" name="groups"/>
+    <table id="12" parent="2" name="pic_of_dir"/>
+    <table id="13" parent="2" name="dimensions"/>
+    <table id="14" parent="2" name="photo"/>
+    <column id="15" parent="9" name="id_photo">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="16" parent="9" name="methodName1">
+      <DataType>json|0</DataType>
+    </column>
+    <column id="17" parent="9" name="methodName2">
+      <DataType>json|0</DataType>
+    </column>
+    <column id="18" parent="9" name="methodName3">
+      <DataType>json|0</DataType>
+    </column>
+    <index id="19" parent="9" name="id_photo">
+      <ColNames>id_photo</ColNames>
+    </index>
+    <foreign-key id="20" parent="9" name="algoritms_ibfk_1">
+      <ColNames>id_photo</ColNames>
+      <RefKeyName>photos</RefKeyName>
+    </foreign-key>
+    <column id="21" parent="10" name="name">
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="22" parent="10" name="id_folder">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="23" parent="10" name="count_files">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="24" parent="10" name="PRIMARY">
+      <ColNames>id_folder</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="25" parent="11" name="id_group">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="26" parent="11" name="name_group">
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="27" parent="11" name="PRIMARY">
+      <ColNames>id_group</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="28" parent="12" name="id_pic">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="29" parent="12" name="id_dir">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="30" parent="12" name="id_dir">
+      <ColNames>id_dir</ColNames>
+    </index>
+    <column id="31" parent="13" name="id_photo">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="32" parent="13" name="width">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="33" parent="13" name="height">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="34" parent="13" name="id_photo">
+      <ColNames>id_photo</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="35" parent="13" name="id_photo">
+      <ColNames>id_photo</ColNames>
+      <UnderlyingIndexName>id_photo</UnderlyingIndexName>
+    </key>
+    <foreign-key id="36" parent="13" name="ref_id_photo">
+      <ColNames>id_photo</ColNames>
+      <RefKeyName>photos</RefKeyName>
+    </foreign-key>
+    <column id="37" parent="14" name="id_photo">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="38" parent="14" name="name">
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="39" parent="14" name="size">
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="40" parent="14" name="id_folder">
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="41" parent="14" name="id_group">
+      <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <index id="42" parent="14" name="id_folder">
+      <ColNames>id_folder</ColNames>
+    </index>
+    <index id="43" parent="14" name="id_group">
+      <ColNames>id_group</ColNames>
+    </index>
+    <index id="44" parent="14" name="name">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="45" parent="14" name="name">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name</UnderlyingIndexName>
+    </key>
+    <foreign-key id="46" parent="14" name="photos_ibfk_2">
+      <ColNames>id_folder</ColNames>
+      <RefTableName>folder</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id_folder</RefColNames>
+    </foreign-key>
+  </database-model>
+</dataSource>
