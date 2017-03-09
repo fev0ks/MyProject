@@ -65,3 +65,5 @@ $RECYCLE.BIN/
 .idea/libraries/org_openpnp_opencv_3_2_0_1.xml
 .idea/workspace.xml
 .idea/workspace.xml
+.idea/workspace.xml
+*.xml
