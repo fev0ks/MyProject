@@ -1042,7 +1042,7 @@
       <workItem from="1488976615452" duration="346000" />
       <workItem from="1489053705383" duration="1586000" />
       <workItem from="1489055706834" duration="6000" />
-      <workItem from="1489056420081" duration="117000" />
+      <workItem from="1489056420081" duration="360000" />
     </task>
     <task id="LOCAL-00001" summary="восстановлена первичная роботоспособность 3.03.17">
       <created>1488546918990</created>
@@ -1069,7 +1069,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68403000" />
+    <option name="totallyTimeSpent" value="68646000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
