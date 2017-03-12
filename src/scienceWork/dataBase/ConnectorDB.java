@@ -6,24 +6,23 @@ import java.sql.SQLException;
 
 public class ConnectorDB {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/scientific_work";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+
 
     private Connection connection;
 
-    public ConnectorDB() {
+     ConnectorDB() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
+               String URL = "jdbc:mysql://localhost:3306/scientific_work";
+               String USERNAME = "root";
+               String PASSWORD = "root";
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public  Connection getConnection() {
+    Connection getConnection() {
         return connection;
     }
 

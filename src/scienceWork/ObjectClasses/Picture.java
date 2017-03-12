@@ -18,7 +18,7 @@ public class Picture {
     private Dimension dimension;
     private LinkedList<Integer> groups;
     private Mat imgMat;
-    //private Algorithms algorithms;
+    private Algorithms algorithms;
     private BufferedImage image;
     private static int count=1;
 
@@ -43,6 +43,7 @@ public class Picture {
         return dimension;
     }
 
+    //TODO разрешение нужно запихать в сам BufferedImage
     public void setDimension(Dimension dimension) {
         this.dimension = dimension;
     }

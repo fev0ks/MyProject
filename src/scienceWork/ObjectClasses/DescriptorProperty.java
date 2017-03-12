@@ -4,11 +4,11 @@ package scienceWork.ObjectClasses;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 
-public class FuturesDescriptor {
+public class DescriptorProperty {
     private MatOfKeyPoint matOfKeyPoint;
     private Mat mat;
 
-    public FuturesDescriptor(MatOfKeyPoint matOfKeyPoint, Mat mat) {
+    public DescriptorProperty(MatOfKeyPoint matOfKeyPoint, Mat mat) {
         this.matOfKeyPoint = matOfKeyPoint;
         this.mat=mat;
     }

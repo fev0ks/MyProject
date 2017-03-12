@@ -25,7 +25,7 @@ public class ManagerDB {
         return instance;
     }
 
-//TODO
+
     public String picToDBfromDir(ObservableList<Picture> picturesList) {
         String picToDBQuery = " insert into photo(name,size,id_folder) values(?,?,?) ";
 
