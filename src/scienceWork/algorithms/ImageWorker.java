@@ -1,10 +1,7 @@
 package scienceWork.algorithms;
 
-import javafx.collections.ObservableList;
 import scienceWork.Interfaces.IImageWorker;
 import scienceWork.ObjectClasses.Algorithms;
-import scienceWork.ObjectClasses.Picture;
-import scienceWork.WorkFolder;
 import scienceWork.dataBase.ManagerDB;
 
 /*
@@ -29,14 +26,14 @@ public class ImageWorker implements IImageWorker {
         return instance;
     }
 
-    public ObservableList<Picture> setPicDimensions(ObservableList<Picture> pictureList) {
-        WorkFolder workFolder = WorkFolder.getInstance();
-        for (Picture picture : pictureList) {
-            picture.setDimension(workFolder.getPicDimensions(picture.getPicFile()));//выкинуть в алгоритмы!!! реализовать по потокам
-            managerDB.setPicDimensionsDB(picture);
-        }
-        return pictureList;
-    }
+//    public ObservableList<Picture> setPicDimensions(ObservableList<Picture> pictureList) {
+//        WorkFolder workFolder = WorkFolder.getInstance();
+//        for (Picture picture : pictureList) {
+//            picture.setDimension(workFolder.getPicDimensions(picture.getPicFile()));//выкинуть в алгоритмы!!! реализовать по потокам
+//            managerDB.setPicDimensionsDB(picture);
+//        }
+//        return pictureList;
+//    }
     public void run(){
 
     }

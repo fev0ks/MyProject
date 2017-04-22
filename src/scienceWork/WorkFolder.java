@@ -2,6 +2,7 @@ package scienceWork;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import net.coobird.thumbnailator.Thumbnails;
 import scienceWork.ObjectClasses.Picture;
 import scienceWork.dataBase.ManagerDB;
 
@@ -17,6 +18,9 @@ import java.util.Iterator;
 
 public class WorkFolder {
     public static volatile WorkFolder instance;
+    public static double avrgH = 0;
+    public static double avrgW = 0;
+    public static int count=0;
 
     private WorkFolder() {
     }
@@ -29,11 +33,13 @@ public class WorkFolder {
             }
         return instance;
     }
+
+    //загружаем фотографии из выбранной папки
     public ObservableList<Picture> loadPicFromDir(File dir) {
 
-        ObservableList<Picture> pictList= FXCollections.observableArrayList();
+        ObservableList<Picture> pictList = FXCollections.observableArrayList();
         for (File file : dir.listFiles()) {
-           // System.out.println(file.getName());
+            // System.out.println(file.getName());
             if (file.isFile()) { //фаил?
                 String[] formatFile = file.getName().split("\\.");
                 Boolean isImage = false;
@@ -52,11 +58,11 @@ public class WorkFolder {
 //                    }
                     System.out.println(file.getName());
                     picture.setName(file.getName());
-                    picture.setSize(file.length()/1024);
+                    picture.setSize(file.length() / 1024);
                     picture.setDir(dir.getAbsolutePath());
                     picture.setPicFile(file);//??????
-
-                   // System.out.println(nameFile);
+                    picture.setDimension(getPicDimensions(file));
+                    // System.out.println(nameFile);
                     //   loadBitmap = resizeLoadBitmap(loadBitmap, MainActivity.compression);//уменьшаю загружаемый Bitmap
                     // bitmap.setPath(fileFinal.getAbsolutePath().substring(0, fileFinal.getAbsolutePath().lastIndexOf("/")));
 
@@ -71,19 +77,21 @@ public class WorkFolder {
         }
         return pictList;
     }
-    public BufferedImage loadPicFromFile(File file){
+
+    public BufferedImage loadPicFromFile(File file) {
         BufferedImage loadImg = null;
         try {
             loadImg = ImageIO.read(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return loadImg;
+        return resizeLoadBitmap(loadImg, 600);
     }
 
-    public Dimension getPicDimensions(File pictureFile){
-     //   System.out.println(pictureFile);
-        try(ImageInputStream in = ImageIO.createImageInputStream(pictureFile)){
+    //получить разрешение изображений
+    private Dimension getPicDimensions(File pictureFile) {
+        //   System.out.println(pictureFile);
+        try (ImageInputStream in = ImageIO.createImageInputStream(pictureFile)) {
             final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
             if (readers.hasNext()) {
                 ImageReader reader = readers.next();
@@ -98,5 +106,27 @@ public class WorkFolder {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //уeменьшение больших изображений
+    public BufferedImage resizeLoadBitmap(BufferedImage image, int compression) {
+        BufferedImage newImage = null;
+        int height = image.getHeight();
+        int width = image.getWidth();
+        if (height > compression || width > compression) {
+            int w1 = width / compression, h1 = height / compression;
+            int power = w1;
+            if (h1 > w1) power = h1;
+            try {
+                newImage = Thumbnails.of(image).size(width / power, height / power).asBufferedImage();
+                avrgH += newImage.getHeight();
+                avrgW += newImage.getWidth();
+                count++;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return newImage;//если не надо уменьшать
     }
 }

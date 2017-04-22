@@ -1,26 +1,22 @@
 package scienceWork.ObjectClasses;
 
 import javafx.beans.property.*;
-import org.opencv.core.Mat;
+import scienceWork.algorithms.ValueAlgorithm;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.LinkedList;
 
 public class Picture {
 
-
-    private  File picFile;
+    private static int count = 1;
+    private File picFile;
     private String name;
     private String dir;
     private double size;
     private Dimension dimension;
     private LinkedList<Integer> groups;
-    private Mat imgMat;
-    private Algorithms algorithms;
-    private BufferedImage image;
-    private static int count=1;
+    private ValueAlgorithm valueAlgorithm;
 
     public int getId() {
         return id;
@@ -32,31 +28,34 @@ public class Picture {
 
     private int id;
 
-    public  File getPicFile() {
+    public File getPicFile() {
         return picFile;
     }
 
-    public  void setPicFile(File picFile) {
+    public void setPicFile(File picFile) {
         this.picFile = picFile;
     }
+
     public Dimension getDimension() {
         return dimension;
     }
 
-    //TODO разрешение нужно запихать в сам BufferedImage
     public void setDimension(Dimension dimension) {
         this.dimension = dimension;
     }
-    public DimensionsProperty getDimensionsProperty(){
+
+    public DimensionsProperty getDimensionsProperty() {
         return new DimensionsProperty(dimension);
     }
-    public Picture(String name) {
-        this.name = name;
+
+    public ValueAlgorithm getValueAlgorithm() {
+        return valueAlgorithm;
     }
 
     public Picture() {
-        this.groups=new LinkedList<>();
-        this.id=count++;
+        valueAlgorithm=new ValueAlgorithm();
+        this.id = count++;
+        groups = new LinkedList<>();
         groups.add(0);
     }
 
@@ -70,14 +69,6 @@ public class Picture {
 
     public void setDir(String dir) {
         this.dir = dir;
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
     }
 
     public String getName() {
@@ -96,10 +87,11 @@ public class Picture {
         this.size = size;
     }
 
-    public StringProperty getNameProperty(){
+    public StringProperty getNameProperty() {
         return new SimpleStringProperty(this.name);
     }
-    public DoubleProperty getSizeProperty(){
+
+    public DoubleProperty getSizeProperty() {
         return new SimpleDoubleProperty(this.size);
     }
 }

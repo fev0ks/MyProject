@@ -3,6 +3,7 @@
   <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
     <root id="1"/>
     <schema id="2" parent="1" name="scientific_work">
+      <Current>1</Current>
       <Visible>1</Visible>
     </schema>
     <schema id="3" parent="1" name="information_schema"/>
@@ -12,22 +13,26 @@
     <schema id="7" parent="1" name="sys"/>
     <schema id="8" parent="1" name="vocabularydb"/>
     <table id="9" parent="2" name="algoritms"/>
-    <table id="10" parent="2" name="folder"/>
-    <table id="11" parent="2" name="groups"/>
-    <table id="12" parent="2" name="pic_of_dir"/>
-    <table id="13" parent="2" name="dimensions"/>
-    <table id="14" parent="2" name="photo"/>
+    <table id="10" parent="2" name="dimensions"/>
+    <table id="11" parent="2" name="folder"/>
+    <table id="12" parent="2" name="groups"/>
+    <table id="13" parent="2" name="photo"/>
+    <table id="14" parent="2" name="pic_of_dir"/>
     <column id="15" parent="9" name="id_photo">
+      <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
     <column id="16" parent="9" name="methodName1">
+      <Position>2</Position>
       <DataType>json|0</DataType>
     </column>
     <column id="17" parent="9" name="methodName2">
+      <Position>3</Position>
       <DataType>json|0</DataType>
     </column>
     <column id="18" parent="9" name="methodName3">
+      <Position>4</Position>
       <DataType>json|0</DataType>
     </column>
     <index id="19" parent="9" name="id_photo">
@@ -35,113 +40,135 @@
     </index>
     <foreign-key id="20" parent="9" name="algoritms_ibfk_1">
       <ColNames>id_photo</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>photos</RefTableName>
       <RefKeyName>photos</RefKeyName>
+      <RefColNames>id_photo</RefColNames>
     </foreign-key>
-    <column id="21" parent="10" name="name">
-      <DataType>varchar(255)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="22" parent="10" name="id_folder">
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-    </column>
-    <column id="23" parent="10" name="count_files">
+    <column id="21" parent="10" name="id_photo">
+      <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="24" parent="10" name="PRIMARY">
-      <ColNames>id_folder</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="25" parent="11" name="id_group">
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-    </column>
-    <column id="26" parent="11" name="name_group">
-      <DataType>varchar(30)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <key id="27" parent="11" name="PRIMARY">
-      <ColNames>id_group</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="28" parent="12" name="id_pic">
+    <column id="22" parent="10" name="width">
+      <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="29" parent="12" name="id_dir">
+    <column id="23" parent="10" name="height">
+      <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="30" parent="12" name="id_dir">
-      <ColNames>id_dir</ColNames>
-    </index>
-    <column id="31" parent="13" name="id_photo">
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="32" parent="13" name="width">
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="33" parent="13" name="height">
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <index id="34" parent="13" name="id_photo">
+    <index id="24" parent="10" name="id_photo">
       <ColNames>id_photo</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="35" parent="13" name="id_photo">
+    <key id="25" parent="10" name="id_photo">
       <ColNames>id_photo</ColNames>
       <UnderlyingIndexName>id_photo</UnderlyingIndexName>
     </key>
-    <foreign-key id="36" parent="13" name="ref_id_photo">
+    <foreign-key id="26" parent="10" name="ref_id_photo">
       <ColNames>id_photo</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>photos</RefTableName>
       <RefKeyName>photos</RefKeyName>
+      <RefColNames>id_photo</RefColNames>
     </foreign-key>
-    <column id="37" parent="14" name="id_photo">
+    <column id="27" parent="11" name="name">
+      <Position>1</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="28" parent="11" name="id_folder">
+      <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="38" parent="14" name="name">
+    <column id="29" parent="11" name="count_files">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="30" parent="11" name="PRIMARY">
+      <ColNames>id_folder</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="31" parent="12" name="id_group">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="32" parent="12" name="name_group">
+      <Position>2</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="33" parent="12" name="PRIMARY">
+      <ColNames>id_group</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="34" parent="13" name="id_photo">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="35" parent="13" name="name">
+      <Position>2</Position>
       <DataType>varchar(100)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="39" parent="14" name="size">
+    <column id="36" parent="13" name="size">
+      <Position>3</Position>
       <DataType>double|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="40" parent="14" name="id_folder">
+    <column id="37" parent="13" name="id_folder">
+      <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="41" parent="14" name="id_group">
+    <column id="38" parent="13" name="id_group">
+      <Position>5</Position>
       <DataType>int(11)|0</DataType>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
     </column>
-    <index id="42" parent="14" name="id_folder">
+    <index id="39" parent="13" name="id_folder">
       <ColNames>id_folder</ColNames>
     </index>
-    <index id="43" parent="14" name="id_group">
+    <index id="40" parent="13" name="id_group">
       <ColNames>id_group</ColNames>
     </index>
-    <index id="44" parent="14" name="name">
+    <index id="41" parent="13" name="name">
       <ColNames>name</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="45" parent="14" name="name">
+    <key id="42" parent="13" name="name">
       <ColNames>name</ColNames>
       <UnderlyingIndexName>name</UnderlyingIndexName>
     </key>
-    <foreign-key id="46" parent="14" name="photos_ibfk_2">
+    <foreign-key id="43" parent="13" name="photos_ibfk_2">
       <ColNames>id_folder</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
       <RefTableName>folder</RefTableName>
       <RefKeyName>PRIMARY</RefKeyName>
       <RefColNames>id_folder</RefColNames>
     </foreign-key>
+    <column id="44" parent="14" name="id_pic">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="45" parent="14" name="id_dir">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="46" parent="14" name="id_dir">
+      <ColNames>id_dir</ColNames>
+    </index>
   </database-model>
 </dataSource>

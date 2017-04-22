@@ -6,8 +6,6 @@ import java.sql.SQLException;
 
 public class ConnectorDB {
 
-
-
     private Connection connection;
 
      ConnectorDB() {

@@ -61,24 +61,34 @@ public class AlgorithmHistogramController {
         for (Node n : barChart.lookupAll(".default-color1.chart-bar")) {
             n.setStyle("-fx-bar-fill: green;");
         }
-        // Создаём объект XYChart.Data для каждого месяца.
-        // Добавляем его в серии.
-        for (int i=0;i<3;i++) {
+        if (algName.equals("dimensions")) {
+            // Создаём объект XYChart.Data для каждого месяца.
+            // Добавляем его в серии.
+            for (int i = 0; i < 3; i++) {
+                XYChart.Series addSeries = new XYChart.Series();
+                series.add(addSeries);
+            }
+
+            series.get(0).setName("size");
+            series.get(1).setName("width");
+            series.get(2).setName("height");
+
+
+            for (Picture aPictureList : pictureList) {
+                series.get(0).getData().add(new XYChart.Data(String.valueOf(aPictureList.getId()), aPictureList.getSize()));
+                series.get(1).getData().add(new XYChart.Data(String.valueOf(aPictureList.getId()), aPictureList.getDimension().getWidth()));
+                series.get(2).getData().add(new XYChart.Data(String.valueOf(aPictureList.getId()), aPictureList.getDimension().getHeight()));
+            }
+        }
+        if (algName.equals("distance")) {
             XYChart.Series addSeries = new XYChart.Series();
             series.add(addSeries);
+            series.get(0).setName("value");
+
+            for (Picture aPictureList : pictureList) {
+                series.get(0).getData().add(new XYChart.Data(String.valueOf(aPictureList.getName()), aPictureList.getValueAlgorithm().getNormKeyPoints()));
+            }
         }
-
-        series.get(0).setName("size");
-        series.get(1).setName("width");
-        series.get(2).setName("height");
-
-
-            for (int i = 0; i < pictureList.size(); i++) {
-                series.get(0).getData().add(new XYChart.Data(String.valueOf(pictureList.get(i).getId()), pictureList.get(i).getSize()));
-                series.get(1).getData().add(new XYChart.Data(String.valueOf(pictureList.get(i).getId()), pictureList.get(i).getDimension().getWidth()));
-                series.get(2).getData().add(new XYChart.Data(String.valueOf(pictureList.get(i).getId()), pictureList.get(i).getDimension().getHeight()));
-                            }
-
         barChart.getData().addAll(series);
 
     }

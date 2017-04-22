@@ -35,7 +35,7 @@ public class ManagerDB {
         // System.out.println(picturesList.get(0).getDir());
 
         for (Picture picture : picturesList) {
-            //  System.out.println(picture.getName() + " idFolder:" + idFolder);
+            if(!isExist(picture))
             try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(picToDBQuery)) {
                 //  preparedStatement.setString(4, picture.getName()); //хотел проверку сделать, если уже существует
                 preparedStatement.setString(1, picture.getName());
@@ -48,6 +48,21 @@ public class ManagerDB {
             }
         }
         return message;
+    }
+
+    private boolean isExist(Picture picture) {
+        String picToDBQuery = " select * from photo where photo.name=? ";
+        boolean isExist = false;
+        try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(picToDBQuery)) {
+            //  preparedStatement.setString(4, picture.getName()); //хотел проверку сделать, если уже существует
+            preparedStatement.setString(1, picture.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet != null) isExist = true;
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isExist;
     }
 
     //    IF EXISTS (SELECT * FROM table_name WHERE id = ?)
@@ -132,14 +147,14 @@ public class ManagerDB {
 
     public void setPicDimensionsDB(Picture picture) {
         String setDimQuery = "insert into dimensions values(?,?,?)";
-        try(PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(setDimQuery)) {
+        try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(setDimQuery)) {
             preparedStatement.setInt(1, getID(picture.getName(), "photo"));
             preparedStatement.setInt(2, picture.getDimension().width);
             preparedStatement.setInt(3, picture.getDimension().height);
             preparedStatement.execute();
             preparedStatement.close();
         } catch (SQLException e) {
-             e.printStackTrace();
+            e.printStackTrace();
         }
     }
 //    private void executorUpdate(String queryUpdate){

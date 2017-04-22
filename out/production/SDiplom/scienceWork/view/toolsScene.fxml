@@ -41,7 +41,7 @@
                               </Text>
                               <CheckBox layoutX="14.0" layoutY="94.0" mnemonicParsing="false" text="method N" AnchorPane.topAnchor="94.0" />
                               <CheckBox layoutX="14.0" layoutY="74.0" mnemonicParsing="false" text="CheckBox" AnchorPane.topAnchor="74.0" />
-                              <CheckBox layoutX="14.0" layoutY="54.0" mnemonicParsing="false" text="CheckBox" AnchorPane.topAnchor="54.0" />
+                              <CheckBox fx:id="distanceChB" layoutX="14.0" layoutY="54.0" mnemonicParsing="false" text="distance" AnchorPane.topAnchor="54.0" />
                               <CheckBox fx:id="dimensionsChB" layoutX="14.0" layoutY="34.0" mnemonicParsing="false" text="dimensions" AnchorPane.topAnchor="34.0" />
                               <Button layoutX="152.0" layoutY="151.0" mnemonicParsing="false" onAction="#analise" text="Analize" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="10.0" />
                               <Button layoutX="140.0" layoutY="184.0" mnemonicParsing="false" onAction="#showAlgorithmHistogram" text="Histogram" AnchorPane.rightAnchor="10.0" />
