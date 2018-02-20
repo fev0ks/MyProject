@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="254.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.StartMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="254.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.ChoseDirectoryController">
    <children>
       <Button fx:id="loadDirB" layoutX="66.0" layoutY="14.0" mnemonicParsing="false" onAction="#chooseDirectory" text="Выбор директории" AnchorPane.topAnchor="15.0" />
       <TextField fx:id="dirPathTF" layoutX="52.0" layoutY="46.0" promptText="choose the directory" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />

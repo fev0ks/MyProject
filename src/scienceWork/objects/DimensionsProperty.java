@@ -1,4 +1,4 @@
-package scienceWork.ObjectClasses;
+package scienceWork.objects;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

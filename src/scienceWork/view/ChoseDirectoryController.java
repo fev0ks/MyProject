@@ -5,14 +5,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import scienceWork.FileWorker;
 import scienceWork.Main;
-import scienceWork.WorkFolder;
 
 import java.io.File;
 
-public class StartMenuController {
+public class ChoseDirectoryController {
     private Main mainApp;
-    private WorkFolder workFolder;
+    private FileWorker fileWorker;
     private Stage dialogStage;
     private File dir;
     @FXML
@@ -40,7 +40,6 @@ public class StartMenuController {
     }
     @FXML
     private void nextStep(){
-
         dialogStage.close();
     }
     public File isOkClicked() {

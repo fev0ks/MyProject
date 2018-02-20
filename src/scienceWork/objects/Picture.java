@@ -1,7 +1,6 @@
-package scienceWork.ObjectClasses;
+package scienceWork.objects;
 
 import javafx.beans.property.*;
-import scienceWork.algorithms.ValueAlgorithm;
 
 import java.awt.*;
 import java.io.File;
@@ -13,10 +12,45 @@ public class Picture {
     private File picFile;
     private String name;
     private String dir;
+    private String pictureType;
     private double size;
     private Dimension dimension;
     private LinkedList<Integer> groups;
-    private ValueAlgorithm valueAlgorithm;
+    private DescriptorProperty descriptorProperty;
+    private int countOfDescr;
+
+    public Picture() {
+        this.id = count++;
+        groups = new LinkedList<>();
+        groups.add(0);
+        descriptorProperty = new DescriptorProperty();
+        this.pictureType ="";
+    }
+
+    public int getCountOfDescr() {
+        return countOfDescr;
+    }
+
+    public static void clearCount() {
+        Picture.count = 1;
+    }
+
+    public void setCountOfDescr(int countOfDescr) {
+        this.countOfDescr = countOfDescr;
+    }
+
+    public SimpleIntegerProperty getCountOfDescrProperty() {
+        return new SimpleIntegerProperty(this.countOfDescr);
+    }
+
+
+    public DescriptorProperty getDescriptorProperty() {
+        return descriptorProperty;
+    }
+
+    public void setDescriptorProperty(DescriptorProperty descriptorProperty) {
+        this.descriptorProperty = descriptorProperty;
+    }
 
     public int getId() {
         return id;
@@ -46,17 +80,6 @@ public class Picture {
 
     public DimensionsProperty getDimensionsProperty() {
         return new DimensionsProperty(dimension);
-    }
-
-    public ValueAlgorithm getValueAlgorithm() {
-        return valueAlgorithm;
-    }
-
-    public Picture() {
-        valueAlgorithm=new ValueAlgorithm();
-        this.id = count++;
-        groups = new LinkedList<>();
-        groups.add(0);
     }
 
     public IntegerProperty getIdProperty() {
@@ -94,4 +117,14 @@ public class Picture {
     public DoubleProperty getSizeProperty() {
         return new SimpleDoubleProperty(this.size);
     }
+
+    public String getPictureType() {
+        return pictureType;
+    }
+
+    public void setPictureType(String pictureType) {
+        this.pictureType = pictureType;
+    }
+
+    public StringProperty getGroupProperty(){ return new SimpleStringProperty(this.pictureType);}
 }

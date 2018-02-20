@@ -1,8 +1,7 @@
 package scienceWork.dataBase;
 
-import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
-import scienceWork.ObjectClasses.Picture;
+import scienceWork.objects.Picture;
 
 import java.io.File;
 import java.sql.PreparedStatement;
@@ -27,27 +26,30 @@ public class ManagerDB {
     }
 
 
-    public String picToDBfromDir(ObservableList<Picture> picturesList) {
+    public boolean picToDBfromDir(ObservableList<Picture> picturesList) {
         String picToDBQuery = " insert into photo(name,size,id_folder) values(?,?,?) ";
 
-        String message = "Загружено.";
-        int idFolder = getID(picturesList.get(0).getDir(), "folder");
-        // System.out.println(picturesList.get(0).getDir());
+        if (picturesList.size() > 0) {
+            int idFolder = getID(picturesList.get(0).getDir(), "folder");
+            // System.out.println(picturesList.get(0).getDir());
 
-        for (Picture picture : picturesList) {
-            if(!isExist(picture))
-            try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(picToDBQuery)) {
-                //  preparedStatement.setString(4, picture.getName()); //хотел проверку сделать, если уже существует
-                preparedStatement.setString(1, picture.getName());
-                preparedStatement.setDouble(2, picture.getSize());
-                preparedStatement.setInt(3, idFolder);
-                preparedStatement.execute();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            for (Picture picture : picturesList) {
+                if (!isExist(picture))
+                    try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(picToDBQuery)) {
+                        //  preparedStatement.setString(4, picture.getName()); //хотел проверку сделать, если уже существует
+                        preparedStatement.setString(1, picture.getName());
+                        preparedStatement.setDouble(2, picture.getSize());
+                        preparedStatement.setInt(3, idFolder);
+                        preparedStatement.execute();
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
             }
+            return true;
+        } else {
+            return false;
         }
-        return message;
     }
 
     private boolean isExist(Picture picture) {
@@ -90,7 +92,7 @@ public class ManagerDB {
         return id;
     }
 
-    public String dirToDB(@NotNull File file) {
+    public String dirToDB(File file) {
 
         String message = "";
 //        if (file == null) return message += "Ошибка файла! ";
@@ -121,7 +123,6 @@ public class ManagerDB {
                 }
             }
         }
-
         return message;
     }
 

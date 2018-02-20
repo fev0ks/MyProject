@@ -7,7 +7,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import scienceWork.Main;
-import scienceWork.ObjectClasses.Picture;
+import scienceWork.objects.Picture;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -85,9 +85,9 @@ public class AlgorithmHistogramController {
             series.add(addSeries);
             series.get(0).setName("value");
 
-            for (Picture aPictureList : pictureList) {
-                series.get(0).getData().add(new XYChart.Data(String.valueOf(aPictureList.getName()), aPictureList.getValueAlgorithm().getNormKeyPoints()));
-            }
+//            for (Picture aPictureList : pictureList) {
+//                series.get(0).getData().add(new XYChart.Data(String.valueOf(aPictureList.getName()), aPictureList.getValueAlgorithm().getNormKeyPoints()));
+//            }
         }
         barChart.getData().addAll(series);
 

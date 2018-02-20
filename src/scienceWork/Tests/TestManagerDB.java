@@ -8,5 +8,7 @@ public class TestManagerDB {
     public void dirToDBTest() {
         ManagerDB managerDB = ManagerDB.getInstance();
         assert (managerDB.dirToDB(null).equalsIgnoreCase("ошибка файла!"));
+        assert (true);
+        System.out.println();
     }
 }

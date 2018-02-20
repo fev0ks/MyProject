@@ -12,5 +12,6 @@
     <orderEntry type="library" name="junit:junit:4.12" level="project" />
     <orderEntry type="library" name="opencv-320" level="project" />
     <orderEntry type="library" name="net.coobird:thumbnailator:0.4.8" level="project" />
+    <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.lang:2.6" level="project" />
   </component>
 </module>

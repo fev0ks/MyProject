@@ -1,4 +1,4 @@
-package scienceWork.ObjectClasses;
+package scienceWork.objects;
 
 import java.io.File;
 
