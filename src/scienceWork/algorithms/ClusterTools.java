@@ -3,7 +3,15 @@ package scienceWork.algorithms;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.TermCriteria;
+import scienceWork.FxWorker.Interfaces.Progress;
+import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static org.opencv.core.CvType.CV_32FC3;
 
@@ -75,5 +83,32 @@ public class ClusterTools {
             distance += Math.abs(mat1.get(0, i)[0] - mat2.get(0, i)[0]);
         }
         return distance;
+    }
+
+    //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения
+    public void findPicturesClusters(List<Picture> pictList, Progress progress) {
+//        ExecutorService executor = Executors.newFixedThreadPool(Settings.getCountThreads());
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        List<Future> futureList = new LinkedList<>();
+        System.out.println("start find KP/Descr");
+
+        for (Picture picture : pictList) {
+            DescriptorsOfPictureClustering descriptorsOfPictureClustering = new DescriptorsOfPictureClustering(picture);
+            try {
+                futureList.add(executor.submit(descriptorsOfPictureClustering));
+                descriptorsOfPictureClustering.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < pictList.size(); i++) {
+//            System.out.println("progress " + i);
+            while (!futureList.get(i).isDone()) {
+                progress.setProgress( (i + 1) , pictList.size());
+            }
+        }
+        executor.shutdown();
+        System.out.println("finish find KP/Descr");
     }
 }

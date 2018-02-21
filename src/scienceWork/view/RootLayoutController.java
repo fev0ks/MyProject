@@ -36,7 +36,7 @@ public class RootLayoutController {
     private void chouseNewDirectory(){
 //        new Main().showToolsScene();
 //    }
-        MainController controller = new MainController();
+        MainView controller = new MainView();
         File file = new Main().showChooseDir();
         if (file == null) System.exit(0);
         else {
@@ -46,8 +46,8 @@ public class RootLayoutController {
 
             });
         }
-//        MainController controller = new MainController();
-////        MainController controller = loader.getController();
+//        MainView controller = new MainView();
+////        MainView controller = loader.getController();
 ////        controller.setMainApp(this);
 //        File file = new Main().showChooseDir();
 //        if (file == null) System.exit(0);

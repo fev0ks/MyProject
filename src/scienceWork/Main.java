@@ -71,7 +71,7 @@ public class Main extends Application {
             rootLayout.setCenter(startMenu);
 
             // Даём контроллеру доступ к главному приложению.
-            MainController controller = loader.getController();
+            MainView controller = loader.getController();
             controller.setMainApp(this);
             File file = showChooseDir();
             System.out.println("showToolsScene " + file + " " + firstSelect);

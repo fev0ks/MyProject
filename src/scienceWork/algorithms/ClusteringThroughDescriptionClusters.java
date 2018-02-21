@@ -1,41 +1,41 @@
 package scienceWork.algorithms;
 
 
-import javafx.scene.control.ProgressBar;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import scienceWork.algorithms.Interfaces.IImageWorker;
+import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.objects.Clusters;
 import scienceWork.objects.Picture;
 
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class ClusteringThroughDescriptionClusters implements IImageWorker {
+public class ClusteringThroughDescriptionClusters {
 //    private List<Picture> pictList;
-    private ProgressBar progressBar;
+    private Progress progress;
     private String typeImages;
-    private ClusterTools clusterTools = new ClusterTools();
+    private ClusterTools clusterTools;
 
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    public ClusteringThroughDescriptionClusters(String typeImages, ProgressBar progressBar) {
+    public ClusteringThroughDescriptionClusters(String typeImages, Progress progress) {
         this.typeImages = typeImages;
-        this.progressBar = progressBar;
+        this.progress = progress;
+        clusterTools= new ClusterTools();
     }
 
-    public ClusteringThroughDescriptionClusters( ProgressBar progressBar) {
-        this.progressBar = progressBar;
+    public ClusteringThroughDescriptionClusters( Progress progress) {
+        this.progress = progress;
     }
 
     //По известным кластерам определяю типы ихображений
     public void getImagesType(List<Picture> pictList) {
-        findClustersForEachPicture(pictList);
+        clusterTools.findPicturesClusters(pictList,progress);
         Map<String, Mat> allTypeClusters = Clusters.addGeneralizedClustersForInputTypeImage;
         for (Picture picture : pictList) {
             Mat clustersOfPicture = picture.getDescriptorProperty().getCentersOfDescriptors();
@@ -59,62 +59,7 @@ public class ClusteringThroughDescriptionClusters implements IImageWorker {
         }
     }
 
-    //Вычисляю для заданного типа изображений их особенности
-    public void findFeaturesForImages(List<Picture> pictList) {
-        //ищу кластеры для каждой фотки
-        findClustersForEachPicture(pictList);
-        //собираю все их вместе и ищу обшие кластеры
-        Mat commonClusters = findGeneralizedClustersForPictures(pictList);
-        //Добавляю эти кластеры для указанного входного типа
-        if (commonClusters.height() != 0)
-            Clusters.addGeneralizedClustersForInputTypeImage.put(typeImages, commonClusters);
-//        Mat bestCommonClusters = filteringClusters(commonClusters);
-//        printMat(commonClusters);
-    }
 
-    //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения
-    private void findClustersForEachPicture(List<Picture> pictList) {
-//        ExecutorService executor = Executors.newFixedThreadPool(Settings.getCountThreads());
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        List<Future> futureList = new LinkedList<>();
-        System.out.println("start find KP/Descr");
-
-        for (Picture picture : pictList) {
-            DescriptorsOfPictureClustering descriptorsOfPictureClustering = new DescriptorsOfPictureClustering(picture);
-            try {
-                futureList.add(executor.submit(descriptorsOfPictureClustering));
-                descriptorsOfPictureClustering.run();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        for (int i = 0; i < pictList.size(); i++) {
-            System.out.println("progress " + i);
-            while (!futureList.get(i).isDone()) {
-                progressBar.setProgress((double) (i + 1) / pictList.size());
-            }
-        }
-        executor.shutdown();
-        System.out.println("finish find KP/Descr");
-    }
-
-    //Собрал в кучу все кластеры и нашел N самых самых* но это не точно
-    private Mat findGeneralizedClustersForPictures(List<Picture> pictList) {
-        Mat allClusters = new Mat();
-        for (Picture picture : pictList) {
-            try {
-                if (picture.getDescriptorProperty().getCountOfDescr() > 0) {
-                    allClusters.push_back(picture.getDescriptorProperty().getCentersOfDescriptors());
-                }
-            } catch (NullPointerException e) {
-                System.out.println(e);
-                System.out.println(picture.getName() + " NullPointerException;" +
-                        " MatOfDescription: " + picture.getDescriptorProperty().getMatOfDescription());
-            }
-        }
-        Mat commonClusters = clusterTools.createClusters(allClusters);
-        return commonClusters;
-    }
 
 //    private Mat filteringClusters(Mat commonClusters) {
 //        System.out.println("commonClusters.width() " + commonClusters.width());

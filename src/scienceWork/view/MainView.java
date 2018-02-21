@@ -4,23 +4,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
 import scienceWork.FileWorker;
+import scienceWork.FxWorker.UpdateProgressBar;
 import scienceWork.Main;
 import scienceWork.algorithms.ClusteringThroughDescriptionClusters;
+import scienceWork.algorithms.DescriptorTeacher;
 import scienceWork.objects.Clusters;
 import scienceWork.objects.Directory;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-public class MainController {
+public class MainView {
     private Main mainApp;
     private Directory directory;
     private String typeImages;
+
     private final FileWorker fileWorker = FileWorker.getInstance();
 //    private final ManagerDB managerDB = ManagerDB.getInstance();
 
@@ -65,7 +69,7 @@ public class MainController {
     @FXML
     private Label settingsLbl;
 
-    private List<List<Picture>> pictList;
+    private List<List<Picture>> pictLists;
     private String message = "";
 
     public void setDir(File dir) {
@@ -77,10 +81,10 @@ public class MainController {
         fileWorker.setProgressBar(progressBar);
         infoTA.setText("Loading pictures from "+directory.getDir());
         Thread workFolderThread = new Thread(() -> {
-            pictList = fileWorker.loadPicFromDir(dir);
+            pictLists = fileWorker.loadPicFromDir(dir);
 
-        // System.out.println(" files: " +dir.listFiles().length+" pic: "+ pictList.size());
-        infoTA.setText(directory.getDir() + " files: " + dir.listFiles().length + " pic: " + pictList.size());
+        // System.out.println(" files: " +dir.listFiles().length+" pic: "+ pictLists.size());
+        infoTA.setText(directory.getDir() + " files: " + dir.listFiles().length + " pic: " + pictLists.size());
         updateTable();
         });
         workFolderThread.start();
@@ -88,6 +92,10 @@ public class MainController {
 
     public Directory getDir() {
         return directory;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
     @FXML
@@ -100,8 +108,8 @@ public class MainController {
     private void choseNewDirectory() {
 //        new Main().showToolsScene();
 //    }
-//        MainController controller = new MainController();
-//        MainController controller = loader.getController();
+//        MainView controller = new MainView();
+//        MainView controller = loader.getController();
 //        controller.setMainApp(this);
         Main main = new Main();
         File file = main.showChooseDir();
@@ -117,16 +125,16 @@ public class MainController {
     //вывожу данные об изображениях в табилцу
     @FXML
     private void updateTable() {
-        System.out.println(" files: " + directory.getDirFile().listFiles().length + " pic: " + pictList.size());
-        if (pictList.size() > 0) {
-            picTable.setItems(convertListsToObservableList(pictList));
+        System.out.println(" files: " + directory.getDirFile().listFiles().length + " pic: " + pictLists.size());
+        if (pictLists.size() > 0) {
+            picTable.setItems(convertListsToObservableList(pictLists));
             groupColumn.setCellValueFactory(cellData -> cellData.getValue().getGroupProperty());
             namePicColumn.setCellValueFactory(cellData -> cellData.getValue().getNameProperty());
             sizePicColumn.setCellValueFactory(cellData -> cellData.getValue().getSizeProperty().asObject());
             countColumn.setCellValueFactory(cellData -> cellData.getValue().getIdProperty().asObject());
             dimensionsColumn.setCellValueFactory(cellData -> cellData.getValue().getDimensionsProperty().toPropertyString());
             countOfDescriptorsColumn.setCellValueFactory(cellData -> cellData.getValue().getDescriptorProperty().getCountOfDescrProperty().asObject());
-//            System.out.println(pictList.get(0).getDescriptorProperty().getCountOfDescr() + " descr");
+//            System.out.println(pictLists.get(0).getDescriptorProperty().getCountOfDescr() + " descr");
             dimensionsColumn.setCellValueFactory(cellData -> cellData.getValue().getDimensionsProperty().toPropertyString());
         } else {
             showMessage("NO IMAGES!!!");
@@ -148,7 +156,7 @@ public class MainController {
 
     //загружаю изображения в базу данных
     private void loadPicToDB() {
-//        message += (managerDB.picToDBfromDir(pictList));
+//        message += (managerDB.picToDBfromDir(pictLists));
     }
 
 
@@ -176,7 +184,7 @@ public class MainController {
         Thread mainThread = new Thread(() -> {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
-            new ClusteringThroughDescriptionClusters(progressBar).getImagesType(pictList.get(0));
+            new ClusteringThroughDescriptionClusters(UpdateProgressBar.getInstance()).getImagesType(pictLists.get(0));
 //            clearTable();
 //            updateTable();
             stopWatch.stop();
@@ -193,41 +201,28 @@ public class MainController {
     @FXML
     private void analysis() {
 
-        typeImages = new Main().setNameOfTypeImages();
-        if (StringUtils.isBlank(typeImages)) {
-            infoTA.setText("Select type of analysing images\n" + infoTA.getText());
-        } else {
-            infoTA.setText("Analysing type: " + typeImages + "\n" + infoTA.getText());
+//        typeImages = new Main().setNameOfTypeImages();
+//        if (StringUtils.isBlank(typeImages)) {
+//            infoTA.setText("Select type of analysing images\n" + infoTA.getText());
+//        } else {
+//            infoTA.setText("Analysing type: " + typeImages + "\n" + infoTA.getText());
             setDisabledButtons(true);
-
             Thread mainThread = new Thread(() -> {
-                StopWatch stopWatch = new StopWatch();
-                stopWatch.start();
-                new ClusteringThroughDescriptionClusters(typeImages, progressBar).findFeaturesForImages(pictList.get(0));
-                stopWatch.stop();
-                viewWorkTime(stopWatch.getTime());
+
+                for (List<Picture> pictList : pictLists) {
+                    StopWatch stopWatch = new StopWatch();
+                    stopWatch.start();
+                    new DescriptorTeacher(pictList, UpdateProgressBar.getInstance()).run();
+                    stopWatch.stop();
+                    viewWorkTime(stopWatch.getTime());
+                }
 
                 clearTable();
                 updateTable();
                 setDisabledButtons(false);
             });
             mainThread.start();
-
-//          обращение к вьюхе из любого участка кода
-//        Platform.runLater(() -> {
-//            try {
-//                Stage st = new Stage();
-//                Parent sceneMain = FXMLLoader.load(getClass().getResource("/com/load/free/form/LoadFile.fxml"));
-//                Scene scene = new Scene(sceneMain);
-//                st.setScene(scene);
-//                st.setMaximized(true);
-//                st.setTitle("load");
-//                st.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        });
-        }
+//        }
     }
 
     private void viewWorkTime(long finishTime) {
@@ -256,14 +251,14 @@ public class MainController {
 
     public void clearTable() {
         List<List<Picture>> newPictList = new LinkedList<>();
-        newPictList.addAll(pictList);
+        newPictList.addAll(pictLists);
 //            List list2 = ((List) ((ArrayList) list).clone());
-//            ObservableList<Picture> clone = pictList.stream().collect(toList());
+//            ObservableList<Picture> clone = pictLists.stream().collect(toList());
 
         picTable.getItems().clear();
-        System.out.println(pictList);
+        System.out.println(pictLists);
         Picture.clearCount();
-        pictList = newPictList;
+        pictLists = newPictList;
         progressBar.setProgress(0);
     }
 
@@ -280,8 +275,8 @@ public class MainController {
     @FXML
     private void showAlgorithmHistogram() {
 
-        if (dimensionsChB.isSelected()) mainApp.showAlgorithmStatistics(pictList.get(0), "dimensions");
-        if (distanceChB.isSelected()) mainApp.showAlgorithmStatistics(pictList.get(0), "distance");
+        if (dimensionsChB.isSelected()) mainApp.showAlgorithmStatistics(pictLists.get(0), "dimensions");
+        if (distanceChB.isSelected()) mainApp.showAlgorithmStatistics(pictLists.get(0), "distance");
     }
 
     public void setMainApp(Main mainApp) {
