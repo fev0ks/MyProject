@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import scienceWork.FileWorker;
+import scienceWork.Workers.FileWorker;
 import scienceWork.Main;
 
 import java.io.File;

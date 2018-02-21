@@ -5,11 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.apache.commons.lang.time.StopWatch;
-import scienceWork.FileWorker;
+import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.FxWorker.UpdateProgressBar;
 import scienceWork.Main;
-import scienceWork.algorithms.ClusteringThroughDescriptionClusters;
-import scienceWork.algorithms.DescriptorTeacher;
+import scienceWork.Workers.FileWorker;
+import scienceWork.algorithms.DescriptorProcess.DescriptorClusterer;
+import scienceWork.algorithms.DescriptorProcess.DescriptorTeacher;
 import scienceWork.objects.Clusters;
 import scienceWork.objects.Directory;
 import scienceWork.objects.Picture;
@@ -69,6 +70,8 @@ public class MainView {
     @FXML
     private Label settingsLbl;
 
+    private Progress progress;
+
     private List<List<Picture>> pictLists;
     private String message = "";
 
@@ -78,24 +81,31 @@ public class MainView {
         directory.setDir(dir.getAbsolutePath());
         directory.setCountFiles(dir.listFiles().length);
 //        message = managerDB.dirToDB(dir);
-        fileWorker.setProgressBar(progressBar);
-        infoTA.setText("Loading pictures from "+directory.getDir());
+//        UpdateProgressBar.getInstance().setProgressBar(progressBar);
+        fileWorker.setProgressBar(progress);
+        infoTA.setText("Loading pictures from " + directory.getDir());
         Thread workFolderThread = new Thread(() -> {
             pictLists = fileWorker.loadPicFromDir(dir);
 
-        // System.out.println(" files: " +dir.listFiles().length+" pic: "+ pictLists.size());
-        infoTA.setText(directory.getDir() + " files: " + dir.listFiles().length + " pic: " + pictLists.size());
-        updateTable();
+            // System.out.println(" files: " +dir.listFiles().length+" pic: "+ pictLists.size());
+            infoTA.setText(directory.getDir() + " files: " + dir.listFiles().length + " pic: " + pictLists.size());
+            updateTable();
         });
         workFolderThread.start();
     }
 
-    public Directory getDir() {
-        return directory;
-    }
+//    public Directory getDir() {
+//        return directory;
+//    }
 
-    public ProgressBar getProgressBar() {
-        return progressBar;
+//    public ProgressBar getProgressBar() {
+//        return progressBar;
+//    }
+
+
+    @FXML
+    public void initialize() {
+        progress = new UpdateProgressBar(progressBar);
     }
 
     @FXML
@@ -182,13 +192,15 @@ public class MainView {
 
         setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
-            new ClusteringThroughDescriptionClusters(UpdateProgressBar.getInstance()).getImagesType(pictLists.get(0));
+            for (List<Picture> pictList : pictLists) {
+                StopWatch stopWatch = new StopWatch();
+                stopWatch.start();
+                new DescriptorClusterer(progress).findPictureType(pictList);
 //            clearTable();
 //            updateTable();
-            stopWatch.stop();
-            viewWorkTime(stopWatch.getTime());
+                stopWatch.stop();
+                viewWorkTime(stopWatch.getTime());
+            }
 
             clearTable();
             updateTable();
@@ -206,29 +218,29 @@ public class MainView {
 //            infoTA.setText("Select type of analysing images\n" + infoTA.getText());
 //        } else {
 //            infoTA.setText("Analysing type: " + typeImages + "\n" + infoTA.getText());
-            setDisabledButtons(true);
-            Thread mainThread = new Thread(() -> {
+        setDisabledButtons(true);
+        Thread mainThread = new Thread(() -> {
 
-                for (List<Picture> pictList : pictLists) {
-                    StopWatch stopWatch = new StopWatch();
-                    stopWatch.start();
-                    new DescriptorTeacher(pictList, UpdateProgressBar.getInstance()).run();
-                    stopWatch.stop();
-                    viewWorkTime(stopWatch.getTime());
-                }
+            for (List<Picture> pictList : pictLists) {
+                StopWatch stopWatch = new StopWatch();
+                stopWatch.start();
+                new DescriptorTeacher(pictList, progress).findFeatures();
+                stopWatch.stop();
+                viewWorkTime(stopWatch.getTime());
+            }
 
-                clearTable();
-                updateTable();
-                setDisabledButtons(false);
-            });
-            mainThread.start();
+            clearTable();
+            updateTable();
+            setDisabledButtons(false);
+        });
+        mainThread.start();
 //        }
     }
 
     private void viewWorkTime(long finishTime) {
         System.out.println("Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
         message = "Завершено за " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;";
-        infoTA.setText(message + " " + Settings.getInstance().toString() + "\n" + infoTA.getText());
+        infoTA.setText(message + "\n" + infoTA.getText());
     }
 
     @FXML
@@ -256,7 +268,7 @@ public class MainView {
 //            ObservableList<Picture> clone = pictLists.stream().collect(toList());
 
         picTable.getItems().clear();
-        System.out.println(pictLists);
+//        System.out.println(pictLists);
         Picture.clearCount();
         pictLists = newPictList;
         progressBar.setProgress(0);
@@ -282,4 +294,6 @@ public class MainView {
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
     }
+
+
 }

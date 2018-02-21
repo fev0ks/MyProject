@@ -13,12 +13,12 @@ import javafx.stage.Stage;
 import org.opencv.core.Core;
 import scienceWork.objects.Clusters;
 import scienceWork.objects.Picture;
-import scienceWork.FileWorker;
+import scienceWork.Workers.FileWorker;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static scienceWork.algorithms.PictureWorker.printClusters;
+import static scienceWork.Workers.PictureWorker.printClusters;
 
 ;
 

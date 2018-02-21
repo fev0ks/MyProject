@@ -1,9 +1,9 @@
-package scienceWork;
+package scienceWork.Workers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ProgressBar;
 import net.coobird.thumbnailator.Thumbnails;
+import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.dataBase.ManagerDB;
 import scienceWork.objects.Picture;
 
@@ -27,9 +27,9 @@ public class FileWorker {
     public static double avrgW = 0;
     public static int count = 0;
     private int numberDir = 0;
-    private ProgressBar progressBar;
+    private Progress progress;
     private long countOfFiles;
-    private long number = 0;
+    private long number;
 
     private FileWorker() {
     }
@@ -43,12 +43,13 @@ public class FileWorker {
         return instance;
     }
 
-    public void setProgressBar(ProgressBar progressBar) {
-        this.progressBar = progressBar;
+    public void setProgressBar(Progress progress) {
+        this.progress = progress;
     }
 
     //загружаем фотографии из выбранной папки
     public List<List<Picture>> loadPicFromDir(File dir) {
+        number = 0;
         countOfFiles = getCountOfFiles(dir);
         List<Picture> pictures = new LinkedList();
         List<List<Picture>> allPicturesFromDirectories = new LinkedList<>();
@@ -62,7 +63,9 @@ public class FileWorker {
             }
         }
         allPicturesFromDirectories.add(pictures);
-        updateProgressBar(0);
+        if (progress != null) {
+            progress.setProgress(0, countOfFiles);
+        }
         return allPicturesFromDirectories;
     }
 
@@ -71,18 +74,14 @@ public class FileWorker {
         for (File file : dir.listFiles())
             if (isPicture(file)) { //картинка?
                 pictures.add(createPictureFromFile(file, dir.getName()));
-                updateProgressBar(number++);
-
             }
         return pictures;
     }
 
-    private void updateProgressBar(long number) {
-        progressBar.setProgress((double)(number) / countOfFiles);
-
-    }
-
     private Picture createPictureFromFile(File file, String pictureType) {
+        if (progress != null) {
+            progress.setProgress(number++, countOfFiles);
+        }
         Picture picture = new Picture();
         picture.setName(file.getName());
         picture.setSize(file.length() / 1024);
@@ -119,7 +118,7 @@ public class FileWorker {
     public BufferedImage loadBufferedImage(File file) {
         BufferedImage loadImg = null;
         try {
-            System.out.println(file);
+//            System.out.println(file);
             loadImg = ImageIO.read(file);
         } catch (IOException e) {
             e.printStackTrace();

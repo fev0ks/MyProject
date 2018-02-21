@@ -1,4 +1,4 @@
-package scienceWork.algorithms;
+package scienceWork.Workers;
 
 
 import javafx.embed.swing.SwingFXUtils;
@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import org.opencv.core.*;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
-import scienceWork.FileWorker;
+import scienceWork.algorithms.DescriptorProcess.ClusterTools;
 import scienceWork.objects.Picture;
 
 import java.awt.image.BufferedImage;
@@ -33,6 +33,8 @@ public class PictureWorker {
 
     //перевод изображения в формат OpenCV - Mat
     public static Mat getMatFromImage(BufferedImage image) {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        System.out.println(image.getHeight());
         Mat imageMat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
         byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         imageMat.put(0, 0, data);

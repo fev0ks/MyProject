@@ -1,17 +1,12 @@
-package scienceWork.algorithms;
+package scienceWork.algorithms.DescriptorProcess;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.TermCriteria;
-import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import static org.opencv.core.CvType.CV_32FC3;
 
@@ -46,12 +41,13 @@ public class ClusterTools {
             Для второй и последующих попыток используются случайные или полу случайные центры;
         centers – выходная матрица центров, по одной строке на каждый кластер.
          */
+
 //            System.out.println("matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
             if (matDescriptor.height() < Settings.getCountClusters()) {
                 setFictitiousDescriptors(matDescriptor);
             }
 
-            double kMeans = Core.kmeans(matDescriptor, Settings.getCountClusters(), clusteredHSV, criteria, 100, Core.KMEANS_RANDOM_CENTERS, clusteredCenter);
+           Core.kmeans(matDescriptor, Settings.getCountClusters(), clusteredHSV, criteria, 100, Core.KMEANS_PP_CENTERS, clusteredCenter);
 //            System.out.println(" kMean: " + kMeans);
 //            System.out.println("clusteredCenter: " + clusteredCenter);
 //        System.out.println("clusteredCenter: " + picture.getName() + " [");
@@ -67,11 +63,11 @@ public class ClusterTools {
     }
 
     private Mat setFictitiousDescriptors(Mat matDescriptor) {
-        System.out.println("setFictitiousDescriptors " + Settings.getCountClusters() / matDescriptor.height());
+//        System.out.println("setFictitiousDescriptors " + Settings.getCountClusters() / matDescriptor.height());
         int countOfNeedRows;
         while ((countOfNeedRows = Settings.getCountClusters() / matDescriptor.height()) != 0) {
             matDescriptor.push_back(matDescriptor);
-            System.out.println(countOfNeedRows + " " + Settings.getCountClusters() / matDescriptor.height() + " matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
+//            System.out.println(countOfNeedRows + " " + Settings.getCountClusters() / matDescriptor.height() + " matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
         }
         return matDescriptor;
     }
@@ -85,30 +81,52 @@ public class ClusterTools {
         return distance;
     }
 
-    //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения
-    public void findPicturesClusters(List<Picture> pictList, Progress progress) {
-//        ExecutorService executor = Executors.newFixedThreadPool(Settings.getCountThreads());
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        List<Future> futureList = new LinkedList<>();
-        System.out.println("start find KP/Descr");
+//    //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения
+//    public void findPicturesClusters(List<Picture> pictList, Progress progress) {
+////        ExecutorService executor = Executors.newFixedThreadPool(Settings.getCountThreads());
+//        ExecutorService executor = Executors.newFixedThreadPool(Settings.getInstance().getCountThreads());
+//
+//        List<Future> futureList = new LinkedList<>();
+//        System.out.println("start find KP/Descr");
+//        int number = 0;
+//        for (Picture picture : pictList) {
+//            DescriptorsOfPictureClustering descriptorsOfPictureClustering = new DescriptorsOfPictureClustering(picture);
+//            try {
+//                futureList.add(executor.submit(descriptorsOfPictureClustering));
+//                descriptorsOfPictureClustering.run();
+//                progress.setProgress( number++ , pictList.size());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        for (int i = 0; i < pictList.size(); i++) {
+////            System.out.println("progress " + i);
+//
+//
+//            while (!futureList.get(i).isDone()) {
+//
+//            }
+//        }
+//        executor.shutdown();
+//        System.out.println("finish find KP/Descr");
+//    }
 
+    //Собрал в кучу все кластеры и нашел N самых самых* но это не точно
+    public Mat findCommonPicturesCluster(List<Picture> pictList) {
+        Mat allClusters = new Mat();
         for (Picture picture : pictList) {
-            DescriptorsOfPictureClustering descriptorsOfPictureClustering = new DescriptorsOfPictureClustering(picture);
             try {
-                futureList.add(executor.submit(descriptorsOfPictureClustering));
-                descriptorsOfPictureClustering.run();
-            } catch (Exception e) {
-                e.printStackTrace();
+                if (picture.getDescriptorProperty().getCountOfDescr() > 0) {
+                    allClusters.push_back(picture.getDescriptorProperty().getCentersOfDescriptors());
+                }
+            } catch (NullPointerException e) {
+//                System.out.println(e);
+                System.out.println(picture.getName() + " NullPointerException;" +
+                        " MatOfDescription: " + picture.getDescriptorProperty().getMatOfDescription());
             }
         }
 
-        for (int i = 0; i < pictList.size(); i++) {
-//            System.out.println("progress " + i);
-            while (!futureList.get(i).isDone()) {
-                progress.setProgress( (i + 1) , pictList.size());
-            }
-        }
-        executor.shutdown();
-        System.out.println("finish find KP/Descr");
+        return createClusters(allClusters);
     }
 }

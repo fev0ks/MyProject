@@ -1,4 +1,4 @@
-package scienceWork.algorithms;
+package scienceWork.algorithms.DescriptorProcess;
 
 import org.opencv.core.Mat;
 import scienceWork.algorithms.Interfaces.IProcess;
@@ -14,16 +14,10 @@ public class DescriptorsOfPictureClustering implements IProcess {
 
     @Override
     public void run() {
-        System.out.println(picture.getName());
-        picture = new KeyPointsAndDescriptors().setMatOfKPandDescr(picture);
-        if(picture.getDescriptorProperty().getMatOfDescription().height()>0) {
+       picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
+        if (!picture.getDescriptorProperty().getMatOfDescription().empty()) {
             Mat centersOfDescriptors = new ClusterTools().createClusters(picture.getDescriptorProperty().getMatOfDescription());
             picture.getDescriptorProperty().setCentersOfDescriptors(centersOfDescriptors);
         }
-    }
-
-    private Mat getIfExistDescriptorsInDB(){
-
-        return null;
     }
 }

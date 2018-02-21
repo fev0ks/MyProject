@@ -33,7 +33,7 @@ public class Settings {
         method = Constants.ORB;
     }
 
-    public static int getCountThreads() {
+    public int getCountThreads() {
         return countThreads;
     }
 

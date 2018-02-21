@@ -2,15 +2,8 @@ package scienceWork.algorithms;
 
 
 import org.opencv.core.Core;
-import org.opencv.core.Mat;
 import scienceWork.FxWorker.Interfaces.Progress;
-import scienceWork.objects.Clusters;
-import scienceWork.objects.Picture;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import scienceWork.algorithms.DescriptorProcess.ClusterTools;
 
 public class ClusteringThroughDescriptionClusters {
 //    private List<Picture> pictList;
@@ -33,31 +26,31 @@ public class ClusteringThroughDescriptionClusters {
         this.progress = progress;
     }
 
-    //По известным кластерам определяю типы ихображений
-    public void getImagesType(List<Picture> pictList) {
-        clusterTools.findPicturesClusters(pictList,progress);
-        Map<String, Mat> allTypeClusters = Clusters.addGeneralizedClustersForInputTypeImage;
-        for (Picture picture : pictList) {
-            Mat clustersOfPicture = picture.getDescriptorProperty().getCentersOfDescriptors();
-            double minDistance = Double.MAX_VALUE;
-            double distance;
-            String bestGroup = "";
-            for (int i = 0; i < clustersOfPicture.height(); i++) {
-                for (Map.Entry<String, Mat> templateCluster : allTypeClusters.entrySet()) {
-                    for (int j = 0; j < templateCluster.getValue().height(); j++) {
-                        distance = clusterTools.findDistanceForMats(clustersOfPicture, templateCluster.getValue().row(j));
-//                        System.out.println(picture.getName() + " " + i + " - " + j + " " + distance);
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            bestGroup = templateCluster.getKey();
-                        }
-                    }
-                }
-            }
-            picture.setPictureType(bestGroup);
-            System.out.println(picture.getName() + " " + bestGroup + " " + minDistance);
-        }
-    }
+//    //По известным кластерам определяю типы ихображений
+//    public void findPictureType(List<Picture> pictList) {
+//        clusterTools.findPicturesClusters(pictList,progress);
+//        Map<String, Mat> allTypeClusters = Clusters.addGeneralizedClustersForInputTypeImage;
+//        for (Picture picture : pictList) {
+//            Mat clustersOfPicture = picture.getDescriptorProperty().getCentersOfDescriptors();
+//            double minDistance = Double.MAX_VALUE;
+//            double distance;
+//            String bestGroup = "";
+//            for (int i = 0; i < clustersOfPicture.height(); i++) {
+//                for (Map.Entry<String, Mat> templateCluster : allTypeClusters.entrySet()) {
+//                    for (int j = 0; j < templateCluster.getValue().height(); j++) {
+//                        distance = clusterTools.findDistanceForMats(clustersOfPicture, templateCluster.getValue().row(j));
+////                        System.out.println(picture.getName() + " " + i + " - " + j + " " + distance);
+//                        if (distance < minDistance) {
+//                            minDistance = distance;
+//                            bestGroup = templateCluster.getKey();
+//                        }
+//                    }
+//                }
+//            }
+//            picture.setPictureType(bestGroup);
+////            System.out.println(picture.getName() + " " + bestGroup + " " + minDistance);
+//        }
+//    }
 
 
 
@@ -90,36 +83,36 @@ public class ClusteringThroughDescriptionClusters {
 //        return selectBestClusters(ratingClusters, commonClusters);
 //    }
 
-    private Map<Integer, Double> initRatingClustersMap(int size) {
-        Map<Integer, Double> map = new HashMap<>();
-        for (int i = 0; i < size; i++) {
-            map.put(i, -1D);
-        }
-        return map;
-    }
-
-    private Mat selectBestClusters(Map<Integer, Double> ratingClusters, Mat commonClusters) {
-        double avrgDistance = 0;
-
-        for (Map.Entry<Integer, Double> entry : ratingClusters.entrySet()) {
-            avrgDistance += entry.getValue();
-        }
-        avrgDistance = avrgDistance / ratingClusters.size();
-        System.out.println("avrgDistance " + avrgDistance);
-
-        Map<Integer, Double> numbersOfBestClusters = new HashMap<>();
-        Mat bestClusters = new Mat();
-        for (Map.Entry<Integer, Double> entry : ratingClusters.entrySet()) {
-            if (entry.getValue() < avrgDistance) {
-                numbersOfBestClusters.put(entry.getKey(), entry.getValue());
-                bestClusters.push_back(commonClusters.row(entry.getKey()));
-            }
-        }
-
-        System.out.println("numbersOfBestClusters " + numbersOfBestClusters);
-        System.out.println("bestClusters " + bestClusters);
-        return bestClusters;
-    }
+//    private Map<Integer, Double> initRatingClustersMap(int size) {
+//        Map<Integer, Double> map = new HashMap<>();
+//        for (int i = 0; i < size; i++) {
+//            map.put(i, -1D);
+//        }
+//        return map;
+//    }
+//
+//    private Mat selectBestClusters(Map<Integer, Double> ratingClusters, Mat commonClusters) {
+//        double avrgDistance = 0;
+//
+//        for (Map.Entry<Integer, Double> entry : ratingClusters.entrySet()) {
+//            avrgDistance += entry.getValue();
+//        }
+//        avrgDistance = avrgDistance / ratingClusters.size();
+//        System.out.println("avrgDistance " + avrgDistance);
+//
+//        Map<Integer, Double> numbersOfBestClusters = new HashMap<>();
+//        Mat bestClusters = new Mat();
+//        for (Map.Entry<Integer, Double> entry : ratingClusters.entrySet()) {
+//            if (entry.getValue() < avrgDistance) {
+//                numbersOfBestClusters.put(entry.getKey(), entry.getValue());
+//                bestClusters.push_back(commonClusters.row(entry.getKey()));
+//            }
+//        }
+//
+//        System.out.println("numbersOfBestClusters " + numbersOfBestClusters);
+//        System.out.println("bestClusters " + bestClusters);
+//        return bestClusters;
+//    }
 
 //    private double findDistanceForMats(Mat mat1, Mat mat2) {
 //        double distance = 0;
@@ -130,16 +123,16 @@ public class ClusteringThroughDescriptionClusters {
 //        return distance;
 //    }
 
-    private void printMat(Mat mat) {
-        System.out.println("Mat[ ");
-        for (int i = 0; i < mat.height(); i++) {
-            for (int j = 0; j < mat.width(); j++) {
-                System.out.print(Arrays.toString(mat.get(i, j)) + " ");
-            }
-            System.out.println();
-        }
-        System.out.print("]");
-    }
+//    private void printMat(Mat mat) {
+//        System.out.println("Mat[ ");
+//        for (int i = 0; i < mat.height(); i++) {
+//            for (int j = 0; j < mat.width(); j++) {
+//                System.out.print(Arrays.toString(mat.get(i, j)) + " ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.print("]");
+//    }
 
 //    private int findDistance(List<Integer> descr1, List<Integer> descr2) {
 //        int range = 0;
