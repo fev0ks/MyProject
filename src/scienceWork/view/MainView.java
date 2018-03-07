@@ -11,8 +11,8 @@ import scienceWork.Main;
 import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.DescriptorProcess.DescriptorClusterer;
 import scienceWork.algorithms.DescriptorProcess.DescriptorTeacher;
-import scienceWork.objects.Clusters;
-import scienceWork.objects.Directory;
+import scienceWork.objects.picTypesData.ImgTypesClusters;
+import scienceWork.objects.pictureData.Directory;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
 
@@ -43,6 +43,8 @@ public class MainView {
     private TableColumn<Picture, String> dimensionsColumn;
     @FXML
     private TableColumn<Picture, String> groupColumn;
+    @FXML
+    private TableColumn<Picture, String> inputType;
     @FXML
     private TableColumn<Picture, Integer> countOfDescriptorsColumn;
     @FXML
@@ -110,8 +112,8 @@ public class MainView {
 
     @FXML
     private void resetData() {
-        infoTA.setText("Clearing " + Clusters.addGeneralizedClustersForInputTypeImage.size() + " type(s) of pictures");
-        Clusters.addGeneralizedClustersForInputTypeImage = new HashMap<>();
+        infoTA.setText("Clearing " + ImgTypesClusters.addGeneralizedClustersForInputTypeImage.size() + " type(s) of pictures");
+        ImgTypesClusters.addGeneralizedClustersForInputTypeImage = new HashMap<>();
     }
 
     @FXML
@@ -138,6 +140,7 @@ public class MainView {
         System.out.println(" files: " + directory.getDirFile().listFiles().length + " pic: " + pictLists.size());
         if (pictLists.size() > 0) {
             picTable.setItems(convertListsToObservableList(pictLists));
+            inputType.setCellValueFactory(cellData -> cellData.getValue().getInpGroupProperty());
             groupColumn.setCellValueFactory(cellData -> cellData.getValue().getGroupProperty());
             namePicColumn.setCellValueFactory(cellData -> cellData.getValue().getNameProperty());
             sizePicColumn.setCellValueFactory(cellData -> cellData.getValue().getSizeProperty().asObject());
@@ -191,17 +194,23 @@ public class MainView {
     private void groupingImagesToClasses() {
 
         setDisabledButtons(true);
+
         Thread mainThread = new Thread(() -> {
+            int count=0;
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
             for (List<Picture> pictList : pictLists) {
-                StopWatch stopWatch = new StopWatch();
-                stopWatch.start();
+
                 new DescriptorClusterer(progress).findPictureType(pictList);
 //            clearTable();
 //            updateTable();
-                stopWatch.stop();
-                viewWorkTime(stopWatch.getTime());
-            }
 
+                count+=pictList.size();
+            }
+            stopWatch.stop();
+            viewWorkTime(stopWatch.getTime(), "Grouping");
+            long right = pictLists.stream().map(l->l.stream().filter(p->p.getPictureType().equals(p.getExitPictureType())).count()).mapToLong(s->s).sum();
+            infoTA.setText("Right: "+right+"; False: "+ (count-right)+"; Rate: "+((double)right/count*100)+"%\n" + infoTA.getText());
             clearTable();
             updateTable();
             setDisabledButtons(false);
@@ -220,14 +229,20 @@ public class MainView {
 //            infoTA.setText("Analysing type: " + typeImages + "\n" + infoTA.getText());
         setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-
+            StopWatch stopWatchAll = new StopWatch();
+            stopWatchAll.start();
+            System.out.println(pictLists.size());
             for (List<Picture> pictList : pictLists) {
+                System.out.println("analysis "+ pictList.size());
+                System.out.println("analysis "+ pictList.get(0).toString());
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
                 new DescriptorTeacher(pictList, progress).findFeatures();
                 stopWatch.stop();
-                viewWorkTime(stopWatch.getTime());
+                viewWorkTime(stopWatch.getTime(), pictList.get(0).getPictureType());
             }
+            stopWatchAll.stop();
+            viewWorkTime(stopWatchAll.getTime(), "Total time for "+pictLists.size()+" groups");
 
             clearTable();
             updateTable();
@@ -237,10 +252,10 @@ public class MainView {
 //        }
     }
 
-    private void viewWorkTime(long finishTime) {
-        System.out.println("Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
+    private void viewWorkTime(long finishTime, String title) {
+        System.out.println(title+"; Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
         message = "Завершено за " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;";
-        infoTA.setText(message + "\n" + infoTA.getText());
+        infoTA.setText(title+"; "+message + "\n" + infoTA.getText());
     }
 
     @FXML

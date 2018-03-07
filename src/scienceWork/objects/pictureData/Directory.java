@@ -1,4 +1,4 @@
-package scienceWork.objects;
+package scienceWork.objects.pictureData;
 
 import java.io.File;
 

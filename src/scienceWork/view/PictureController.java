@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
-import scienceWork.objects.Clusters;
+import scienceWork.objects.picTypesData.ImgTypesClusters;
 import scienceWork.objects.Picture;
 import scienceWork.Workers.FileWorker;
 
@@ -25,7 +25,7 @@ import static scienceWork.Workers.PictureWorker.printClusters;
 /**
  * Created by mixa1 on 05.12.2017.
  */
-public class PictureController implements Controller, Initializable {
+public class PictureController implements Initializable {
     private Stage dialogStage;
     private Picture picture;
     private int size;
@@ -55,7 +55,7 @@ public class PictureController implements Controller, Initializable {
         this.picture = picture;
     }
 
-    @Override
+
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
@@ -92,7 +92,7 @@ public class PictureController implements Controller, Initializable {
             image = printClusters(picture, picture.getDescriptorProperty().getCentersOfDescriptors());
         } else {
             System.out.println("selected type");
-            image = printClusters(picture, Clusters.addGeneralizedClustersForInputTypeImage.get(selectedType));
+            image = printClusters(picture, ImgTypesClusters.addGeneralizedClustersForInputTypeImage.get(selectedType));
         }
     }
 
@@ -153,7 +153,7 @@ public class PictureController implements Controller, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        typeClusterCB.setItems(FXCollections.observableArrayList(Clusters.getClustersTypes()));
+        typeClusterCB.setItems(FXCollections.observableArrayList(ImgTypesClusters.getClustersTypes()));
         typeClusterCB.getItems().add(0, null);
         size = (int) Math.round(sizePictureSlider.getValue());
         scrollPane = new ScrollPane();

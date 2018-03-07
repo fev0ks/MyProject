@@ -62,6 +62,7 @@ public class FileWorker {
                 allPicturesFromDirectories.add(getPicturesFromDir(file));
             }
         }
+        if(!pictures.isEmpty())
         allPicturesFromDirectories.add(pictures);
         if (progress != null) {
             progress.setProgress(0, countOfFiles);

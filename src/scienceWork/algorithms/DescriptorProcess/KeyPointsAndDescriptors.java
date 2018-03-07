@@ -4,18 +4,11 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.FeatureDetector;
-import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.Workers.FileWorker;
 import scienceWork.Workers.PictureWorker;
-import scienceWork.objects.DescriptorProperty;
+import scienceWork.objects.pictureData.DescriptorProperty;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /* класс для получения особый точек и их дескрипторов */
 public class KeyPointsAndDescriptors {
@@ -48,35 +41,35 @@ public class KeyPointsAndDescriptors {
         descrip.compute(matImage, keyPointOfImage, descriptor);
         return descriptor;
     }
-    //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения
-    public void findPicturesClusters(List<Picture> pictList, Progress progress) {
-//        ExecutorService executor = Executors.newFixedThreadPool(Settings.getCountThreads());
-        ExecutorService executor = Executors.newFixedThreadPool(Settings.getInstance().getCountThreads());
-
-        List<Future> futureList = new LinkedList<>();
-        System.out.println("start find KP/Descr");
-        int number = 0;
-        for (Picture picture : pictList) {
-            DescriptorsOfPictureClustering descriptorsOfPictureClustering = new DescriptorsOfPictureClustering(picture);
-            try {
-                futureList.add(executor.submit(descriptorsOfPictureClustering));
-                descriptorsOfPictureClustering.run();
-                progress.setProgress( number++ , pictList.size());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        for (int i = 0; i < pictList.size(); i++) {
-//            System.out.println("progress " + i);
-
-
-            while (!futureList.get(i).isDone()) {
-
-            }
-        }
-        executor.shutdown();
-        System.out.println("finish find KP/Descr");
-    }
+//    //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения
+//    public void findPicturesClusters(List<Picture> pictList, Progress progress) {
+////        ExecutorService executor = Executors.newFixedThreadPool(Settings.getCountThreads());
+//        ExecutorService executor = Executors.newFixedThreadPool(Settings.getInstance().getCountThreads());
+//
+//        List<Future> futureList = new LinkedList<>();
+//        System.out.println("start find KP/Descr");
+//        int number = 0;
+//        for (Picture picture : pictList) {
+//            DescriptorsOfPictureClustering descriptorsOfPictureClustering = new DescriptorsOfPictureClustering(picture);
+//            try {
+//                futureList.add(executor.submit(descriptorsOfPictureClustering));
+//                descriptorsOfPictureClustering.run();
+//                progress.setProgress( number++ , pictList.size());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        for (int i = 0; i < pictList.size(); i++) {
+////            System.out.println("progress " + i);
+//
+//
+//            while (!futureList.get(i).isDone()) {
+//
+//            }
+//        }
+//        executor.shutdown();
+//        System.out.println("finish find KP/Descr");
+//    }
 
 }

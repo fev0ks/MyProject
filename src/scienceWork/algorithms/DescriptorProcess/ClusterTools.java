@@ -21,7 +21,11 @@ public class ClusterTools {
         if (matDescriptor != null && matDescriptor.height() > 0) {
             Mat clusteredHSV = new Mat();
 
-            matDescriptor.convertTo(matDescriptor, CV_32FC3);
+            try {
+                matDescriptor.convertTo(matDescriptor, CV_32FC3);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
 //        mHSV.convertTo(mHSV, CvType.CV_32FC3);
 //        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER, 100, 0.1);
             TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER, 1000, 0.01);
@@ -46,8 +50,12 @@ public class ClusterTools {
             if (matDescriptor.height() < Settings.getCountClusters()) {
                 setFictitiousDescriptors(matDescriptor);
             }
-
-           Core.kmeans(matDescriptor, Settings.getCountClusters(), clusteredHSV, criteria, 100, Core.KMEANS_PP_CENTERS, clusteredCenter);
+            try {
+                Core.kmeans(matDescriptor, Settings.getCountClusters(), clusteredHSV, criteria, 100, Core.KMEANS_PP_CENTERS, clusteredCenter);
+            } catch (Exception e) {
+                System.out.println("ClusterTools.clusteringDescriptors -  Core.kmeans");
+                System.out.println("matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
+            }
 //            System.out.println(" kMean: " + kMeans);
 //            System.out.println("clusteredCenter: " + clusteredCenter);
 //        System.out.println("clusteredCenter: " + picture.getName() + " [");
@@ -76,7 +84,9 @@ public class ClusterTools {
         double distance = 0;
         if (mat1.width() != mat2.width()) return Double.MAX_VALUE;
         for (int i = 0; i < mat1.width(); i++) {
-            distance += Math.abs(mat1.get(0, i)[0] - mat2.get(0, i)[0]);
+//            for(int j=0; j<mat2.width();j++)
+
+            distance += Math.abs((int)mat1.get(0, i)[0] ^ (int)mat2.get(0, i)[0]);
         }
         return distance;
     }
@@ -118,7 +128,9 @@ public class ClusterTools {
         for (Picture picture : pictList) {
             try {
                 if (picture.getDescriptorProperty().getCountOfDescr() > 0) {
-                    allClusters.push_back(picture.getDescriptorProperty().getCentersOfDescriptors());
+                    Mat centersOfDescriptors = picture.getDescriptorProperty().getCentersOfDescriptors();
+                    if (centersOfDescriptors.height() != 0)
+                        allClusters.push_back(centersOfDescriptors);
                 }
             } catch (NullPointerException e) {
 //                System.out.println(e);

@@ -2,13 +2,17 @@ package scienceWork.objects.constants;
 
 
 import org.opencv.features2d.DescriptorExtractor;
+import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
 
 public class Settings {
     private static int countThreads = 4;
     private static int countClusters = 10;
+    private static int countBOWClusters = 10;
     private static int methodKP = FeatureDetector.ORB;
     private static int methodDescr = DescriptorExtractor.ORB;
+    private static int methodMatcher = DescriptorMatcher.FLANNBASED;
+
     private static String method = Constants.ORB;
     private static Settings settings;
 
@@ -33,7 +37,7 @@ public class Settings {
         method = Constants.ORB;
     }
 
-    public int getCountThreads() {
+    public static int getCountThreads() {
         return countThreads;
     }
 
@@ -71,6 +75,24 @@ public class Settings {
 
     public static void setMethod(String method) {
         Settings.method = method;
+    }
+
+
+    public static int getCountBOWClusters() {
+        return countBOWClusters;
+    }
+
+    public static void setCountBOWClusters(int countBOWClusters) {
+        Settings.countBOWClusters = countBOWClusters;
+    }
+
+
+    public static int getMethodMatcher() {
+        return methodMatcher;
+    }
+
+    public static void setMethodMatcher(int methodMatcher) {
+        Settings.methodMatcher = methodMatcher;
     }
 
     @Override

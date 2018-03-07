@@ -3,7 +3,7 @@ package scienceWork.algorithms.DescriptorProcess;
 import org.opencv.core.Mat;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.Interfaces.Teacher;
-import scienceWork.objects.Clusters;
+import scienceWork.objects.picTypesData.ImgTypesClusters;
 import scienceWork.objects.Picture;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class DescriptorTeacher implements Teacher {
         String typeImages = pictList.get(0).getPictureType();
         //Добавляю эти кластеры для указанного входного типа
         if (commonClusters.height() != 0)
-            Clusters.addGeneralizedClustersForInputTypeImage.put(typeImages, commonClusters);
+            ImgTypesClusters.addGeneralizedClustersForInputTypeImage.put(typeImages, commonClusters);
 //        Mat bestCommonClusters = filteringClusters(commonClusters);
 //        printMat(commonClusters);
     }

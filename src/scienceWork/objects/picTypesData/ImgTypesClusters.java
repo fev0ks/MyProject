@@ -1,4 +1,4 @@
-package scienceWork.objects;
+package scienceWork.objects.picTypesData;
 
 import org.opencv.core.Mat;
 
@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Clusters {
+public class ImgTypesClusters {
 
     public static Map<String, Mat> addGeneralizedClustersForInputTypeImage = new HashMap<>();
 

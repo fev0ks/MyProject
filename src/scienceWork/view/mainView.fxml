@@ -30,15 +30,16 @@
       <TableView fx:id="picTable" layoutX="210.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#selectRowInTable" prefHeight="403.0" prefWidth="459.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
         <columns>
             <TableColumn fx:id="countColumn" prefWidth="35.0" resizable="false" text="n" />
-            <TableColumn fx:id="groupColumn" prefWidth="59.0" text="pictureType" />
-          <TableColumn prefWidth="167.0" text="photo">
+            <TableColumn fx:id="inputType" prefWidth="60.0" text="inpType" />
+            <TableColumn fx:id="groupColumn" prefWidth="74.0" text="exitType" />
+          <TableColumn prefWidth="239.0" text="photo">
                <columns>
                   <TableColumn fx:id="namePicColumn" prefWidth="109.0" text="name" />
                 <TableColumn fx:id="sizePicColumn" prefWidth="71.0" text="size" />
                </columns>
             </TableColumn>
-            <TableColumn fx:id="countOfDescriptorsColumn" prefWidth="83.0" text="desc" />
-            <TableColumn fx:id="dimensionsColumn" prefWidth="99.0" text="dim" />
+            <TableColumn fx:id="countOfDescriptorsColumn" prefWidth="45.0" text="desc" />
+            <TableColumn fx:id="dimensionsColumn" prefWidth="56.0" text="dim" />
         </columns>
       </TableView>
       <ProgressBar fx:id="progressBar" layoutX="7.0" layoutY="477.0" prefHeight="18.0" prefWidth="614.0" progress="0.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />

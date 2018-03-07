@@ -1,6 +1,8 @@
 package scienceWork.objects;
 
 import javafx.beans.property.*;
+import scienceWork.objects.pictureData.DescriptorProperty;
+import scienceWork.objects.pictureData.DimensionsProperty;
 
 import java.awt.*;
 import java.io.File;
@@ -13,6 +15,7 @@ public class Picture {
     private String name;
     private String dir;
     private String pictureType;
+    private String exitPictureType;
     private double size;
     private Dimension dimension;
     private LinkedList<Integer> groups;
@@ -126,5 +129,25 @@ public class Picture {
         this.pictureType = pictureType;
     }
 
-    public StringProperty getGroupProperty(){ return new SimpleStringProperty(this.pictureType);}
+    public StringProperty getGroupProperty(){ return new SimpleStringProperty(this.exitPictureType);}
+    public StringProperty getInpGroupProperty(){ return new SimpleStringProperty(this.pictureType);}
+
+    public String getExitPictureType() {
+        return exitPictureType;
+    }
+
+    public void setExitPictureType(String exitPictureType) {
+        this.exitPictureType = exitPictureType;
+    }
+
+    @Override
+    public String toString() {
+        return "Picture{" +
+                "picFile=" + picFile +
+                ", name='" + name + '\'' +
+                ", dir='" + dir + '\'' +
+                ", pictureType='" + pictureType + '\'' +
+                ", groups=" + groups +
+                '}';
+    }
 }
