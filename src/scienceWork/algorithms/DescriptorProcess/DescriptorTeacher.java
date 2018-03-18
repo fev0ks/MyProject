@@ -29,7 +29,7 @@ public class DescriptorTeacher implements Teacher {
         String typeImages = pictList.get(0).getPictureType();
         //Добавляю эти кластеры для указанного входного типа
         if (commonClusters.height() != 0)
-            ImgTypesClusters.addGeneralizedClustersForInputTypeImage.put(typeImages, commonClusters);
+            ImgTypesClusters.trainedClusters.put(typeImages, commonClusters);
 //        Mat bestCommonClusters = filteringClusters(commonClusters);
 //        printMat(commonClusters);
     }

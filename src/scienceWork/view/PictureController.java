@@ -92,7 +92,7 @@ public class PictureController implements Initializable {
             image = printClusters(picture, picture.getDescriptorProperty().getCentersOfDescriptors());
         } else {
             System.out.println("selected type");
-            image = printClusters(picture, ImgTypesClusters.addGeneralizedClustersForInputTypeImage.get(selectedType));
+            image = printClusters(picture, ImgTypesClusters.trainedClusters.get(selectedType));
         }
     }
 

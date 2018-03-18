@@ -1,14 +1,15 @@
 package scienceWork.algorithms.DescriptorProcess;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.FeatureDetector;
 import scienceWork.Workers.FileWorker;
 import scienceWork.Workers.PictureWorker;
-import scienceWork.objects.pictureData.DescriptorProperty;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
+import scienceWork.objects.pictureData.DescriptorProperty;
 
 /* класс для получения особый точек и их дескрипторов */
 public class KeyPointsAndDescriptors {
@@ -39,6 +40,7 @@ public class KeyPointsAndDescriptors {
         Mat descriptor = new Mat();
         DescriptorExtractor descrip = DescriptorExtractor.create(methodD);
         descrip.compute(matImage, keyPointOfImage, descriptor);
+        descriptor.convertTo(descriptor, CvType.CV_32F);
         return descriptor;
     }
 //    //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения

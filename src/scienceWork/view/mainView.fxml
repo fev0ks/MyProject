@@ -20,11 +20,12 @@
          </cursor>
          <children>
             <Button fx:id="showHistogramBT" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#showAlgorithmHistogram" text="Histogram" />
-            <Button fx:id="newDirBT" layoutX="7.0" layoutY="331.0" mnemonicParsing="false" onAction="#choseNewDirectory" text="New dir" />
-            <Button fx:id="groupingBT" layoutX="134.0" layoutY="366.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" text="Search" AnchorPane.bottomAnchor="12.0" />
-            <Button fx:id="analysisBT" layoutX="8.0" layoutY="388.0" mnemonicParsing="false" onAction="#analysis" text="Start" AnchorPane.bottomAnchor="12.0" />
+            <Button fx:id="newDirBT" layoutX="58.0" layoutY="297.0" mnemonicParsing="false" onAction="#choseNewDirectory" text="New dir" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="58.0" />
+            <Button fx:id="groupingBT" layoutX="134.0" layoutY="366.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" text="Sort" AnchorPane.bottomAnchor="12.0" />
+            <Button fx:id="analysisBT" layoutX="8.0" layoutY="388.0" mnemonicParsing="false" onAction="#analysis" text="Train" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="5.0" />
             <Button layoutX="130.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettingsMenu" text="Settings" />
             <Button fx:id="resetDataBT" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" onAction="#resetData" text="Reset Data" />
+            <Button fx:id="createVocabulary" layoutX="4.0" layoutY="330.0" mnemonicParsing="false" onAction="#createVocabulary" text="setVocabulary" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" />
          </children>
       </AnchorPane>
       <TableView fx:id="picTable" layoutX="210.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#selectRowInTable" prefHeight="403.0" prefWidth="459.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">

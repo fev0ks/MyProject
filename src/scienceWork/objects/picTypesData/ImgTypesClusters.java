@@ -9,11 +9,11 @@ import java.util.Map;
 
 public class ImgTypesClusters {
 
-    public static Map<String, Mat> addGeneralizedClustersForInputTypeImage = new HashMap<>();
+    public static Map<String, Mat> trainedClusters = new HashMap<>();
 
     public static List getClustersTypes(){
         List<String> types = new LinkedList();
-        for(Map.Entry<String, Mat> entry: addGeneralizedClustersForInputTypeImage.entrySet()){
+        for(Map.Entry<String, Mat> entry: trainedClusters.entrySet()){
             types.add(entry.getKey());
         }
         return types;

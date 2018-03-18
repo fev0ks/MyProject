@@ -79,7 +79,7 @@ public class Settings {
 
 
     public static int getCountBOWClusters() {
-        return countBOWClusters;
+        return countClusters;
     }
 
     public static void setCountBOWClusters(int countBOWClusters) {

@@ -29,7 +29,7 @@ public class ClusteringThroughDescriptionClusters {
 //    //По известным кластерам определяю типы ихображений
 //    public void findPictureType(List<Picture> pictList) {
 //        clusterTools.findPicturesClusters(pictList,progress);
-//        Map<String, Mat> allTypeClusters = ImgTypesClusters.addGeneralizedClustersForInputTypeImage;
+//        Map<String, Mat> allTypeClusters = ImgTypesClusters.trainedClusters;
 //        for (Picture picture : pictList) {
 //            Mat clustersOfPicture = picture.getDescriptorProperty().getCentersOfDescriptors();
 //            double minDistance = Double.MAX_VALUE;

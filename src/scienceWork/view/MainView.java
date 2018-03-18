@@ -9,12 +9,14 @@ import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.FxWorker.UpdateProgressBar;
 import scienceWork.Main;
 import scienceWork.Workers.FileWorker;
-import scienceWork.algorithms.DescriptorProcess.DescriptorClusterer;
-import scienceWork.algorithms.DescriptorProcess.DescriptorTeacher;
-import scienceWork.objects.picTypesData.ImgTypesClusters;
-import scienceWork.objects.pictureData.Directory;
+import scienceWork.algorithms.bow.BOWClusterer;
+import scienceWork.algorithms.bow.BOWTeacher;
+import scienceWork.algorithms.bow.bowTools.BOWHelper;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
+import scienceWork.objects.picTypesData.BOWVocabulary;
+import scienceWork.objects.picTypesData.ImgTypesClusters;
+import scienceWork.objects.pictureData.Directory;
 
 import java.io.File;
 import java.util.HashMap;
@@ -64,6 +66,8 @@ public class MainView {
     @FXML
     private Button resetDataBT;
     @FXML
+    private Button createVocabulary;
+    @FXML
     private ListView<Integer> countThreadLV;
     @FXML
     private ListView<String> typeMethodKeyPandDescrLV;
@@ -112,8 +116,8 @@ public class MainView {
 
     @FXML
     private void resetData() {
-        infoTA.setText("Clearing " + ImgTypesClusters.addGeneralizedClustersForInputTypeImage.size() + " type(s) of pictures");
-        ImgTypesClusters.addGeneralizedClustersForInputTypeImage = new HashMap<>();
+        infoTA.setText("Clearing " + ImgTypesClusters.trainedClusters.size() + " type(s) of pictures");
+        ImgTypesClusters.trainedClusters = new HashMap<>();
     }
 
     @FXML
@@ -180,11 +184,12 @@ public class MainView {
     }
 
     private void setDisabledButtons(boolean disable) {
-        groupingBT.setDisable(disable);
-        analysisBT.setDisable(disable);
-        newDirBT.setDisable(disable);
-        showHistogramBT.setDisable(disable);
-        resetDataBT.setDisable(disable);
+//        groupingBT.setDisable(disable);
+//        analysisBT.setDisable(disable);
+//        newDirBT.setDisable(disable);
+//        showHistogramBT.setDisable(disable);
+//        resetDataBT.setDisable(disable);
+//        createVocabulary.setDisable(disable);
     }
 
     /*
@@ -196,21 +201,21 @@ public class MainView {
         setDisabledButtons(true);
 
         Thread mainThread = new Thread(() -> {
-            int count=0;
+            int count = 0;
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
             for (List<Picture> pictList : pictLists) {
 
-                new DescriptorClusterer(progress).findPictureType(pictList);
+                new BOWClusterer(progress).findPictureType(pictList);
 //            clearTable();
 //            updateTable();
 
-                count+=pictList.size();
+                count += pictList.size();
             }
             stopWatch.stop();
             viewWorkTime(stopWatch.getTime(), "Grouping");
-            long right = pictLists.stream().map(l->l.stream().filter(p->p.getPictureType().equals(p.getExitPictureType())).count()).mapToLong(s->s).sum();
-            infoTA.setText("Right: "+right+"; False: "+ (count-right)+"; Rate: "+((double)right/count*100)+"%\n" + infoTA.getText());
+            long right = pictLists.stream().map(l -> l.stream().filter(p -> p.getPictureType().equals(p.getExitPictureType())).count()).mapToLong(s -> s).sum();
+            infoTA.setText("Right: " + right + "; False: " + (count - right) + "; Rate: " + ((double) right / count * 100) + "%\n" + infoTA.getText());
             clearTable();
             updateTable();
             setDisabledButtons(false);
@@ -233,16 +238,16 @@ public class MainView {
             stopWatchAll.start();
             System.out.println(pictLists.size());
             for (List<Picture> pictList : pictLists) {
-                System.out.println("analysis "+ pictList.size());
-                System.out.println("analysis "+ pictList.get(0).toString());
+                System.out.println("analysis " + pictList.size());
+                System.out.println("analysis " + pictList.get(0).toString());
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
-                new DescriptorTeacher(pictList, progress).findFeatures();
+                new BOWTeacher(pictList, progress).findFeatures();
                 stopWatch.stop();
                 viewWorkTime(stopWatch.getTime(), pictList.get(0).getPictureType());
             }
             stopWatchAll.stop();
-            viewWorkTime(stopWatchAll.getTime(), "Total time for "+pictLists.size()+" groups");
+            viewWorkTime(stopWatchAll.getTime(), "Total time for " + pictLists.size() + " groups");
 
             clearTable();
             updateTable();
@@ -252,10 +257,22 @@ public class MainView {
 //        }
     }
 
+    @FXML
+    private void createVocabulary() {
+        Thread mainThread = new Thread(() -> {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            new BOWHelper(progress).createVocabulary(pictLists);
+            stopWatch.stop();
+            viewWorkTime(stopWatch.getTime(),  "Vocabulary size "+ BOWVocabulary.commonVocabulary.size());
+        });
+        mainThread.start();
+    }
+
     private void viewWorkTime(long finishTime, String title) {
-        System.out.println(title+"; Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
+        System.out.println(title + "; Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
         message = "Завершено за " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;";
-        infoTA.setText(title+"; "+message + "\n" + infoTA.getText());
+        infoTA.setText(title + "; " + message + "\n" + infoTA.getText());
     }
 
     @FXML

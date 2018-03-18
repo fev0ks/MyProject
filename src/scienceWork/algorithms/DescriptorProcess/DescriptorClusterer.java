@@ -25,7 +25,7 @@ public class DescriptorClusterer {
         int k = 5;
 
         new PictureClusters().findPicturesClusters(pictList, progress);
-        Map<String, Mat> allTypeClusters = ImgTypesClusters.addGeneralizedClustersForInputTypeImage;
+        Map<String, Mat> allTypeClusters = ImgTypesClusters.trainedClusters;
         for (Picture picture : pictList) {
             System.out.println(picture.getName() + " " + picture.getPictureType());
             Mat clustersOfPicture = picture.getDescriptorProperty().getCentersOfDescriptors();

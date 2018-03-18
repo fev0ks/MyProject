@@ -48,7 +48,17 @@ public class BOWKMeansTrainer extends BOWTrainer {
     @Override
     public Mat cluster(Mat descriptors) {
         Mat labels = new Mat(), vocabulary = new Mat();
+//        Mat newTypeMat = new Mat(descriptors.rows(), descriptors.cols(), CvType.CV_32F);
+//        descriptors.convertTo(newTypeMat, CvType.CV_32F);
+        System.out.println(descriptors.dims());
+        System.out.println(descriptors.type());
         Core.kmeans(descriptors, clusterCount, labels, termCriteria, attempts, flags, vocabulary);
+//        for(int i =0; i <vocabulary.rows(); i++){
+//            for(int j=0; j< vocabulary.cols(); j++){
+//                System.out.print(vocabulary.get(i,j)[0]+" ");
+//            }
+//            System.out.println();
+//        }
         return vocabulary;
     }
 }

@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class BOWVocabulary {
     public static Map<String, Mat> vocabularies = new HashMap<>();
+    public static Mat commonVocabulary = new Mat();
 
     public static List getClustersTypes(){
         List<String> types = new LinkedList();
