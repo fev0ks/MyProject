@@ -6,4 +6,5 @@ package scienceWork.FxWorker.Interfaces;
 public interface Progress {
 
      void setProgress(long current, long total);
+     void addMessage(String message);
 }

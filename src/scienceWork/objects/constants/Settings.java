@@ -7,7 +7,7 @@ import org.opencv.features2d.FeatureDetector;
 
 public class Settings {
     private static int countThreads = 4;
-    private static int countClusters = 10;
+    private static int countClusters = 500;
     private static int countBOWClusters = 10;
     private static int methodKP = FeatureDetector.ORB;
     private static int methodDescr = DescriptorExtractor.ORB;

@@ -10,4 +10,8 @@ public class EmptyProcesss implements Progress {
     public void setProgress(long current, long total) {
 
     }
+    @Override
+    public void addMessage(String message) {
+
+    }
 }

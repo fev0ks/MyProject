@@ -17,7 +17,7 @@ public class KeyPointsAndDescriptors {
     private int numberOfMethodDescript = Settings.getMethodDescr();
     private int numberOfMethodKeyPoint = Settings.getMethodKP();
 
-        public DescriptorProperty calculateDescriptorProperty(Picture picture) {
+        public DescriptorProperty calculateDescriptorProperty(Picture picture) throws Exception{
         Mat matFromImage = PictureWorker.getMatFromImage(FileWorker.getInstance().loadBufferedImage(picture.getPicFile()));
         MatOfKeyPoint matOfKeyPoint = createKeyPoint(matFromImage, numberOfMethodKeyPoint);
         Mat matDescriptor = createDescriptor(matFromImage, matOfKeyPoint, numberOfMethodDescript);

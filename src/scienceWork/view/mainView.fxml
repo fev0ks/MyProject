@@ -9,9 +9,9 @@
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="1000.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="675.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.MainView">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="675.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.MainView">
    <children>
-      <AnchorPane layoutX="10.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="403.0" prefWidth="196.0" style="-fx-background-color: bbbbbb;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
+      <AnchorPane layoutX="10.0" layoutY="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="403.0" prefWidth="196.0" style="-fx-background-color: bbbbbb;" AnchorPane.bottomAnchor="103.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
          <effect>
             <Bloom threshold="1.0" />
          </effect>
@@ -26,24 +26,25 @@
             <Button layoutX="130.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettingsMenu" text="Settings" />
             <Button fx:id="resetDataBT" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" onAction="#resetData" text="Reset Data" />
             <Button fx:id="createVocabulary" layoutX="4.0" layoutY="330.0" mnemonicParsing="false" onAction="#createVocabulary" text="setVocabulary" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" />
+            <Button fx:id="initSVM" layoutX="61.0" layoutY="366.0" mnemonicParsing="false" onAction="#initSVM" text="SVM" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="70.0" />
          </children>
       </AnchorPane>
-      <TableView fx:id="picTable" layoutX="210.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#selectRowInTable" prefHeight="403.0" prefWidth="459.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+      <TableView fx:id="picTable" layoutX="210.0" layoutY="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#selectRowInTable" prefHeight="403.0" prefWidth="459.0" AnchorPane.bottomAnchor="103.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
         <columns>
             <TableColumn fx:id="countColumn" prefWidth="35.0" resizable="false" text="n" />
             <TableColumn fx:id="inputType" prefWidth="60.0" text="inpType" />
             <TableColumn fx:id="groupColumn" prefWidth="74.0" text="exitType" />
-          <TableColumn prefWidth="239.0" text="photo">
+          <TableColumn prefWidth="-1.0" text="photo">
                <columns>
                   <TableColumn fx:id="namePicColumn" prefWidth="109.0" text="name" />
                 <TableColumn fx:id="sizePicColumn" prefWidth="71.0" text="size" />
                </columns>
             </TableColumn>
-            <TableColumn fx:id="countOfDescriptorsColumn" prefWidth="45.0" text="desc" />
-            <TableColumn fx:id="dimensionsColumn" prefWidth="56.0" text="dim" />
+            <TableColumn fx:id="countOfDescriptorsColumn" prefWidth="34.0" text="desc" />
+            <TableColumn fx:id="dimensionsColumn" prefWidth="71.0" text="dim" />
         </columns>
       </TableView>
       <ProgressBar fx:id="progressBar" layoutX="7.0" layoutY="477.0" prefHeight="18.0" prefWidth="614.0" progress="0.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-      <TextArea fx:id="infoTA" editable="false" layoutX="9.0" layoutY="411.0" maxHeight="1.7976931348623157E308" prefHeight="63.0" prefWidth="612.0" wrapText="true" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="411.0" />
+      <TextArea fx:id="infoTA" editable="false" layoutX="9.0" layoutY="411.0" maxHeight="120.0" prefHeight="73.0" prefWidth="655.0" wrapText="true" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
    </children>
 </AnchorPane>

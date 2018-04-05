@@ -14,7 +14,11 @@ public class DescriptorsOfPictureClustering implements IProcess {
 
     @Override
     public void run() {
-       picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
+        try {
+            picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
+        }catch (Exception e){
+            System.out.println(picture.toString());
+        }
         if (!picture.getDescriptorProperty().getMatOfDescription().empty()) {
             Mat centersOfDescriptors = new ClusterTools().createClusters(picture.getDescriptorProperty().getMatOfDescription());
             picture.getDescriptorProperty().setCentersOfDescriptors(centersOfDescriptors);

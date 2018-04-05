@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * Created by mixa1 on 18.03.2018.
  */
-public class BOWHelper {
+public class VocabularyHelper {
     private BOWTrainer bowTrainer;
     Progress progress;
 
-    public BOWHelper(Progress progress) {
+    public VocabularyHelper(Progress progress) {
         this.progress = progress;
         bowTrainer = new BOWKMeansTrainer(Settings.getCountBOWClusters());
     }
@@ -25,8 +25,10 @@ public class BOWHelper {
         for (List<Picture> pictList : pictLists) {
             addDescriptorsToBowTrainer(pictList);
         }
+        System.out.println("bowTrainer "+bowTrainer.size);
+        progress.addMessage("Start BOW clustering from "+bowTrainer.size+ " descriptors");
         BOWVocabulary.commonVocabulary = getCommonVocabulary();
-        System.out.println(BOWVocabulary.commonVocabulary.size());
+        System.out.println("commonVocabulary "+BOWVocabulary.commonVocabulary.size());
     }
 
     private void addDescriptorsToBowTrainer(List<Picture> pictureList) {
@@ -34,7 +36,11 @@ public class BOWHelper {
         long count =0;
         for (Picture picture : pictureList) {
             progress.setProgress(count++,countPictures);
-            picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture)); //**********************
+            try {
+                picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture)); //**********************
+            } catch(Exception e){
+                continue;
+            }
             Mat descriptor = picture.getDescriptorProperty().getMatOfDescription();
             bowTrainer.add(descriptor);
         }

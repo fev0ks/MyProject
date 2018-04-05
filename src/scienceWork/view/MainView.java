@@ -4,17 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.apache.commons.lang.time.StopWatch;
 import scienceWork.FxWorker.Interfaces.Progress;
-import scienceWork.FxWorker.UpdateProgressBar;
+import scienceWork.FxWorker.ProgressImp;
 import scienceWork.Main;
 import scienceWork.Workers.FileWorker;
-import scienceWork.algorithms.bow.BOWClusterer;
-import scienceWork.algorithms.bow.BOWTeacher;
-import scienceWork.algorithms.bow.bowTools.BOWHelper;
+import scienceWork.algorithms.MainOperations;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
-import scienceWork.objects.picTypesData.BOWVocabulary;
 import scienceWork.objects.picTypesData.ImgTypesClusters;
 import scienceWork.objects.pictureData.Directory;
 
@@ -68,6 +64,8 @@ public class MainView {
     @FXML
     private Button createVocabulary;
     @FXML
+    private Button initSVM;
+    @FXML
     private ListView<Integer> countThreadLV;
     @FXML
     private ListView<String> typeMethodKeyPandDescrLV;
@@ -87,7 +85,7 @@ public class MainView {
         directory.setDir(dir.getAbsolutePath());
         directory.setCountFiles(dir.listFiles().length);
 //        message = managerDB.dirToDB(dir);
-//        UpdateProgressBar.getInstance().setProgressBar(progressBar);
+//        ProgressImp.getInstance().setProgressBar(progressBar);
         fileWorker.setProgressBar(progress);
         infoTA.setText("Loading pictures from " + directory.getDir());
         Thread workFolderThread = new Thread(() -> {
@@ -111,7 +109,7 @@ public class MainView {
 
     @FXML
     public void initialize() {
-        progress = new UpdateProgressBar(progressBar);
+        progress = new ProgressImp(progressBar, infoTA);
     }
 
     @FXML
@@ -186,6 +184,7 @@ public class MainView {
     private void setDisabledButtons(boolean disable) {
 //        groupingBT.setDisable(disable);
 //        analysisBT.setDisable(disable);
+//        initSVM.setDisable(disable);
 //        newDirBT.setDisable(disable);
 //        showHistogramBT.setDisable(disable);
 //        resetDataBT.setDisable(disable);
@@ -197,25 +196,9 @@ public class MainView {
      */
     @FXML
     private void groupingImagesToClasses() {
-
         setDisabledButtons(true);
-
         Thread mainThread = new Thread(() -> {
-            int count = 0;
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
-            for (List<Picture> pictList : pictLists) {
-
-                new BOWClusterer(progress).findPictureType(pictList);
-//            clearTable();
-//            updateTable();
-
-                count += pictList.size();
-            }
-            stopWatch.stop();
-            viewWorkTime(stopWatch.getTime(), "Grouping");
-            long right = pictLists.stream().map(l -> l.stream().filter(p -> p.getPictureType().equals(p.getExitPictureType())).count()).mapToLong(s -> s).sum();
-            infoTA.setText("Right: " + right + "; False: " + (count - right) + "; Rate: " + ((double) right / count * 100) + "%\n" + infoTA.getText());
+            new MainOperations().executeClustering(pictLists, new ProgressImp(progressBar, infoTA));
             clearTable();
             updateTable();
             setDisabledButtons(false);
@@ -226,53 +209,34 @@ public class MainView {
 
     @FXML
     private void analysis() {
-
-//        typeImages = new Main().setNameOfTypeImages();
-//        if (StringUtils.isBlank(typeImages)) {
-//            infoTA.setText("Select type of analysing images\n" + infoTA.getText());
-//        } else {
-//            infoTA.setText("Analysing type: " + typeImages + "\n" + infoTA.getText());
         setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-            StopWatch stopWatchAll = new StopWatch();
-            stopWatchAll.start();
-            System.out.println(pictLists.size());
-            for (List<Picture> pictList : pictLists) {
-                System.out.println("analysis " + pictList.size());
-                System.out.println("analysis " + pictList.get(0).toString());
-                StopWatch stopWatch = new StopWatch();
-                stopWatch.start();
-                new BOWTeacher(pictList, progress).findFeatures();
-                stopWatch.stop();
-                viewWorkTime(stopWatch.getTime(), pictList.get(0).getPictureType());
-            }
-            stopWatchAll.stop();
-            viewWorkTime(stopWatchAll.getTime(), "Total time for " + pictLists.size() + " groups");
-
+            new MainOperations().executeTraining(pictLists, new ProgressImp(progressBar, infoTA));
             clearTable();
             updateTable();
             setDisabledButtons(false);
         });
         mainThread.start();
-//        }
     }
 
     @FXML
     private void createVocabulary() {
+        setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
-            new BOWHelper(progress).createVocabulary(pictLists);
-            stopWatch.stop();
-            viewWorkTime(stopWatch.getTime(),  "Vocabulary size "+ BOWVocabulary.commonVocabulary.size());
+            new MainOperations().executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
+            setDisabledButtons(false);
         });
         mainThread.start();
     }
 
-    private void viewWorkTime(long finishTime, String title) {
-        System.out.println(title + "; Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
-        message = "Завершено за " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;";
-        infoTA.setText(title + "; " + message + "\n" + infoTA.getText());
+    @FXML
+    private void initSVM(){
+        setDisabledButtons(true);
+        Thread mainThread = new Thread(() -> {
+            new MainOperations().executeInitSVM(new ProgressImp(progressBar, infoTA));
+            setDisabledButtons(false);
+        });
+        mainThread.start();
     }
 
     @FXML
@@ -280,12 +244,8 @@ public class MainView {
 
         Picture pictureFromTable = picTable.getSelectionModel().getSelectedItem();
         if (pictureFromTable != null) {
-//            System.out.println(pictureFromTable.getName());
             picTable.getSelectionModel().clearSelection();
             new Main().showInfoAboutPicture(pictureFromTable);
-//            infoTA.setText(Settings.getInstance().toString() + "\n" + infoTA.getText());
-
-
         }
 //        picTable.getFocusModel().focus(-1);
 //        picTable.getSelectionModel().clearAndSelect(0);

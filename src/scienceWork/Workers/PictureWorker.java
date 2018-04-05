@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PictureWorker {
-    public static Image printKP(Picture picture) {
+    public static Image printKP(Picture picture) throws Exception{
         Mat outputImage = new Mat();
         Scalar color = new Scalar(0, 255, 255);
         int flags = Features2d.NOT_DRAW_SINGLE_POINTS;
@@ -32,7 +32,7 @@ public class PictureWorker {
     }
 
     //перевод изображения в формат OpenCV - Mat
-    public static Mat getMatFromImage(BufferedImage image) {
+    public static Mat getMatFromImage(BufferedImage image) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 //        System.out.println(image.getHeight());
         Mat imageMat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
@@ -58,7 +58,7 @@ public class PictureWorker {
                     numberCluster = j;
                 }
             }
-            colorKP.put(i, -numberCluster * (1000000/ clusters.height()));
+            colorKP.put(i, -numberCluster * (1000000 / clusters.height()));
         }
         int cluster = 0;
         for (KeyPoint keyPoints : picture.getDescriptorProperty().getMatOfKeyPoint().toArray()) {
