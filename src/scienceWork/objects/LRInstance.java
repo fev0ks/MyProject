@@ -1,40 +1,35 @@
 package scienceWork.objects;
 
-import org.opencv.core.Mat;
+import org.opencv.ml.LogisticRegression;
 import org.opencv.ml.Ml;
-import org.opencv.ml.SVM;
 import org.opencv.ml.TrainData;
 import scienceWork.Exceptions.VocabularyNotFoundException;
 import scienceWork.objects.CommonML.AlgorithmMLImpl;
-import scienceWork.objects.constants.SettingsSVM;
+import scienceWork.objects.constants.SettingsLR;
 
-/**
- * Created by mixa1 on 28.03.2018.
- */
-public class SVMInstance extends AlgorithmMLImpl<SVM> {
-    private SVM svm;
-    private Mat trainingData;
-    private Mat classes;
+public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
+    private LogisticRegression logisticRegression;
 
+    private static LRInstance LRInstance;
 
-    private static SVMInstance SVMInstance;
+    private LRInstance() {
 
-    private SVMInstance() {}
+    }
 
-    public static SVMInstance getSVMInstance() {
-        if (SVMInstance == null) {
-            SVMInstance = new SVMInstance();
+    public static LRInstance getLRInstance() {
+        if (LRInstance == null) {
+            LRInstance = new LRInstance();
         }
-        return SVMInstance;
+        return LRInstance;
     }
 
     private void initSVM() {
-        svm = SVM.create();
-        SettingsSVM.setSettings(svm);
+        logisticRegression = LogisticRegression.create();
+        SettingsLR.setSettings(logisticRegression);
     }
 
-    public SVM getInstance() {
-        return svm;
+    public LogisticRegression getInstance() {
+        return logisticRegression;
     }
 
     public void train() {
@@ -61,11 +56,10 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
 //            System.out.println("classesType: " + CvType.typeToString(classes.type()));
 //            System.out.println(trainingData.rows() == classes.rows());
 //            TrainData trainData = TrainData.create(trainingData, Ml.ROW_SAMPLE, classes);
-
         try {
             TrainData trainData = trainingData();
-            svm.train(trainData.getSamples(), Ml.ROW_SAMPLE, trainData.getResponses());
-            System.out.println("SVM finish");
+            logisticRegression.train(trainData.getSamples(), Ml.ROW_SAMPLE, trainData.getResponses());
+            System.out.println("LogisticRegression finish");
         } catch (VocabularyNotFoundException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -78,18 +72,12 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
     }
 
     public String toString() {
-        return "SVM:" +
-                " \ngetType " + svm.getType() +
-                " \ngetKernelType " + svm.getKernelType() +
-                " \ngetVarCount " + svm.getVarCount() +
-                " \ngetC " + svm.getC() +
-                " \ngetCoef0 " + svm.getCoef0() +
-                " \ngetDegree " + svm.getDegree() +
-                " \ngetGamma " + svm.getGamma() +
-                " \ngetNu " + svm.getNu() +
-                " \ngetP " + svm.getP() +
-                " \ngetTermCriteria " + svm.getTermCriteria().type +
-                " \nmaxCount " + svm.getTermCriteria().maxCount +
-                " \nepsilon " + svm.getTermCriteria().epsilon;
+        return "LogisticRegression:" +
+                " \ngetTermCriteria " + logisticRegression.getTermCriteria() +
+                " \ngetIterations " + logisticRegression.getIterations() +
+                " \ngetLearningRate " + logisticRegression.getLearningRate() +
+                " \ngetMiniBatchSize " + logisticRegression.getMiniBatchSize() +
+                " \ngetRegularization " + logisticRegression.getRegularization() +
+                " \ngetTrainMethod " + logisticRegression.getTrainMethod();
     }
 }

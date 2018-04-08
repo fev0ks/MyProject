@@ -6,7 +6,6 @@ import net.coobird.thumbnailator.Thumbnails;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.dataBase.ManagerDB;
 import scienceWork.objects.Picture;
-
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -107,6 +106,7 @@ public class FileWorker {
     private boolean isPicture(File file) {
         String[] formatFile = file.getName().split("\\.");
         return formatFile.length > 0 && new MimetypesFileTypeMap().getContentType(file).contains("image");
+//        return true;
     }
 
 

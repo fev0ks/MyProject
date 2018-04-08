@@ -29,7 +29,7 @@ public class BOWClusterer implements Clusterer {
         extractor.setVocabulary(BOWVocabulary.commonVocabulary);
         this.pictureList = pictureList;
         this.progress = progress;
-        svm = SVMInstance.getSVMInstance().getSvm();
+        svm = SVMInstance.getSVMInstance().getInstance();
 //        System.out.println("getVarCount "+svm.getVarCount());
     }
 

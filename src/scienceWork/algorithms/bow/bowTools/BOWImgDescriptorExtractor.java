@@ -46,6 +46,7 @@ public class BOWImgDescriptorExtractor {
     public void setVocabulary(Mat vocabulary) {
         dmatcher.clear();
         this.vocabulary = vocabulary;
+        System.out.println("Vocabulart was added "+vocabulary.rows());
         dmatcher.add(Arrays.asList(vocabulary));
     }
 

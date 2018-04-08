@@ -2,6 +2,7 @@ package scienceWork.algorithms;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.opencv.core.Mat;
+import org.opencv.ml.LogisticRegression;
 import org.opencv.ml.SVM;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.bow.BOWClusterer;
@@ -36,30 +37,22 @@ public class MainOperations {
         viewWorkTime(stopWatchAll.getTime(), "Total teach ", progress);
     }
 
+
+    private void executeInitLogisticRegression(){
+        LogisticRegression logisticRegression = LogisticRegression.create();
+//        logisticRegression.train()
+    }
+
     public void executeInitSVM(Progress progress) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        SVMInstance.getSVMInstance().trainSVM();
+        SVMInstance.getSVMInstance().train();
         stopWatch.stop();
         System.out.println("Finish SVM ");
         long finishTime = stopWatch.getTime();
         System.out.println("Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
-        SVM svm = SVMInstance.getSVMInstance().getSvm();
-        System.out.println(
-                "getType " + svm.getType() +
-                        " \ngetKernelType " + svm.getKernelType() +
-                        " \ngetVarCount " + svm.getVarCount() +
-                        " \ngetC " + svm.getC() +
-                        " \ngetCoef0 " + svm.getCoef0() +
-                        " \ngetDegree " + svm.getDegree() +
-                        " \ngetGamma " + svm.getGamma() +
-                        " \ngetNu " + svm.getNu() +
-                        " \ngetP " + svm.getP() +
-//                        " \ngetDefaultName " + svm.getDefaultName()+
-                        " \ngetTermCriteria " + svm.getTermCriteria().type+
-                        " \nmaxCount " + svm.getTermCriteria().maxCount+
-                        " \nepsilon " + svm.getTermCriteria().epsilon
-        );
+        SVM svm = SVMInstance.getSVMInstance().getInstance();
+
         System.out.println("getClassWeights\n");
         Mat mat = svm.getClassWeights();
 //        long[][] newMat = new long[mat.rows()][mat.cols()];

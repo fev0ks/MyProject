@@ -16,7 +16,7 @@ public class SVMofBOW {
 
     public SVMofBOW(Progress progress) {
         this.progress = progress;
-        svm = SVMInstance.getSVMInstance().getSvm();
+        svm = SVMInstance.getSVMInstance().getInstance();
     }
 
     private void trainSVM() {

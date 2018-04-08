@@ -28,6 +28,7 @@ public class VocabularyHelper {
         System.out.println("bowTrainer "+bowTrainer.size);
         progress.addMessage("Start BOW clustering from "+bowTrainer.size+ " descriptors");
         BOWVocabulary.commonVocabulary = getCommonVocabulary();
+        progress.addMessage("Vocabulary was created "+Settings.getMethod()+"; size "+Settings.getCountClusters());
         System.out.println("commonVocabulary "+BOWVocabulary.commonVocabulary.size());
     }
 

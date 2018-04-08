@@ -75,7 +75,7 @@ public class MainView {
     private Label settingsLbl;
 
     private Progress progress;
-
+    private MainOperations mainOperations;
     private List<List<Picture>> pictLists;
     private String message = "";
 
@@ -92,7 +92,8 @@ public class MainView {
             pictLists = fileWorker.loadPicFromDir(dir);
 
             // System.out.println(" files: " +dir.listFiles().length+" pic: "+ pictLists.size());
-            infoTA.setText(directory.getDir() + " files: " + dir.listFiles().length + " pic: " + pictLists.size());
+            long countPhotos = pictLists.stream().mapToLong(s -> (long) s.size()).sum();
+            infoTA.setText(directory.getDir() + " files: " + dir.listFiles().length + " pic: " + countPhotos);
             updateTable();
         });
         workFolderThread.start();
@@ -109,7 +110,9 @@ public class MainView {
 
     @FXML
     public void initialize() {
+
         progress = new ProgressImp(progressBar, infoTA);
+        mainOperations = new MainOperations();
     }
 
     @FXML
@@ -139,7 +142,8 @@ public class MainView {
     //вывожу данные об изображениях в табилцу
     @FXML
     private void updateTable() {
-        System.out.println(" files: " + directory.getDirFile().listFiles().length + " pic: " + pictLists.size());
+        long countPhotos = pictLists.stream().mapToLong(s -> (long) s.size()).sum();
+        System.out.println(" files: " + directory.getDirFile().listFiles().length + " pic: " + countPhotos);
         if (pictLists.size() > 0) {
             picTable.setItems(convertListsToObservableList(pictLists));
             inputType.setCellValueFactory(cellData -> cellData.getValue().getInpGroupProperty());
@@ -198,7 +202,7 @@ public class MainView {
     private void groupingImagesToClasses() {
         setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-            new MainOperations().executeClustering(pictLists, new ProgressImp(progressBar, infoTA));
+            mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA));
             clearTable();
             updateTable();
             setDisabledButtons(false);
@@ -211,7 +215,7 @@ public class MainView {
     private void analysis() {
         setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-            new MainOperations().executeTraining(pictLists, new ProgressImp(progressBar, infoTA));
+            mainOperations.executeTraining(pictLists, new ProgressImp(progressBar, infoTA));
             clearTable();
             updateTable();
             setDisabledButtons(false);
@@ -223,20 +227,25 @@ public class MainView {
     private void createVocabulary() {
         setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-            new MainOperations().executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
+            mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
             setDisabledButtons(false);
         });
         mainThread.start();
     }
 
     @FXML
-    private void initSVM(){
+    private void initSVM() {
         setDisabledButtons(true);
         Thread mainThread = new Thread(() -> {
-            new MainOperations().executeInitSVM(new ProgressImp(progressBar, infoTA));
+            mainOperations.executeInitSVM(new ProgressImp(progressBar, infoTA));
             setDisabledButtons(false);
         });
         mainThread.start();
+    }
+
+    private int getSelectedClassifier(){
+
+        return 1;
     }
 
     @FXML
