@@ -10,7 +10,7 @@ public class ConnectorDB {
 
      ConnectorDB() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
                String URL = "jdbc:mysql://localhost:3306/scientific_work";
                String USERNAME = "root";
                String PASSWORD = "root";

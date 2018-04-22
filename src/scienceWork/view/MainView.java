@@ -9,15 +9,19 @@ import scienceWork.FxWorker.ProgressImp;
 import scienceWork.Main;
 import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.MainOperations;
+import scienceWork.dataBase.VocabularyDB;
+import scienceWork.objects.CommonML.AlgorithmML;
+import scienceWork.objects.FeatureTypes;
+import scienceWork.objects.LRInstance;
 import scienceWork.objects.Picture;
+import scienceWork.objects.SVMInstance;
 import scienceWork.objects.constants.Settings;
+import scienceWork.objects.picTypesData.BOWVocabulary;
 import scienceWork.objects.picTypesData.ImgTypesClusters;
 import scienceWork.objects.pictureData.Directory;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MainView {
     private Main mainApp;
@@ -66,6 +70,8 @@ public class MainView {
     @FXML
     private Button initSVM;
     @FXML
+    private Button stopBT;
+    @FXML
     private ListView<Integer> countThreadLV;
     @FXML
     private ListView<String> typeMethodKeyPandDescrLV;
@@ -73,11 +79,23 @@ public class MainView {
     private ListView<Integer> countClustersLV;
     @FXML
     private Label settingsLbl;
+    @FXML
+    private RadioButton svmClassifierType;
+    @FXML
+    private RadioButton lrClassifierType;
+    @FXML
+    private RadioButton nnlassifierType;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
+    private List<Thread> threads;
+
+    private int countPhotos;
     private Progress progress;
     private MainOperations mainOperations;
     private List<List<Picture>> pictLists;
     private String message = "";
+    private AlgorithmML classifierAlgorithm;
 
     public void setDir(File dir) {
         directory = new Directory();
@@ -88,13 +106,15 @@ public class MainView {
 //        ProgressImp.getInstance().setProgressBar(progressBar);
         fileWorker.setProgressBar(progress);
         infoTA.setText("Loading pictures from " + directory.getDir());
+        setDisabledButtons(true);
         Thread workFolderThread = new Thread(() -> {
             pictLists = fileWorker.loadPicFromDir(dir);
 
             // System.out.println(" files: " +dir.listFiles().length+" pic: "+ pictLists.size());
-            long countPhotos = pictLists.stream().mapToLong(s -> (long) s.size()).sum();
+            countPhotos = pictLists.stream().mapToInt(List::size).sum();
             infoTA.setText(directory.getDir() + " files: " + dir.listFiles().length + " pic: " + countPhotos);
             updateTable();
+            setDisabledButtons(false);
         });
         workFolderThread.start();
     }
@@ -110,9 +130,13 @@ public class MainView {
 
     @FXML
     public void initialize() {
-
+        progressIndicator.setProgress(-1f);
+        stopBT.setVisible(false);
+        progressIndicator.setVisible(false);
         progress = new ProgressImp(progressBar, infoTA);
         mainOperations = new MainOperations();
+        threads = new ArrayList<>();
+        System.out.println(FeatureTypes.valueOf(5));
     }
 
     @FXML
@@ -142,8 +166,7 @@ public class MainView {
     //вывожу данные об изображениях в табилцу
     @FXML
     private void updateTable() {
-        long countPhotos = pictLists.stream().mapToLong(s -> (long) s.size()).sum();
-        System.out.println(" files: " + directory.getDirFile().listFiles().length + " pic: " + countPhotos);
+        System.out.println(" files: " + Objects.requireNonNull(directory.getDirFile().listFiles()).length + " pic: " + countPhotos);
         if (pictLists.size() > 0) {
             picTable.setItems(convertListsToObservableList(pictLists));
             inputType.setCellValueFactory(cellData -> cellData.getValue().getInpGroupProperty());
@@ -166,9 +189,7 @@ public class MainView {
     private ObservableList<Picture> convertListsToObservableList(List<List<Picture>> pictLists) {
         ObservableList<Picture> observableListPicures = FXCollections.observableArrayList();
         for (List<Picture> pictList : pictLists) {
-            for (Picture picture : pictList) {
-                observableListPicures.add(picture);
-            }
+            observableListPicures.addAll(pictList);
         }
         return observableListPicures;
     }
@@ -186,9 +207,11 @@ public class MainView {
     }
 
     private void setDisabledButtons(boolean disable) {
+        progressIndicator.setVisible(disable);
+//        stopBT.setVisible(disable);
 //        groupingBT.setDisable(disable);
 //        analysisBT.setDisable(disable);
-//        initSVM.setDisable(disable);
+//        initClassifierData.setDisable(disable);
 //        newDirBT.setDisable(disable);
 //        showHistogramBT.setDisable(disable);
 //        resetDataBT.setDisable(disable);
@@ -201,51 +224,95 @@ public class MainView {
     @FXML
     private void groupingImagesToClasses() {
         setDisabledButtons(true);
-        Thread mainThread = new Thread(() -> {
-            mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA));
+        Thread groupingThread = new Thread(() -> {
+            if (classifierAlgorithm == null) {
+                initClassifier(getSelectedClassifier());
+            }
+            mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA), classifierAlgorithm);
             clearTable();
             updateTable();
             setDisabledButtons(false);
         });
-        mainThread.start();
+        threads.add(groupingThread);
+        groupingThread.start();
     }
 
 
     @FXML
     private void analysis() {
         setDisabledButtons(true);
-        Thread mainThread = new Thread(() -> {
+        Thread analysisThread = new Thread(() -> {
             mainOperations.executeTraining(pictLists, new ProgressImp(progressBar, infoTA));
             clearTable();
             updateTable();
             setDisabledButtons(false);
         });
-        mainThread.start();
+        threads.add(analysisThread);
+        analysisThread.start();
     }
 
     @FXML
     private void createVocabulary() {
         setDisabledButtons(true);
-        Thread mainThread = new Thread(() -> {
+        Thread vocabularyThread = new Thread(() -> {
             mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
+            VocabularyDB.getInstance().saveVocabulary(
+                    pictLists.size(),
+                    countPhotos,
+                    FeatureTypes.valueOf(Settings.getMethodKP()),
+                    Settings.getCountClusters(),
+                    BOWVocabulary.commonVocabulary);
             setDisabledButtons(false);
         });
-        mainThread.start();
+        threads.add(vocabularyThread);
+        vocabularyThread.start();
     }
 
     @FXML
-    private void initSVM() {
+    private void initClassifierData() {
         setDisabledButtons(true);
-        Thread mainThread = new Thread(() -> {
-            mainOperations.executeInitSVM(new ProgressImp(progressBar, infoTA));
+        Thread classifierThread = new Thread(() -> {
+            initClassifier(getSelectedClassifier());
+            mainOperations.executeInitClassifier(new ProgressImp(progressBar, infoTA), classifierAlgorithm);
             setDisabledButtons(false);
         });
-        mainThread.start();
+        threads.add(classifierThread);
+        classifierThread.start();
     }
 
-    private int getSelectedClassifier(){
+    private void initClassifier(int type) {
 
-        return 1;
+        if (type == 1) {
+            classifierAlgorithm = SVMInstance.getSVMInstance();
+        }
+        if (type == 2) {
+            classifierAlgorithm = LRInstance.getLRInstance();
+        }
+        if (type == 3) {
+
+        }
+    }
+
+    private int getSelectedClassifier() {
+        int type = 0;
+        if (svmClassifierType.isSelected()) {
+            type = 1;
+        }
+        if (lrClassifierType.isSelected()) {
+            type = 2;
+        }
+        if (nnlassifierType.isSelected()) {
+            type = 3;
+        }
+//        disablClassifiereRadiButtons(true);
+        System.out.println("getSelectedClassifier " + type);
+        return type;
+    }
+
+    private void disablClassifiereRadiButtons(boolean disable) {
+        svmClassifierType.setDisable(disable);
+        lrClassifierType.setDisable(disable);
+        nnlassifierType.setDisable(disable);
     }
 
     @FXML
@@ -261,8 +328,20 @@ public class MainView {
 //        picTable.getFocusModel().focus(0);
     }
 
+    @FXML
+    /*doesn't work */
+    private void stopThreads(){
+        for(Thread thread: threads){
+            if(thread.isAlive()){
+                thread.stop();
+            }
+        }
+        showMessage("Process was stopped!");
+        setDisabledButtons(false);
+        progressBar.setProgress(0);
+    }
 
-    public void clearTable() {
+    void clearTable() {
         List<List<Picture>> newPictList = new LinkedList<>();
         newPictList.addAll(pictLists);
 //            List list2 = ((List) ((ArrayList) list).clone());

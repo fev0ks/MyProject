@@ -19,8 +19,8 @@ public class Main extends Application {
     private static boolean firstSelect = true;
     private BorderPane rootLayout;
     private final int HEIGHT_MENU = 25;
-    private final int WIDTH_ROOT_LAYOUT = 675;
-    private final int HEIGHT_ROOT_LAYOUT = 525;
+    private final int WIDTH_ROOT_LAYOUT = 680;
+    private final int HEIGHT_ROOT_LAYOUT = 655;
 
     public static void main(String[] args) {
         //  System.out.println(5/0);

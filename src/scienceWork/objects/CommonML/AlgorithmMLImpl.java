@@ -35,7 +35,7 @@ public abstract class AlgorithmMLImpl<T> implements AlgorithmML<T> {
                 classNumber++;
             }
 
-            trainingData.convertTo(trainingData, CV_32F);
+//            trainingData.convertTo(trainingData, CV_32F);
             classes.convertTo(classes, CV_32S);
             return TrainData.create(trainingData, Ml.ROW_SAMPLE, classes);
         } else {

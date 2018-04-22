@@ -1,6 +1,7 @@
 package scienceWork.algorithms.bow.bowTools;
 
 import org.opencv.core.Mat;
+import org.opencv.core.TermCriteria;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.objects.Picture;
@@ -18,6 +19,7 @@ public class VocabularyHelper {
 
     public VocabularyHelper(Progress progress) {
         this.progress = progress;
+        TermCriteria termCriteria = new TermCriteria(TermCriteria.MAX_ITER, 10000, 0.001);
         bowTrainer = new BOWKMeansTrainer(Settings.getCountBOWClusters());
     }
 
@@ -27,6 +29,7 @@ public class VocabularyHelper {
         }
         System.out.println("bowTrainer "+bowTrainer.size);
         progress.addMessage("Start BOW clustering from "+bowTrainer.size+ " descriptors");
+
         BOWVocabulary.commonVocabulary = getCommonVocabulary();
         progress.addMessage("Vocabulary was created "+Settings.getMethod()+"; size "+Settings.getCountClusters());
         System.out.println("commonVocabulary "+BOWVocabulary.commonVocabulary.size());

@@ -7,6 +7,7 @@ import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.algorithms.Interfaces.Clusterer;
 import scienceWork.algorithms.bow.bowTools.BOWImgDescriptorExtractor;
+import scienceWork.objects.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
 import scienceWork.objects.SVMInstance;
 import scienceWork.objects.picTypesData.BOWVocabulary;
@@ -20,16 +21,16 @@ import static org.opencv.core.CvType.CV_32F;
  */
 public class BOWClusterer implements Clusterer {
     private Progress progress;
-    private SVM svm;
+    private AlgorithmML classifier;
     private List<Picture> pictureList;
     private BOWImgDescriptorExtractor extractor;
 
-    public BOWClusterer(List<Picture> pictureList, Progress progress) {
+    public BOWClusterer(List<Picture> pictureList, Progress progress, AlgorithmML classifier) {
         this.extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
         extractor.setVocabulary(BOWVocabulary.commonVocabulary);
         this.pictureList = pictureList;
         this.progress = progress;
-        svm = SVMInstance.getSVMInstance().getInstance();
+        this.classifier = classifier;
 //        System.out.println("getVarCount "+svm.getVarCount());
     }
 
@@ -50,8 +51,8 @@ public class BOWClusterer implements Clusterer {
                 picture.setExitPictureType("failed");
                 continue;
             }
-            prediction = svm.predict(vocabularyTemp);
-//            System.out.println("prediction "+prediction);
+            prediction = classifier.predict(vocabularyTemp);
+            System.out.println(picture.getPictureType()+ ": prediction "+prediction);
             String typeImage = BOWVocabulary.classesNumbers.get((int)prediction);
             picture.setExitPictureType(typeImage);
         }

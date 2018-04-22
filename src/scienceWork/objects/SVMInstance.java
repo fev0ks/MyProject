@@ -8,6 +8,10 @@ import scienceWork.Exceptions.VocabularyNotFoundException;
 import scienceWork.objects.CommonML.AlgorithmMLImpl;
 import scienceWork.objects.constants.SettingsSVM;
 
+import static org.opencv.core.CvType.CV_32F;
+import static org.opencv.core.CvType.CV_32FC1;
+import static org.opencv.core.CvType.CV_32S;
+
 /**
  * Created by mixa1 on 28.03.2018.
  */
@@ -64,13 +68,22 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
 
         try {
             TrainData trainData = trainingData();
-            svm.train(trainData.getSamples(), Ml.ROW_SAMPLE, trainData.getResponses());
+            Mat samples = trainData.getSamples();
+            Mat response = trainData.getResponses();
+            samples.convertTo(samples, CV_32F);
+            response.convertTo(response, CV_32S);
+            svm.train(samples, Ml.ROW_SAMPLE, response);
             System.out.println("SVM finish");
         } catch (VocabularyNotFoundException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public float predict(Mat template) {
+        return svm.predict(template);
     }
 
     private TrainData trainingData() throws VocabularyNotFoundException {
