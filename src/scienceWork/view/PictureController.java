@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
-import scienceWork.objects.picTypesData.ImgTypesClusters;
+import scienceWork.objects.data.ImgTypesClusters;
 import scienceWork.objects.Picture;
 import scienceWork.Workers.FileWorker;
 

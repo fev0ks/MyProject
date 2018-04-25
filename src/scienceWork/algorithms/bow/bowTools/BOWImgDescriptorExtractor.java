@@ -90,8 +90,15 @@ public class BOWImgDescriptorExtractor {
         if(vocabulary.empty()) throw new IllegalStateException("Vocabulary is empty.");
 
         MatOfDMatch matOfDMatch = new MatOfDMatch();
-        dmatcher.match(keypointDescriptors, matOfDMatch);
+        try{
+            dmatcher.match(keypointDescriptors, matOfDMatch);
+        } catch (Exception e){
+            System.out.println(dmatcher.getTrainDescriptors().get(0).rows()+" "+dmatcher.getTrainDescriptors().get(0).cols());
+            System.out.println(keypointDescriptors.rows()+" x "+keypointDescriptors.cols());
+           e.printStackTrace();
+        }
         if (pointIdxsOfClusters != null) {
+
             pointIdxsOfClusters.clear();
         }
         imgDescriptor.create(1, descriptorsSize(), descriptorsType());

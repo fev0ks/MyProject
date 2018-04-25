@@ -31,7 +31,7 @@ public class Settings {
 
     public void resetSettingsToDefault() {
         countThreads = 4;
-        countClusters = 10;
+        countClusters = 500;
         methodKP = FeatureDetector.ORB;
         methodDescr = DescriptorExtractor.ORB;
         method = Constants.ORB;

@@ -175,6 +175,33 @@ public class Main extends Application {
         }
     }
 
+    public void showVocabularyMenu() {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/vocabularyView.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+
+            // Создаём диалоговое окно Stage.
+            Stage startMenuStage = new Stage();
+            startMenuStage.setTitle("Vocabulary");
+            startMenuStage.initModality(Modality.WINDOW_MODAL);
+            startMenuStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            startMenuStage.setScene(scene);
+
+            // Передаём адресата в контроллер.
+            VocabularyController controller = loader.getController();
+            controller.setMainApp(this);
+            controller.setDialogStage(startMenuStage);
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            startMenuStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void showInfoAboutPicture(Picture picture) {
         try {
             // Загружаем fxml-файл и создаём новую сцену

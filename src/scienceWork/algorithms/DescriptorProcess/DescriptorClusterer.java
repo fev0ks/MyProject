@@ -3,7 +3,7 @@ package scienceWork.algorithms.DescriptorProcess;
 import org.opencv.core.Mat;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.objects.Picture;
-import scienceWork.objects.picTypesData.ImgTypesClusters;
+import scienceWork.objects.data.ImgTypesClusters;
 
 import java.util.List;
 import java.util.Map;

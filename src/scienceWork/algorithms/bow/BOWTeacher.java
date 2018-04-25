@@ -7,7 +7,7 @@ import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.algorithms.Interfaces.Teacher;
 import scienceWork.algorithms.bow.bowTools.BOWImgDescriptorExtractor;
 import scienceWork.objects.Picture;
-import scienceWork.objects.picTypesData.BOWVocabulary;
+import scienceWork.objects.data.BOWVocabulary;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +43,7 @@ public class BOWTeacher implements Teacher {
     }
 
     private Mat getGroupHistograms() {
-        extractor.setVocabulary(BOWVocabulary.commonVocabulary);
+        extractor.setVocabulary(BOWVocabulary.vocabulary.getVocabulary());
         Mat groupHistograms = new Mat();
         long countPictures = pictureList.size();
         long count = 0;

@@ -1,4 +1,4 @@
-package scienceWork.objects.picTypesData;
+package scienceWork.objects.data;
 
 import org.opencv.core.Mat;
 import org.opencv.features2d.DescriptorExtractor;
@@ -13,7 +13,8 @@ import java.util.*;
  */
 public class BOWVocabulary {
     public static Map<String, Mat> vocabularies = new HashMap<>();
-    public static Mat commonVocabulary = new Mat();
+    public static Vocabulary vocabulary = new Vocabulary();
+//    public static Mat commonVocabulary = new Mat();
     public static List<String> classesNumbers = new ArrayList<>();
     public static List getClustersTypes(){
         List<String> types = new LinkedList();

@@ -5,11 +5,10 @@ import org.opencv.core.Mat;
 import org.opencv.ml.Ml;
 import org.opencv.ml.TrainData;
 import scienceWork.Exceptions.VocabularyNotFoundException;
-import scienceWork.objects.picTypesData.BOWVocabulary;
+import scienceWork.objects.data.BOWVocabulary;
 
 import java.util.Map;
 
-import static org.opencv.core.CvType.CV_32F;
 import static org.opencv.core.CvType.CV_32S;
 
 public abstract class AlgorithmMLImpl<T> implements AlgorithmML<T> {

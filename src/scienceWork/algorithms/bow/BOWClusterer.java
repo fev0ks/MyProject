@@ -2,15 +2,13 @@ package scienceWork.algorithms.bow;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
-import org.opencv.ml.SVM;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.algorithms.Interfaces.Clusterer;
 import scienceWork.algorithms.bow.bowTools.BOWImgDescriptorExtractor;
 import scienceWork.objects.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
-import scienceWork.objects.SVMInstance;
-import scienceWork.objects.picTypesData.BOWVocabulary;
+import scienceWork.objects.data.BOWVocabulary;
 
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class BOWClusterer implements Clusterer {
 
     public BOWClusterer(List<Picture> pictureList, Progress progress, AlgorithmML classifier) {
         this.extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
-        extractor.setVocabulary(BOWVocabulary.commonVocabulary);
+        extractor.setVocabulary(BOWVocabulary.vocabulary.getVocabulary());
         this.pictureList = pictureList;
         this.progress = progress;
         this.classifier = classifier;
@@ -47,31 +45,32 @@ public class BOWClusterer implements Clusterer {
             float prediction;
             Mat vocabularyTemp = findVocabularyTemp(picture);
             vocabularyTemp.convertTo(vocabularyTemp, CV_32F);
-            if(vocabularyTemp.empty()){
+            if (vocabularyTemp.empty()) {
                 picture.setExitPictureType("failed");
                 continue;
             }
             prediction = classifier.predict(vocabularyTemp);
-            System.out.println(picture.getPictureType()+ ": prediction "+prediction);
-            String typeImage = BOWVocabulary.classesNumbers.get((int)prediction);
+            System.out.println(picture.getPictureType() + ": prediction " + prediction);
+            String typeImage = BOWVocabulary.classesNumbers.get((int) prediction);
             picture.setExitPictureType(typeImage);
         }
         progress.setProgress(0, countPictures);
     }
 
-    private Mat findVocabularyTemp(Picture picture){
-        MatOfKeyPoint keyPoints = picture.getDescriptorProperty().getMatOfKeyPoint();
-        if (keyPoints == null) {
-            try {
-                picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture)); //**********************
-            }catch(Exception e){
-                return new Mat();
-            }
-        }
-        Mat descriptors = picture.getDescriptorProperty().getMatOfDescription();
+    private Mat findVocabularyTemp(Picture picture) {
         Mat outMat = new Mat();
-        List<List<Integer>> pointIdxsOfClusters = null;
-        extractor.compute(descriptors, outMat, pointIdxsOfClusters);
+        MatOfKeyPoint keyPoints = picture.getDescriptorProperty().getMatOfKeyPoint();
+        try {
+            if (keyPoints == null) {
+                picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture)); //**********************
+            }
+            Mat descriptors = picture.getDescriptorProperty().getMatOfDescription();
+            List<List<Integer>> pointIdxsOfClusters = null;
+            extractor.compute(descriptors, outMat, pointIdxsOfClusters);
+        } catch (Exception e) {
+            System.out.println(picture.toString());
+            e.printStackTrace();
+        }
         return outMat;
     }
 }

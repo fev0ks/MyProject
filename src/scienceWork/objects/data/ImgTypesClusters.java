@@ -1,4 +1,4 @@
-package scienceWork.objects.picTypesData;
+package scienceWork.objects.data;
 
 import org.opencv.core.Mat;
 

@@ -22,14 +22,14 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
          <children>
-            <Button fx:id="showHistogramBT" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#showAlgorithmHistogram" text="Histogram" />
-            <Button fx:id="newDirBT" layoutX="58.0" layoutY="297.0" mnemonicParsing="false" onAction="#choseNewDirectory" text="New dir" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="58.0" />
-            <Button fx:id="groupingBT" layoutX="134.0" layoutY="366.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" text="Sort" AnchorPane.bottomAnchor="12.0" />
+            <Button fx:id="showHistogramBT" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#showAlgorithmHistogram" text="Histogram" AnchorPane.leftAnchor="5.0" />
+            <Button fx:id="newDirBT" layoutX="71.0" layoutY="406.0" mnemonicParsing="false" onAction="#choseNewDirectory" text="New dir" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="74.0" />
+            <Button fx:id="groupingBT" layoutX="154.0" layoutY="461.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" text="Sort" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="5.0" />
             <Button fx:id="analysisBT" layoutX="8.0" layoutY="388.0" mnemonicParsing="false" onAction="#analysis" text="Train" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="5.0" />
-            <Button layoutX="130.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettingsMenu" text="Settings" />
-            <Button fx:id="resetDataBT" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" onAction="#resetData" text="Reset Data" />
-            <Button fx:id="createVocabulary" layoutX="4.0" layoutY="330.0" mnemonicParsing="false" onAction="#createVocabulary" text="setVocabulary" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" />
-            <Button fx:id="initSVM" layoutX="56.0" layoutY="366.0" mnemonicParsing="false" onAction="#initClassifierData" text="Classifier" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="60.0" />
+            <Button layoutX="130.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettingsMenu" text="Settings" AnchorPane.rightAnchor="5.0" />
+            <Button fx:id="resetDataBT" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" onAction="#resetData" text="Reset Data" AnchorPane.leftAnchor="5.0" />
+            <Button fx:id="createVocabulary" layoutX="10.0" layoutY="224.0" mnemonicParsing="false" onAction="#createVocabulary" text="createBOW" AnchorPane.bottomAnchor="249.0" AnchorPane.leftAnchor="5.0" />
+            <Button fx:id="initSVM" layoutX="56.0" layoutY="366.0" mnemonicParsing="false" onAction="#initClassifierData" prefHeight="25.0" prefWidth="76.0" text="Classifier" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="65.0" />
             <RadioButton fx:id="svmClassifierType" layoutX="15.0" layoutY="99.0" mnemonicParsing="false" selected="true" text="SVM">
                <toggleGroup>
                   <ToggleGroup fx:id="classifier" />
@@ -37,6 +37,7 @@
             </RadioButton>
             <RadioButton fx:id="lrClassifierType" layoutX="15.0" layoutY="116.0" mnemonicParsing="false" text="LR" toggleGroup="$classifier" />
             <RadioButton fx:id="nnlassifierType" layoutX="15.0" layoutY="133.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$classifier" />
+            <Button fx:id="loadVocabulary" layoutX="126.0" layoutY="224.0" mnemonicParsing="false" onAction="#showVocabularyMenu" text="loadBOW" AnchorPane.rightAnchor="5.0" />
          </children>
       </AnchorPane>
       <TableView fx:id="picTable" layoutX="210.0" layoutY="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#selectRowInTable" prefHeight="497.0" prefWidth="455.0" AnchorPane.bottomAnchor="152.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
@@ -50,7 +51,6 @@
                 <TableColumn fx:id="sizePicColumn" prefWidth="71.0" text="size" />
                </columns>
             </TableColumn>
-            <TableColumn fx:id="countOfDescriptorsColumn" prefWidth="34.0" text="desc" />
             <TableColumn fx:id="dimensionsColumn" prefWidth="71.0" text="dim" />
         </columns>
       </TableView>

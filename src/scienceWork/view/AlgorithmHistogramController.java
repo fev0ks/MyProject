@@ -86,7 +86,7 @@ public class AlgorithmHistogramController {
             series.get(0).setName("value");
 
 //            for (Picture aPictureList : pictureList) {
-//                series.get(0).getData().add(new XYChart.Data(String.valueOf(aPictureList.getName()), aPictureList.getValueAlgorithm().getNormKeyPoints()));
+//                series.get(0).getData().add(new XYChart.Data(String.getFeatureId(aPictureList.getName()), aPictureList.getValueAlgorithm().getNormKeyPoints()));
 //            }
         }
         barChart.getData().addAll(series);

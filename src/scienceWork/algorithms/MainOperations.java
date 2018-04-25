@@ -2,16 +2,13 @@ package scienceWork.algorithms;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.opencv.core.Mat;
-import org.opencv.ml.LogisticRegression;
-import org.opencv.ml.SVM;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.bow.BOWClusterer;
 import scienceWork.algorithms.bow.BOWTeacher;
 import scienceWork.algorithms.bow.bowTools.VocabularyHelper;
 import scienceWork.objects.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
-import scienceWork.objects.SVMInstance;
-import scienceWork.objects.picTypesData.BOWVocabulary;
+import scienceWork.objects.data.BOWVocabulary;
 
 import java.util.Arrays;
 import java.util.List;
@@ -114,11 +111,11 @@ public class MainOperations {
         stopWatch.start();
         new VocabularyHelper(progress).createVocabulary(pictLists);
         stopWatch.stop();
-        viewWorkTime(stopWatch.getTime(), "Vocabulary size " + BOWVocabulary.commonVocabulary.size(), progress);
+        viewWorkTime(stopWatch.getTime(), "Vocabulary size " + BOWVocabulary.vocabulary.getVocabulary().size(), progress);
     }
 
     private void viewWorkTime(long finishTime, String title, Progress progress) {
-        String message = title+"; Finished for " + finishTime/1000/60+" min, "+ finishTime / 1000 + " sec, " + finishTime % 1000 + " ms;";
+        String message = title+"; Finished for " + finishTime/1000/60+" min, "+ finishTime / 1000 % 60 + " sec, " + finishTime % 1000 + " ms;";
         System.out.println(message);
         progress.addMessage(message);
     }

@@ -16,8 +16,8 @@ import scienceWork.objects.LRInstance;
 import scienceWork.objects.Picture;
 import scienceWork.objects.SVMInstance;
 import scienceWork.objects.constants.Settings;
-import scienceWork.objects.picTypesData.BOWVocabulary;
-import scienceWork.objects.picTypesData.ImgTypesClusters;
+import scienceWork.objects.data.BOWVocabulary;
+import scienceWork.objects.data.ImgTypesClusters;
 import scienceWork.objects.pictureData.Directory;
 
 import java.io.File;
@@ -71,6 +71,8 @@ public class MainView {
     private Button initSVM;
     @FXML
     private Button stopBT;
+    @FXML
+    private Button loadVocabulary;
     @FXML
     private ListView<Integer> countThreadLV;
     @FXML
@@ -136,7 +138,9 @@ public class MainView {
         progress = new ProgressImp(progressBar, infoTA);
         mainOperations = new MainOperations();
         threads = new ArrayList<>();
-        System.out.println(FeatureTypes.valueOf(5));
+        System.out.println(FeatureTypes.getFeatureId(5));
+        System.out.println(FeatureTypes.getLabel(5));
+
     }
 
     @FXML
@@ -175,7 +179,7 @@ public class MainView {
             sizePicColumn.setCellValueFactory(cellData -> cellData.getValue().getSizeProperty().asObject());
             countColumn.setCellValueFactory(cellData -> cellData.getValue().getIdProperty().asObject());
             dimensionsColumn.setCellValueFactory(cellData -> cellData.getValue().getDimensionsProperty().toPropertyString());
-            countOfDescriptorsColumn.setCellValueFactory(cellData -> cellData.getValue().getDescriptorProperty().getCountOfDescrProperty().asObject());
+//            countOfDescriptorsColumn.setCellValueFactory(cellData -> cellData.getValue().getDescriptorProperty().getCountOfDescrProperty().asObject());
 //            System.out.println(pictLists.get(0).getDescriptorProperty().getCountOfDescr() + " descr");
             dimensionsColumn.setCellValueFactory(cellData -> cellData.getValue().getDimensionsProperty().toPropertyString());
         } else {
@@ -204,6 +208,11 @@ public class MainView {
     private void showSettingsMenu() {
         new Main().showSettingsMenu();
         infoTA.setText(Settings.getInstance().toString() + "\n" + infoTA.getText());
+    }
+  @FXML
+    private void showVocabularyMenu() {
+        new Main().showVocabularyMenu();
+//        infoTA.setText(Settings.getInstance().toString() + "\n" + infoTA.getText());
     }
 
     private void setDisabledButtons(boolean disable) {
@@ -255,13 +264,24 @@ public class MainView {
     private void createVocabulary() {
         setDisabledButtons(true);
         Thread vocabularyThread = new Thread(() -> {
-            mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
-            VocabularyDB.getInstance().saveVocabulary(
-                    pictLists.size(),
-                    countPhotos,
-                    FeatureTypes.valueOf(Settings.getMethodKP()),
-                    Settings.getCountClusters(),
-                    BOWVocabulary.commonVocabulary);
+//            for(int type = 2; type < 3; type++) {
+//                if(type == 1){
+//                    Settings.setMethodKP(12);
+//                    Settings.setMethodDescr(7);
+//                }
+//                if(type == 2){
+//                    Settings.setMethodKP(11);
+//                    Settings.setMethodDescr(5);
+//                }
+//                for (int i = 500; i < 10000; i += 500) {
+//                    Settings.setCountOfClusters(i);
+                    mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
+                    VocabularyDB.getInstance().saveVocabulary(
+                            pictLists.size(),
+                            BOWVocabulary.vocabulary);
+//                }
+
+//            }
             setDisabledButtons(false);
         });
         threads.add(vocabularyThread);

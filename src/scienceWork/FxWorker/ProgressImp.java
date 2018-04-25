@@ -25,6 +25,7 @@ public class ProgressImp implements Progress {
     @Override
     public void addMessage(String message) {
         textArea.setText(message + "\n" + textArea.getText());
+        System.out.println(message);
     }
 
     @Override

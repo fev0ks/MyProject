@@ -17,7 +17,7 @@
       <Text layoutX="13.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Method" />
       <AnchorPane layoutX="211.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: DDD;" AnchorPane.leftAnchor="211.0" AnchorPane.rightAnchor="10.0">
          <children>
-            <TextField fx:id="countOfClustersTF" layoutX="69.0" layoutY="10.0" prefHeight="25.0" prefWidth="31.0" />
+            <TextField fx:id="countOfClustersTF" layoutX="69.0" layoutY="10.0" prefHeight="25.0" prefWidth="69.0" />
             <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Clusters" />
          </children>
       </AnchorPane>

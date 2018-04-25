@@ -1208,6 +1208,7 @@
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="297" parent="260" name="total">
@@ -1236,7 +1237,7 @@
     </column>
     <column id="301" parent="260" name="mat">
       <Position>6</Position>
-      <DataType>blob|0s</DataType>
+      <DataType>longblob|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
@@ -1324,6 +1325,7 @@
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="319" parent="263" name="count_clasters">
@@ -1344,10 +1346,9 @@
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="322" parent="263" name="date">
+    <column id="322" parent="263" name="descriptors">
       <Position>5</Position>
-      <DataType>datetime|0s</DataType>
-      <NotNull>1</NotNull>
+      <DataType>bigint(20)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="323" parent="263" name="id_type">
@@ -1362,14 +1363,20 @@
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="325" parent="263" name="id_UNIQUE">
+    <column id="325" parent="263" name="date">
+      <Position>8</Position>
+      <DataType>datetime|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="326" parent="263" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="326" parent="263" name="id_mat_idx">
+    <index id="327" parent="263" name="id_mat_idx">
       <ColNames>id_mat</ColNames>
     </index>
-    <index id="327" parent="263" name="id_type_idx">
+    <index id="328" parent="263" name="id_type_idx">
       <ColNames>id_type</ColNames>
     </index>
   </database-model>
