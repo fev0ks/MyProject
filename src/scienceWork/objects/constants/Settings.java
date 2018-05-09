@@ -12,6 +12,9 @@ public class Settings {
     private static int methodKP = FeatureDetector.ORB;
     private static int methodDescr = DescriptorExtractor.ORB;
     private static int methodMatcher = DescriptorMatcher.FLANNBASED;
+    private static int scaleImageRatio = 600;
+
+    public static final boolean SAVE_DATA = true;
 
     private static String method = Constants.ORB;
     private static Settings settings;
@@ -35,6 +38,18 @@ public class Settings {
         methodKP = FeatureDetector.ORB;
         methodDescr = DescriptorExtractor.ORB;
         method = Constants.ORB;
+    }
+
+    public static boolean isSaveData() {
+        return SAVE_DATA;
+    }
+
+    public static int getScaleImageRatio() {
+        return scaleImageRatio;
+    }
+
+    public static void setScaleImageRatio(int scaleImageRatio) {
+        Settings.scaleImageRatio = scaleImageRatio;
     }
 
     public static int getCountThreads() {

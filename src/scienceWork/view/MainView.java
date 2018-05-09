@@ -4,12 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import scienceWork.FxWorker.FxHelper;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.FxWorker.ProgressImp;
 import scienceWork.Main;
 import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.MainOperations;
-import scienceWork.dataBase.VocabularyDB;
+import scienceWork.dataBase.WorkerDB;
 import scienceWork.objects.CommonML.AlgorithmML;
 import scienceWork.objects.FeatureTypes;
 import scienceWork.objects.LRInstance;
@@ -23,8 +25,11 @@ import scienceWork.objects.pictureData.Directory;
 import java.io.File;
 import java.util.*;
 
+import static scienceWork.FxWorker.FxHelper.showMessage;
+
 public class MainView {
     private Main mainApp;
+    private Stage dialogStage;
     private Directory directory;
     private String typeImages;
 
@@ -70,7 +75,7 @@ public class MainView {
     @FXML
     private Button initSVM;
     @FXML
-    private Button stopBT;
+    private Button clearBT;
     @FXML
     private Button loadVocabulary;
     @FXML
@@ -89,6 +94,8 @@ public class MainView {
     private RadioButton nnlassifierType;
     @FXML
     private ProgressIndicator progressIndicator;
+    @FXML
+    private Button saveGroups;
 
     private List<Thread> threads;
 
@@ -133,20 +140,19 @@ public class MainView {
     @FXML
     public void initialize() {
         progressIndicator.setProgress(-1f);
-        stopBT.setVisible(false);
+//        clearBT.setVisible(false);
         progressIndicator.setVisible(false);
         progress = new ProgressImp(progressBar, infoTA);
         mainOperations = new MainOperations();
         threads = new ArrayList<>();
-        System.out.println(FeatureTypes.getFeatureId(5));
-        System.out.println(FeatureTypes.getLabel(5));
-
     }
 
     @FXML
     private void resetData() {
-        infoTA.setText("Clearing " + ImgTypesClusters.trainedClusters.size() + " type(s) of pictures");
-        ImgTypesClusters.trainedClusters = new HashMap<>();
+        BOWVocabulary.vocabulary = null;
+        BOWVocabulary.vocabularies = null;
+        classifierAlgorithm = null;
+        infoTA.setText("Vocabulary and classifier were cleared");
     }
 
     @FXML
@@ -156,15 +162,25 @@ public class MainView {
 //        MainView controller = new MainView();
 //        MainView controller = loader.getController();
 //        controller.setMainApp(this);
-        Main main = new Main();
-        File file = main.showChooseDir();
+        File file = showDirectorySelector();
         if (file != null) {
             clearTable();
-            setDir(file);
         }
-        if (file == null && main.getStatus()) {
+        if (file == null && pictLists.isEmpty()) {
             System.exit(0);
         }
+        setDir(showDirectorySelector());
+    }
+
+    private File showDirectorySelector(){
+//        Main main = new Main();
+        //        if (file != null) {
+//            clearTable();
+//        }
+//        if (file == null && main.getStatus()) {
+//            System.exit(0);
+//        }
+        return new Main().showChooseDir();
     }
 
     //вывожу данные об изображениях в табилцу
@@ -172,7 +188,7 @@ public class MainView {
     private void updateTable() {
         System.out.println(" files: " + Objects.requireNonNull(directory.getDirFile().listFiles()).length + " pic: " + countPhotos);
         if (pictLists.size() > 0) {
-            picTable.setItems(convertListsToObservableList(pictLists));
+            picTable.setItems(FxHelper.convertListsToObservableList(pictLists));
             inputType.setCellValueFactory(cellData -> cellData.getValue().getInpGroupProperty());
             groupColumn.setCellValueFactory(cellData -> cellData.getValue().getGroupProperty());
             namePicColumn.setCellValueFactory(cellData -> cellData.getValue().getNameProperty());
@@ -183,20 +199,13 @@ public class MainView {
 //            System.out.println(pictLists.get(0).getDescriptorProperty().getCountOfDescr() + " descr");
             dimensionsColumn.setCellValueFactory(cellData -> cellData.getValue().getDimensionsProperty().toPropertyString());
         } else {
-            showMessage("NO IMAGES!!!");
+            showMessage("Error", "There are no any images!", "Please select another folder", Alert.AlertType.ERROR, mainApp);
             mainApp.showToolsScene();
         }
 //        showMessage(message);
         loadPicToDB();
     }
 
-    private ObservableList<Picture> convertListsToObservableList(List<List<Picture>> pictLists) {
-        ObservableList<Picture> observableListPicures = FXCollections.observableArrayList();
-        for (List<Picture> pictList : pictLists) {
-            observableListPicures.addAll(pictList);
-        }
-        return observableListPicures;
-    }
 
     //загружаю изображения в базу данных
     private void loadPicToDB() {
@@ -209,7 +218,8 @@ public class MainView {
         new Main().showSettingsMenu();
         infoTA.setText(Settings.getInstance().toString() + "\n" + infoTA.getText());
     }
-  @FXML
+
+    @FXML
     private void showVocabularyMenu() {
         new Main().showVocabularyMenu();
 //        infoTA.setText(Settings.getInstance().toString() + "\n" + infoTA.getText());
@@ -217,7 +227,7 @@ public class MainView {
 
     private void setDisabledButtons(boolean disable) {
         progressIndicator.setVisible(disable);
-//        stopBT.setVisible(disable);
+//        clearBT.setVisible(disable);
 //        groupingBT.setDisable(disable);
 //        analysisBT.setDisable(disable);
 //        initClassifierData.setDisable(disable);
@@ -236,6 +246,8 @@ public class MainView {
         Thread groupingThread = new Thread(() -> {
             if (classifierAlgorithm == null) {
                 initClassifier(getSelectedClassifier());
+                classifierAlgorithm.setCountClusters(pictLists.size());
+                classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
             }
             mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA), classifierAlgorithm);
             clearTable();
@@ -273,12 +285,9 @@ public class MainView {
 //                    Settings.setMethodKP(11);
 //                    Settings.setMethodDescr(5);
 //                }
-//                for (int i = 500; i < 10000; i += 500) {
+//                for (int i = 1500; i < 5000; i += 500) {
 //                    Settings.setCountOfClusters(i);
-                    mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
-                    VocabularyDB.getInstance().saveVocabulary(
-                            pictLists.size(),
-                            BOWVocabulary.vocabulary);
+            mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
 //                }
 
 //            }
@@ -293,11 +302,27 @@ public class MainView {
         setDisabledButtons(true);
         Thread classifierThread = new Thread(() -> {
             initClassifier(getSelectedClassifier());
+            classifierAlgorithm.setCountClusters(pictLists.size());
+            classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
             mainOperations.executeInitClassifier(new ProgressImp(progressBar, infoTA), classifierAlgorithm);
+
             setDisabledButtons(false);
         });
         threads.add(classifierThread);
         classifierThread.start();
+    }
+
+    @FXML
+    private void initSaveGroups() {
+        setDisabledButtons(true);
+        File file = showDirectorySelector();
+        Thread saveGroupsThread = new Thread(() -> {
+            if(file != null) {
+                mainOperations.executeSavingGroups(pictLists, file, countPhotos, progress);
+            }
+            setDisabledButtons(false);
+        });
+        saveGroupsThread.start();
     }
 
     private void initClassifier(int type) {
@@ -307,9 +332,6 @@ public class MainView {
         }
         if (type == 2) {
             classifierAlgorithm = LRInstance.getLRInstance();
-        }
-        if (type == 3) {
-
         }
     }
 
@@ -321,9 +343,7 @@ public class MainView {
         if (lrClassifierType.isSelected()) {
             type = 2;
         }
-        if (nnlassifierType.isSelected()) {
-            type = 3;
-        }
+
 //        disablClassifiereRadiButtons(true);
         System.out.println("getSelectedClassifier " + type);
         return type;
@@ -349,16 +369,16 @@ public class MainView {
     }
 
     @FXML
-    /*doesn't work */
-    private void stopThreads(){
-        for(Thread thread: threads){
-            if(thread.isAlive()){
-                thread.stop();
-            }
-        }
-        showMessage("Process was stopped!");
-        setDisabledButtons(false);
-        progressBar.setProgress(0);
+    private void clearTextArea() {
+        infoTA.setText("");
+//        for(Thread thread: threads){
+//            if(thread.isAlive()){
+//                thread.stop();
+//            }
+//        }
+//        showMessage("Process was stopped!");
+//        setDisabledButtons(false);
+//        progressBar.setProgress(0);
     }
 
     void clearTable() {
@@ -374,25 +394,19 @@ public class MainView {
         progressBar.setProgress(0);
     }
 
-    private void showMessage(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(mainApp.getPrimaryStage());
-        alert.setTitle("result");
-        alert.setHeaderText(message);
-        alert.setContentText(":-|");
-
-        alert.showAndWait();
-    }
 
     @FXML
     private void showAlgorithmHistogram() {
 
-        if (dimensionsChB.isSelected()) mainApp.showAlgorithmStatistics(pictLists.get(0), "dimensions");
-        if (distanceChB.isSelected()) mainApp.showAlgorithmStatistics(pictLists.get(0), "distance");
+//        mainApp.showAlgorithmStatistics(pictLists.get(0), "dimensions");
     }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+    }
+
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
     }
 
 

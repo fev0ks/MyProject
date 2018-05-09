@@ -1009,375 +1009,492 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="255" parent="7" name="algoritms">
+    <table id="255" parent="7" name="classifier">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="256" parent="7" name="dimensions">
+    <table id="256" parent="7" name="classifier_data">
       <Engine>InnoDB</Engine>
     </table>
     <table id="257" parent="7" name="feature">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="258" parent="7" name="folder">
+    <table id="258" parent="7" name="group">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="259" parent="7" name="groups">
+    <table id="259" parent="7" name="group_data">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="260" parent="7" name="mat_info">
+    <table id="260" parent="7" name="image">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="261" parent="7" name="photo">
+    <table id="261" parent="7" name="mat">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="262" parent="7" name="pic_of_dir">
+    <table id="262" parent="7" name="vocabulary">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="263" parent="7" name="vocabulary">
-      <Engine>InnoDB</Engine>
-    </table>
-    <column id="264" parent="255" name="id_photo">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="265" parent="255" name="methodName1">
-      <Position>2</Position>
-      <DataType>json|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="266" parent="255" name="methodName2">
-      <Position>3</Position>
-      <DataType>json|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="267" parent="255" name="methodName3">
-      <Position>4</Position>
-      <DataType>json|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="268" parent="255" name="id_photo">
-      <ColNames>id_photo</ColNames>
-    </index>
-    <foreign-key id="269" parent="255" name="algoritms_ibfk_1">
-      <ColNames>id_photo</ColNames>
-      <RefSchemaName>scientific_work</RefSchemaName>
-      <RefTableName>photos</RefTableName>
-      <RefKeyName>photos</RefKeyName>
-      <RefColNames>id_photo</RefColNames>
-    </foreign-key>
-    <column id="270" parent="256" name="id_photo">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="271" parent="256" name="width">
-      <Position>2</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="272" parent="256" name="height">
-      <Position>3</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="273" parent="256" name="id_photo">
-      <ColNames>id_photo</ColNames>
-      <Unique>1</Unique>
-    </index>
-    <key id="274" parent="256" name="id_photo">
-      <ColNames>id_photo</ColNames>
-      <UnderlyingIndexName>id_photo</UnderlyingIndexName>
-    </key>
-    <foreign-key id="275" parent="256" name="ref_id_photo">
-      <ColNames>id_photo</ColNames>
-      <RefSchemaName>scientific_work</RefSchemaName>
-      <RefTableName>photos</RefTableName>
-      <RefKeyName>photos</RefKeyName>
-      <RefColNames>id_photo</RefColNames>
-    </foreign-key>
-    <column id="276" parent="257" name="id">
+    <column id="263" parent="255" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="277" parent="257" name="key_point">
+    <column id="264" parent="255" name="name">
+      <Position>2</Position>
+      <DataType>varchar(45)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="265" parent="255" name="id_UNIQUE">
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="266" parent="255" name="name_UNIQUE">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="267" parent="255" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="268" parent="255" name="id_UNIQUE">
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="269" parent="255" name="name_UNIQUE">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name_UNIQUE</UnderlyingIndexName>
+    </key>
+    <column id="270" parent="256" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="271" parent="256" name="clusters">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="278" parent="257" name="descriptor">
+    <column id="272" parent="256" name="settings">
+      <Position>3</Position>
+      <DataType>varchar(250)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="273" parent="256" name="date">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="274" parent="256" name="classifier_id">
+      <Position>5</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="275" parent="256" name="mat_id">
+      <Position>6</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="276" parent="256" name="id_UNIQUE">
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="277" parent="256" name="mat_id_UNIQUE">
+      <ColNames>mat_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="278" parent="256" name="classifier_id">
+      <ColNames>classifier_id</ColNames>
+    </index>
+    <index id="279" parent="256" name="mat_id_idx">
+      <ColNames>mat_id</ColNames>
+    </index>
+    <key id="280" parent="256" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="281" parent="256" name="id_UNIQUE">
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="282" parent="256" name="mat_id_UNIQUE">
+      <ColNames>mat_id</ColNames>
+      <UnderlyingIndexName>mat_id_UNIQUE</UnderlyingIndexName>
+    </key>
+    <foreign-key id="283" parent="256" name="classifier_id">
+      <ColNames>classifier_id</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>classifier</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="284" parent="256" name="classif_mat_id">
+      <ColNames>mat_id</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>mat</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="285" parent="257" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="286" parent="257" name="key_point">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="287" parent="257" name="descriptor">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="279" parent="257" name="label">
+    <column id="288" parent="257" name="label">
       <Position>4</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="280" parent="257" name="descriptor_UNIQUE">
-      <ColNames>descriptor</ColNames>
-      <Unique>1</Unique>
-    </index>
-    <index id="281" parent="257" name="id_UNIQUE">
+    <index id="289" parent="257" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="282" parent="257" name="key_point_UNIQUE">
+    <index id="290" parent="257" name="key_point_UNIQUE">
       <ColNames>key_point</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="283" parent="257" name="label_UNIQUE">
+    <index id="291" parent="257" name="descriptor_UNIQUE">
+      <ColNames>descriptor</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="292" parent="257" name="label_UNIQUE">
       <ColNames>label</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="284" parent="257" name="descriptor_UNIQUE">
-      <ColNames>descriptor</ColNames>
-      <UnderlyingIndexName>descriptor_UNIQUE</UnderlyingIndexName>
+    <key id="293" parent="257" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
     </key>
-    <key id="285" parent="257" name="id_UNIQUE">
+    <key id="294" parent="257" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
     </key>
-    <key id="286" parent="257" name="key_point_UNIQUE">
+    <key id="295" parent="257" name="key_point_UNIQUE">
       <ColNames>key_point</ColNames>
       <UnderlyingIndexName>key_point_UNIQUE</UnderlyingIndexName>
     </key>
-    <key id="287" parent="257" name="label_UNIQUE">
+    <key id="296" parent="257" name="descriptor_UNIQUE">
+      <ColNames>descriptor</ColNames>
+      <UnderlyingIndexName>descriptor_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="297" parent="257" name="label_UNIQUE">
       <ColNames>label</ColNames>
       <UnderlyingIndexName>label_UNIQUE</UnderlyingIndexName>
     </key>
-    <key id="288" parent="257" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="289" parent="258" name="name">
-      <Position>1</Position>
-      <DataType>varchar(255)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="290" parent="258" name="id_folder">
-      <Position>2</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="291" parent="258" name="count_files">
-      <Position>3</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <key id="292" parent="258" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id_folder</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="293" parent="259" name="id_group">
+    <column id="298" parent="258" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="294" parent="259" name="name_group">
+    <column id="299" parent="258" name="name">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="295" parent="259" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id_group</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="296" parent="260" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="297" parent="260" name="total">
-      <Position>2</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="298" parent="260" name="rows">
-      <Position>3</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="299" parent="260" name="cols">
-      <Position>4</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="300" parent="260" name="cv_type">
-      <Position>5</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="301" parent="260" name="mat">
-      <Position>6</Position>
-      <DataType>longblob|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="302" parent="260" name="id_UNIQUE">
-      <ColNames>id</ColNames>
-      <Unique>1</Unique>
-    </index>
-    <key id="303" parent="260" name="id_UNIQUE">
-      <ColNames>id</ColNames>
-      <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
-    </key>
-    <key id="304" parent="260" name="PRIMARY">
+    <key id="300" parent="258" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="305" parent="261" name="id_photo">
+    <column id="301" parent="259" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="306" parent="261" name="name">
+    <column id="302" parent="259" name="used_images">
       <Position>2</Position>
-      <DataType>varchar(100)|0s</DataType>
+      <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="307" parent="261" name="size">
+    <column id="303" parent="259" name="used_descr">
       <Position>3</Position>
-      <DataType>double|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="308" parent="261" name="id_folder">
-      <Position>4</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="309" parent="261" name="id_group">
-      <Position>5</Position>
-      <DataType>int(11)|0s</DataType>
-      <DefaultExpression>&apos;0&apos;</DefaultExpression>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="310" parent="261" name="id_folder">
-      <ColNames>id_folder</ColNames>
-    </index>
-    <index id="311" parent="261" name="id_group">
-      <ColNames>id_group</ColNames>
-    </index>
-    <index id="312" parent="261" name="name">
-      <ColNames>name</ColNames>
-      <Unique>1</Unique>
-    </index>
-    <key id="313" parent="261" name="name">
-      <ColNames>name</ColNames>
-      <UnderlyingIndexName>name</UnderlyingIndexName>
-    </key>
-    <foreign-key id="314" parent="261" name="photos_ibfk_2">
-      <ColNames>id_folder</ColNames>
-      <RefSchemaName>scientific_work</RefSchemaName>
-      <RefTableName>folder</RefTableName>
-      <RefKeyName>PRIMARY</RefKeyName>
-      <RefColNames>id_folder</RefColNames>
-    </foreign-key>
-    <column id="315" parent="262" name="id_pic">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="316" parent="262" name="id_dir">
-      <Position>2</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="317" parent="262" name="id_dir">
-      <ColNames>id_dir</ColNames>
-    </index>
-    <column id="318" parent="263" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="319" parent="263" name="count_clasters">
-      <Position>2</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="320" parent="263" name="count_images">
-      <Position>3</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="321" parent="263" name="size">
-      <Position>4</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="322" parent="263" name="descriptors">
-      <Position>5</Position>
       <DataType>bigint(20)|0s</DataType>
+      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="323" parent="263" name="id_type">
+    <column id="304" parent="259" name="date">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="305" parent="259" name="group_id">
+      <Position>5</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="306" parent="259" name="vocabulary_id">
       <Position>6</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="324" parent="263" name="id_mat">
+    <column id="307" parent="259" name="classifier_data_id">
       <Position>7</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="325" parent="263" name="date">
+    <column id="308" parent="259" name="mat_id">
       <Position>8</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="309" parent="259" name="mat_id_UNIQUE">
+      <ColNames>mat_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="310" parent="259" name="group_id_idx">
+      <ColNames>group_id</ColNames>
+    </index>
+    <index id="311" parent="259" name="vocabulaty_id_idx">
+      <ColNames>vocabulary_id</ColNames>
+    </index>
+    <index id="312" parent="259" name="classifier_data_id_idx">
+      <ColNames>classifier_data_id</ColNames>
+    </index>
+    <index id="313" parent="259" name="mat_id_idx">
+      <ColNames>mat_id</ColNames>
+    </index>
+    <key id="314" parent="259" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="315" parent="259" name="mat_id_UNIQUE">
+      <ColNames>mat_id</ColNames>
+      <UnderlyingIndexName>mat_id_UNIQUE</UnderlyingIndexName>
+    </key>
+    <foreign-key id="316" parent="259" name="classifier_data_id">
+      <ColNames>classifier_data_id</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>classifier_data</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="317" parent="259" name="group_mat_id">
+      <ColNames>mat_id</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>mat</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="318" parent="260" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="319" parent="260" name="name">
+      <Position>2</Position>
+      <DataType>varchar(200)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="320" parent="260" name="path">
+      <Position>3</Position>
+      <DataType>varchar(250)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="321" parent="260" name="height">
+      <Position>4</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="322" parent="260" name="width">
+      <Position>5</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="323" parent="260" name="group_id">
+      <Position>6</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="324" parent="260" name="descriptor_id">
+      <Position>7</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="325" parent="260" name="name">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="326" parent="260" name="group_id_idx">
+      <ColNames>group_id</ColNames>
+    </index>
+    <index id="327" parent="260" name="descriptor_id_idx">
+      <ColNames>descriptor_id</ColNames>
+    </index>
+    <key id="328" parent="260" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="329" parent="260" name="name">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name</UnderlyingIndexName>
+    </key>
+    <foreign-key id="330" parent="260" name="descriptor_id">
+      <ColNames>descriptor_id</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>mat</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="331" parent="261" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="332" parent="261" name="rows">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="333" parent="261" name="cols">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="334" parent="261" name="cv_type">
+      <Position>4</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="335" parent="261" name="mat">
+      <Position>5</Position>
+      <DataType>longblob|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="336" parent="261" name="feature_id">
+      <Position>6</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="337" parent="261" name="id_UNIQUE">
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="338" parent="261" name="feature_id_idx">
+      <ColNames>feature_id</ColNames>
+    </index>
+    <key id="339" parent="261" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="340" parent="261" name="id_UNIQUE">
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
+    </key>
+    <foreign-key id="341" parent="261" name="feature_id">
+      <ColNames>feature_id</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>feature</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="342" parent="262" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="343" parent="262" name="clusters">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="344" parent="262" name="size">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="345" parent="262" name="used_images">
+      <Position>4</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="346" parent="262" name="used_descr">
+      <Position>5</Position>
+      <DataType>bigint(20)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="347" parent="262" name="date">
+      <Position>6</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="326" parent="263" name="id_UNIQUE">
+    <column id="348" parent="262" name="mat_id">
+      <Position>7</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="349" parent="262" name="mat_id_idx">
+      <ColNames>mat_id</ColNames>
+    </index>
+    <key id="350" parent="262" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
-      <Unique>1</Unique>
-    </index>
-    <index id="327" parent="263" name="id_mat_idx">
-      <ColNames>id_mat</ColNames>
-    </index>
-    <index id="328" parent="263" name="id_type_idx">
-      <ColNames>id_type</ColNames>
-    </index>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="351" parent="262" name="voc_mat_id">
+      <ColNames>mat_id</ColNames>
+      <RefSchemaName>scientific_work</RefSchemaName>
+      <RefTableName>mat</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
   </database-model>
 </dataSource>

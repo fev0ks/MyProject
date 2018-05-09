@@ -8,9 +8,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mysql-connector-java-6.0.5-bin" level="project" />
-    <orderEntry type="library" name="org.openpnp:opencv:3.2.0-1" level="project" />
     <orderEntry type="library" name="junit:junit:4.12" level="project" />
     <orderEntry type="library" name="net.coobird:thumbnailator:0.4.8" level="project" />
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.lang:2.6" level="project" />
+    <orderEntry type="library" name="opencv-341" level="project" />
   </component>
 </module>

@@ -1,8 +1,6 @@
 package scienceWork.view;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,14 +9,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
-import scienceWork.objects.data.ImgTypesClusters;
+import scienceWork.Main;
+import scienceWork.Workers.PictureWorker;
+import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
+import scienceWork.objects.data.BOWVocabulary;
 import scienceWork.objects.Picture;
-import scienceWork.Workers.FileWorker;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static scienceWork.Workers.PictureWorker.printClusters;
+import static scienceWork.FxWorker.FxHelper.showMessage;
 
 ;
 
@@ -37,22 +37,38 @@ public class PictureController implements Initializable {
     private Button showBt;
 
     private ScrollPane scrollPane;
-    @FXML
-    private ChoiceBox<String> typeClusterCB;
+    //    @FXML
+//    private ChoiceBox<String> typeClusterCB;
     @FXML
     private ImageView imageView;
     @FXML
     private TextArea infoTA;
     @FXML
     private Slider sizePictureSlider;
+    @FXML
+    private CheckBox grayScaleCB;
+    @FXML
+    private CheckBox keyPointsCB;
 
+    private Main mainApp;
+
+    public void setMainApp(Main mainApp) {
+        this.mainApp = mainApp;
+    }
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
     public void setPicture(Picture picture) {
+
         this.picture = picture;
+        try {
+            this.picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fillUpInfoAboutPicture();
     }
 
 
@@ -63,7 +79,7 @@ public class PictureController implements Initializable {
     @FXML
     private void showPicture() {
         System.out.println("showing: " + picture.getDir() + "\\" + picture.getName());
-        selectTypeImageView();
+        getImage();
         setSizeImageView();
         setPictureToImageView();
     }
@@ -76,24 +92,18 @@ public class PictureController implements Initializable {
     }
 
     private void setPictureToImageView() {
-
-//            Platform.runLater(() -> imageView.setImage(printKP(picture)));
         Platform.runLater(() -> imageView.setImage(image));
-//            imageView.setImage(new Image("file:///" + picture.getDir() + "\\" + picture.getName(), width, height, false, false));
     }
 
-    private void selectTypeImageView() {
-        String selectedType = typeClusterCB.getSelectionModel().getSelectedItem();
-        if (selectedType == null) {
-            System.out.println("clear");
-            image = SwingFXUtils.toFXImage(FileWorker.getInstance().loadBufferedImage(picture.getPicFile()), null);
-        } else if (selectedType.equals("own kep points")) {
-            System.out.println("own");
-            image = printClusters(picture, picture.getDescriptorProperty().getCentersOfDescriptors());
-        } else {
-            System.out.println("selected type");
-            image = printClusters(picture, ImgTypesClusters.trainedClusters.get(selectedType));
+    private void getImage() {
+        boolean isGrayScale = grayScaleCB.isSelected();
+        boolean printKeyPoints = keyPointsCB.isSelected();
+        try {
+            image = PictureWorker.getImage(picture, isGrayScale, printKeyPoints);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     private void fillUpInfoAboutPicture() {
@@ -109,21 +119,22 @@ public class PictureController implements Initializable {
         stringBuilder.append("x");
         stringBuilder.append(picture.getDimension().width);
         stringBuilder.append("\n");
-        stringBuilder.append("Descr-s: ");
+        stringBuilder.append("Features: ");
         stringBuilder.append(picture.getDescriptorProperty().getCountOfDescr());
         infoTA.setText(stringBuilder.toString());
     }
 
     public void initFirstWindow() {
-        if (picture.getDescriptorProperty().getMatOfDescription() == null) {
-            showBt.setDisable(true);
-        } else {
-            typeClusterCB.getItems().add(1, "own kep points");
+        if (picture.getDescriptorProperty() == null) {
+            try {
+                picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         setSizeImageView();
-        fillUpInfoAboutPicture();
-        image = SwingFXUtils.toFXImage(FileWorker.getInstance().loadBufferedImage(picture.getPicFile()), null);
+        getImage();
         imageView.setImage(image);
     }
 
@@ -145,16 +156,11 @@ public class PictureController implements Initializable {
                 anchorPane.getHeight() == 0 ? anchorPane.getMinHeight() : anchorPane.getHeight());
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
-//        System.out.println("anchorPane "+anchorPane.getMaxHeight()+"x"+anchorPane.getMaxHeight());
-//        System.out.println("anchorPane "+anchorPane.getLayoutX()+"x"+anchorPane.getLayoutY());
-//        System.out.println("imageView "+height+"x"+width);
         imageView.setPreserveRatio(true);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        typeClusterCB.setItems(FXCollections.observableArrayList(ImgTypesClusters.getClustersTypes()));
-        typeClusterCB.getItems().add(0, null);
         size = (int) Math.round(sizePictureSlider.getValue());
         scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -163,5 +169,14 @@ public class PictureController implements Initializable {
         anchorPane.getChildren().add(scrollPane);
 
 //        NumberBinding bindAnchorSize = Bindings.min(anchorPane.heightProperty(), anchorPane.widthProperty());
+    }
+
+    @FXML
+    private void showAlgorithmHistogram() {
+        if (BOWVocabulary.vocabulary.getMat() != null) {
+            new Main().showAlgorithmStatistics(picture);
+        } else {
+            showMessage("Error", "Vocabulary is empty!", "Please load or create", Alert.AlertType.ERROR, mainApp);
+        }
     }
 }

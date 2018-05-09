@@ -10,7 +10,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import scienceWork.Main;
-import scienceWork.dataBase.VocabularyDB;
+import scienceWork.dataBase.WorkerDB;
 import scienceWork.objects.FeatureTypes;
 import scienceWork.objects.constants.Settings;
 import scienceWork.objects.data.BOWVocabulary;
@@ -47,7 +47,7 @@ public class VocabularyController implements Initializable {
     }
 
     private void updateChoiceBox() {
-        vocabularies = VocabularyDB.getInstance().loadVocabulary(
+        vocabularies = WorkerDB.getInstance().loadVocabulary(
                 Settings.getCountClusters(),
                 FeatureTypes.getFeatureId(Settings.getMethodKP()));
         vocabulariesCB.setItems(convertListsToObservableList(vocabularies));
@@ -57,9 +57,10 @@ public class VocabularyController implements Initializable {
     private void loadSelectedVocabulary() {
         boolean error = false;
         int indx = vocabulariesCB.getSelectionModel().getSelectedIndex();
-        if (indx > 0){
 
-            BOWVocabulary.vocabulary = vocabularies.get(indx-1);
+        if (indx >= 0){
+            System.out.println("Loaded with indx: "+indx);
+            BOWVocabulary.vocabulary = vocabularies.get(indx);
         }
         showMessage("Success");
         dialogStage.close();

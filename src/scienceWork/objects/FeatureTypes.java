@@ -3,6 +3,7 @@ package scienceWork.objects;
 import java.util.HashMap;
 import java.util.Map;
 
+/* some shit */
 public enum FeatureTypes {
     ORB(1, 5, "ORB"),
     AKAZE(2, 12, "AKAZE"),

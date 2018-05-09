@@ -16,7 +16,9 @@ import static org.opencv.core.CvType.CV_32FC1;
 
 public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
     private LogisticRegression logisticRegression;
-
+    private int countClusters;
+    private int featureID;
+    private final int classifierID = 2;
     private static LRInstance LRInstance;
 
     private LRInstance() {
@@ -37,6 +39,41 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
 
     public LogisticRegression getInstance() {
         return logisticRegression;
+    }
+
+    @Override
+    public Mat getSupportVectors() {
+        return logisticRegression.get_learnt_thetas();
+    }
+
+    @Override
+    public int getFeatureID() {
+        return featureID;
+    }
+
+    @Override
+    public int getCountClusters() {
+        return 0;
+    }
+
+    @Override
+    public void setInstance(LogisticRegression obj) {
+        this.logisticRegression = obj;
+    }
+
+    @Override
+    public void setFeatureID(int featureID) {
+        this.featureID = featureID;
+    }
+
+    @Override
+    public void setCountClusters(int countClusters) {
+
+    }
+
+    @Override
+    public int getClassifierId() {
+        return 0;
     }
 
     public void train() {
@@ -70,8 +107,6 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
             samples.convertTo(samples, CV_32FC1);
             response.convertTo(response, CV_32FC1);
             logisticRegression.train(samples, Ml.ROW_SAMPLE, response);
-//            logisticRegression.save("lalalal.xml");
-//            logisticRegression.train(trainData);
             System.out.println("LogisticRegression finish " + logisticRegression.getLearningRate() );
         } catch (VocabularyNotFoundException e) {
             System.out.println(e.getMessage());

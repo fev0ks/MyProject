@@ -13,7 +13,11 @@ public class DescriptorProperty {
 
 
     public int getCountOfDescr() {
-        return matOfDescription == null ? 0 : matOfDescription.height();
+        return matOfDescription.height();
+    }
+
+    public int getCountOfKP(){
+        return matOfKeyPoint.height();
     }
 
     public void setCountOfDescr(int countOfDescr) {

@@ -1,6 +1,7 @@
 package scienceWork.objects.data;
 
 import org.opencv.core.Mat;
+//import org.opencv.features2d.BOWImgDescriptorExtractor;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
 import scienceWork.algorithms.bow.bowTools.BOWImgDescriptorExtractor;

@@ -18,12 +18,21 @@ import static org.opencv.core.CvType.CV_32S;
 public class SVMInstance extends AlgorithmMLImpl<SVM> {
     private SVM svm;
     private Mat trainingData;
-    private Mat classes;
+    private int countClusters;
+    private int featureID;
+    private final int classifierID = 1;
 
 
     private static SVMInstance SVMInstance;
 
-    private SVMInstance() {}
+    private SVMInstance(int countClusters, int featureID) {
+        this.countClusters = countClusters;
+        this.featureID = featureID;
+
+    }
+
+    public SVMInstance() {
+    }
 
     public static SVMInstance getSVMInstance() {
         if (SVMInstance == null) {
@@ -32,15 +41,58 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
         return SVMInstance;
     }
 
+
+
     private void initSVM() {
         svm = SVM.create();
         SettingsSVM.setSettings(svm);
     }
 
+
     public SVM getInstance() {
         return svm;
     }
 
+    @Override
+    public Mat getSupportVectors() {
+        return svm.getSupportVectors();
+    }
+
+    @Override
+    public int getFeatureID() {
+        return featureID;
+    }
+
+    @Override
+    public int getCountClusters() {
+        return countClusters;
+    }
+
+    @Override
+    public void setInstance(SVM obj) {
+        this.svm = obj;
+    }
+
+    @Override
+    public void setFeatureID(int featureID) {
+        this.featureID = featureID;
+    }
+
+    @Override
+    public void setCountClusters(int countClusters) {
+        this.countClusters = countClusters;
+    }
+
+    public void setSvm(SVM svm) {
+        this.svm = svm;
+    }
+
+    @Override
+    public int getClassifierId() {
+        return classifierID;
+    }
+
+    @Override
     public void train() {
         initSVM();
 //        trainingData = new Mat();
@@ -73,7 +125,17 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
             samples.convertTo(samples, CV_32F);
             response.convertTo(response, CV_32S);
             svm.train(samples, Ml.ROW_SAMPLE, response);
+//            svm.trainAuto(samples, Ml.ROW_SAMPLE, response);
+
+            Mat mat = svm.getSupportVectors();
             System.out.println("SVM finish");
+            for (int i = 0; i < mat.rows(); i++) {
+                for (int j = 0; j < mat.cols(); j++) {
+                    System.out.print(mat.get(i, j)[0] + " ");
+//                newMat[i][j] = Math.round(mat.get(i, j)[0]);
+                }
+                System.out.println();
+            }
         } catch (VocabularyNotFoundException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

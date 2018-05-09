@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scienceWork.objects.Picture;
@@ -12,7 +13,6 @@ import scienceWork.view.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class Main extends Application {
     private Stage primaryStage;
@@ -38,6 +38,14 @@ public class Main extends Application {
         initRootLayout();
         showToolsScene();
 
+    }
+
+    private void setCSSforScene(Scene scene){
+        scene.getStylesheets().add(Main.class.getResource("resources/bootstrap3.css").toExternalForm());
+    }
+
+    private void setCSSforPane(Pane pane){
+        pane.getStylesheets().add(Main.class.getResource("resources/bootstrap3.css").toExternalForm());
     }
 
     public void initRootLayout() {
@@ -66,13 +74,20 @@ public class Main extends Application {
             // System.err.println("FXML resource: " + Main.class.getResource("view/mainView.fxml"));
             // Загружаем сведения об адресатах.
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("view/mainView.fxml"));
-            AnchorPane startMenu = (AnchorPane) loader.load();
+            AnchorPane page = (AnchorPane) loader.load();
 
-            rootLayout.setCenter(startMenu);
+            rootLayout.setCenter(page);
+//            Scene scene = new Scene(page);
+            setCSSforPane(rootLayout);
 
+//            primaryStage.setScene(scene);
             // Даём контроллеру доступ к главному приложению.
             MainView controller = loader.getController();
             controller.setMainApp(this);
+//            controller.setDialogStage(startMenuStage);
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+//            startMenuStage.showAndWait();
+
             File file = showChooseDir();
             System.out.println("showToolsScene " + file + " " + firstSelect);
             if (file != null) {
@@ -103,6 +118,7 @@ public class Main extends Application {
             startMenuStage.initModality(Modality.WINDOW_MODAL);
             startMenuStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
+            setCSSforScene(scene);
             startMenuStage.setScene(scene);
 
             // Передаём адресата в контроллер.
@@ -135,6 +151,7 @@ public class Main extends Application {
             startMenuStage.initModality(Modality.WINDOW_MODAL);
             startMenuStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
+            setCSSforScene(scene);
             startMenuStage.setScene(scene);
 
             // Передаём адресата в контроллер.
@@ -163,6 +180,7 @@ public class Main extends Application {
             startMenuStage.initModality(Modality.WINDOW_MODAL);
             startMenuStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
+            setCSSforScene(scene);
             startMenuStage.setScene(scene);
 
             // Передаём адресата в контроллер.
@@ -189,6 +207,7 @@ public class Main extends Application {
             startMenuStage.initModality(Modality.WINDOW_MODAL);
             startMenuStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
+            setCSSforScene(scene);
             startMenuStage.setScene(scene);
 
             // Передаём адресата в контроллер.
@@ -216,11 +235,13 @@ public class Main extends Application {
             startMenuStage.initModality(Modality.WINDOW_MODAL);
             startMenuStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
+            setCSSforScene(scene);
             startMenuStage.setScene(scene);
 
             // Передаём адресата в контроллер.
             PictureController controller = loader.getController();
             controller.setPicture(picture);
+            controller.setMainApp(this);
             controller.initFirstWindow();
             controller.setDialogStage(startMenuStage);
             System.out.println(startMenuStage.getMinHeight());
@@ -247,7 +268,7 @@ public class Main extends Application {
         }
     }
 
-    public void showAlgorithmStatistics(List<Picture> pictureList, String algName) {
+    public void showAlgorithmStatistics(Picture picture) {
         try {
             // Загружает fxml-файл и создаёт новую сцену для всплывающего окна.
             FXMLLoader loader = new FXMLLoader();
@@ -258,14 +279,16 @@ public class Main extends Application {
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
+            setCSSforScene(scene);
             dialogStage.setScene(scene);
-            rootLayout.setPrefSize(800, 615);
+//            rootLayout.setPrefSize(800, 615);
             // Передаёт адресатов в контроллер.
             AlgorithmHistogramController controller = loader.getController();
-            controller.setAlgorithmData(pictureList, algName);
+            controller.setAlgorithmData(picture);
+            controller.setMainApp(this);
 
             dialogStage.show();
-            rootLayout.setPrefSize(600, 515);
+//            rootLayout.setPrefSize(600, 515);
 
         } catch (IOException e) {
             e.printStackTrace();

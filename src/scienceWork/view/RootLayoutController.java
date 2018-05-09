@@ -3,6 +3,7 @@ package scienceWork.view;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import scienceWork.FxWorker.FxHelper;
 import scienceWork.Main;
 
 import java.io.File;
@@ -24,34 +25,12 @@ public class RootLayoutController {
 
     @FXML
     private void handleAbout() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("DiplomApp");
-        alert.setHeaderText("About");
-        alert.setContentText("Author: Mikhail Patin\n:)");
-
-        alert.showAndWait();
+        FxHelper.showMessage(
+                "Diplom app",
+                " ",
+                "Author: Mikhail Patin\n:)",
+                Alert.AlertType.INFORMATION,
+                mainApp);
     }
 
-    @FXML
-    private void chouseNewDirectory(){
-//        new Main().showToolsScene();
-//    }
-        MainView controller = new MainView();
-        File file = new Main().showChooseDir();
-        if (file == null) System.exit(0);
-        else {
-            Platform.runLater(() -> {
-                controller.setDir(file);
-                controller.clearTable();
-
-            });
-        }
-//        MainView controller = new MainView();
-////        MainView controller = loader.getController();
-////        controller.setMainApp(this);
-//        File file = new Main().showChooseDir();
-//        if (file == null) System.exit(0);
-//        else
-//            controller.setDir(file);
-    }
 }

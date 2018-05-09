@@ -18,12 +18,12 @@ import java.util.TimeZone;
 public class Vocabulary {
     private Mat vocabulary;
     private int size;
-    private long total;
     private int rows;
     private int cols;
     private int cvType;
     private int featureId;
     private int picCounts;
+    private int countClusters;
     private long descriptors;
     private long createdDate;
 
@@ -31,8 +31,7 @@ public class Vocabulary {
 
     }
 
-    public Vocabulary(long total, int rows, int cols, int cvType, int featureId, int size, int picCounts, long descriptors, long date, Mat vocabulary) {
-        this.total = total;
+    public Vocabulary(int rows, int cols, int cvType, int featureId, int size, int picCounts, long descriptors, long date, Mat vocabulary, int countClusters) {
         this.rows = rows;
         this.cols = cols;
         this.cvType = cvType;
@@ -42,11 +41,11 @@ public class Vocabulary {
         this.descriptors = descriptors;
         this.vocabulary = vocabulary;
         this.createdDate = date;
+        this.countClusters = countClusters;
     }
 
 
-    public Vocabulary(long total, int rows, int cols, int cvType, int featureId, int size, int picCounts, long descriptors, Mat vocabulary) {
-        this.total = total;
+    public Vocabulary(int rows, int cols, int cvType, int featureId, int size, int picCounts, long descriptors, Mat vocabulary, int countClusters) {
         this.rows = rows;
         this.cols = cols;
         this.cvType = cvType;
@@ -56,6 +55,11 @@ public class Vocabulary {
         this.descriptors = descriptors;
         this.vocabulary = vocabulary;
         this.createdDate = Calendar.getInstance().getTimeInMillis();
+        this.countClusters = countClusters;
+    }
+
+    public int getCountClusters() {
+        return countClusters;
     }
 
     public long getCreatedDate() {
@@ -66,12 +70,8 @@ public class Vocabulary {
         return descriptors;
     }
 
-    public Mat getVocabulary() {
+    public Mat getMat() {
         return vocabulary;
-    }
-
-    public long getTotal() {
-        return total;
     }
 
     public int getRows() {
@@ -114,8 +114,8 @@ public class Vocabulary {
     public String toString() {
         return "Type: " + FeatureTypes.getLabelById(featureId) +
                 " Size: " + size +
-                " Pictures: " + picCounts +
-                " \nDate: " + getFormateddate();
+                " Pictures: " + picCounts;
+//                " \nDate: " + getFormateddate();
 
     }
 }
