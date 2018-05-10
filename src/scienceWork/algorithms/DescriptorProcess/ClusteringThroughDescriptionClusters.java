@@ -1,4 +1,4 @@
-package scienceWork.algorithms;
+package scienceWork.algorithms.DescriptorProcess;
 
 
 import org.opencv.core.Core;

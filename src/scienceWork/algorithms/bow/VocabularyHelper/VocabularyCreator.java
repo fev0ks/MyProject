@@ -16,11 +16,11 @@ import java.util.List;
 /**
  * Created by mixa1 on 18.03.2018.
  */
-public class VocabularyWorker {
+public class VocabularyCreator {
     private BOWTrainer bowTrainer;
     Progress progress;
 
-    public VocabularyWorker(Progress progress) {
+    public VocabularyCreator(Progress progress) {
         this.progress = progress;
 //        TermCriteria termCriteria = new TermCriteria(TermCriteria.MAX_ITER, 10000, 0.001);
         bowTrainer = new BOWKMeansTrainer(Settings.getCountBOWClusters());

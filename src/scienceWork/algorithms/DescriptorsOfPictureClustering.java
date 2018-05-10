@@ -1,6 +1,8 @@
-package scienceWork.algorithms.DescriptorProcess;
+package scienceWork.algorithms;
 
 import org.opencv.core.Mat;
+import scienceWork.algorithms.DescriptorProcess.ClusterTools;
+import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.algorithms.Interfaces.IProcess;
 import scienceWork.objects.Picture;
 

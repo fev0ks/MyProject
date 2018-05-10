@@ -1,11 +1,9 @@
-package scienceWork.algorithms;
+package scienceWork.dataBase;
 
-import org.opencv.ml.SVM;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.dataBase.WorkerDB;
-import scienceWork.objects.CommonML.AlgorithmML;
+import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.constants.Settings;
-import scienceWork.objects.data.BOWVocabulary;
 import scienceWork.objects.data.Vocabulary;
 
 public class SaveDataHelper {

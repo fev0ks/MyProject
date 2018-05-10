@@ -2,15 +2,13 @@ package scienceWork.algorithms.bow;
 
 import org.opencv.core.Mat;
 import scienceWork.FxWorker.Interfaces.Progress;
-import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.algorithms.Interfaces.Clusterer;
 import scienceWork.algorithms.bow.bowTools.BOWImgDescriptorExtractor;
-import scienceWork.objects.CommonML.AlgorithmML;
+import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
 import scienceWork.objects.data.BOWVocabulary;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.opencv.core.CvType.CV_32F;

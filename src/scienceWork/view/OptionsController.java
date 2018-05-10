@@ -38,7 +38,7 @@ public class OptionsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        messageTF.setVisible(false);
+//        messageTF.setVisible(false);
         countOfThreadsTF.setText(Settings.getCountThreads()+"");
         countOfClustersTF.setText(Settings.getCountClusters()+"");
 

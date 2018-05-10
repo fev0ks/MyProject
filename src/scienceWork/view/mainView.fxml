@@ -23,22 +23,23 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
          <children>
-            <Button fx:id="newDirBT" layoutX="65.0" layoutY="88.0" mnemonicParsing="false" onAction="#choseNewDirectory" styleClass="btn-long" text="Select Folder" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="90.0" />
-            <Button fx:id="groupingBT" layoutX="22.0" layoutY="288.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" prefWidth="44.0" styleClass="btn-short" text="Sort" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="290.0" />
-            <Button fx:id="analysisBT" layoutX="23.0" layoutY="248.0" mnemonicParsing="false" onAction="#analysis" styleClass="btn-short" text="Train" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="250.0" />
+            <Button fx:id="newDirBT" layoutX="65.0" layoutY="88.0" mnemonicParsing="false" onAction="#choseNewDirectory" styleClass="btn-long" text="Select Folder" AnchorPane.leftAnchor="63.0" AnchorPane.topAnchor="90.0" />
+            <Button fx:id="groupingBT" layoutX="25.0" layoutY="323.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" prefWidth="44.0" styleClass="btn-short" text="Sort" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="323.0" />
+            <Button fx:id="analysisBT" layoutX="25.0" layoutY="283.0" mnemonicParsing="false" onAction="#analysis" styleClass="btn-short" text="Train" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="283.0" />
             <Button layoutX="124.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettingsMenu" styleClass="btn-long" text="Settings" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
             <Button fx:id="resetDataBT" layoutX="5.0" layoutY="14.0" mnemonicParsing="false" onAction="#resetData" styleClass="btn-long" text="Reset Data" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
             <Button fx:id="createVocabulary" layoutX="8.0" layoutY="128.0" mnemonicParsing="false" onAction="#createVocabulary" styleClass="btn-long" text="createBOW" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="130.0" />
-            <Button fx:id="initSVM" layoutX="105.0" layoutY="248.0" mnemonicParsing="false" onAction="#initClassifierData" prefHeight="32.0" prefWidth="67.0" styleClass="btn-long" text="Classifier" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="250.0" />
-            <RadioButton fx:id="svmClassifierType" layoutX="8.0" layoutY="178.0" mnemonicParsing="false" selected="true" style="-fx-font-size: 14px;" text="SVM" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="178.0">
+            <Button fx:id="initSVM" layoutX="106.0" layoutY="283.0" mnemonicParsing="false" onAction="#initClassifierData" prefHeight="32.0" prefWidth="67.0" styleClass="btn-long" text="Classifier" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="283.0" />
+            <RadioButton fx:id="svmClassifierType" layoutX="8.0" layoutY="178.0" mnemonicParsing="false" selected="true" style="-fx-font-size: 14px;" text="SVM" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="180.0">
                <toggleGroup>
                   <ToggleGroup fx:id="classifier" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="lrClassifierType" layoutX="8.0" layoutY="198.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="LR" toggleGroup="$classifier" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="198.0" />
+            <RadioButton fx:id="lrClassifierType" layoutX="8.0" layoutY="198.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="LR" toggleGroup="$classifier" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="220.0" />
             <Button fx:id="loadVocabulary" layoutX="122.0" layoutY="128.0" mnemonicParsing="false" onAction="#showVocabularyMenu" styleClass="btn-long" text="loadBOW" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0" />
-            <Button fx:id="saveGroups" layoutX="101.0" layoutY="288.0" maxWidth="88.0" mnemonicParsing="false" prefWidth="88.0" styleClass="btn-long" text="Save groups" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="290.0" />
-            <CheckBox layoutX="6.0" layoutY="332.0" mnemonicParsing="false" text="Test mod" AnchorPane.leftAnchor="10.0" />
+            <Button fx:id="saveGroups" layoutX="106.0" layoutY="323.0" maxWidth="88.0" mnemonicParsing="false" onAction="#initSaveGroups" prefWidth="88.0" styleClass="btn-long" text="Save groups" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="323.0" />
+            <CheckBox layoutX="12.0" layoutY="458.0" mnemonicParsing="false" selected="true" text="Test mod" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+            <RadioButton fx:id="svmsgdClassifierType" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="SVMSGD" toggleGroup="$classifier" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="200.0" />
          </children>
       </AnchorPane>
       <TableView fx:id="picTable" layoutX="231.0" layoutY="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#selectRowInTable" prefHeight="498.0" prefWidth="440.0" style="-fx-border-color: black;" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">

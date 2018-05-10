@@ -26,7 +26,7 @@ public class RootLayoutController {
     @FXML
     private void handleAbout() {
         FxHelper.showMessage(
-                "Diplom app",
+                "Diploma app",
                 " ",
                 "Author: Mikhail Patin\n:)",
                 Alert.AlertType.INFORMATION,

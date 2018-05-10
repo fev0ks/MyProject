@@ -3,8 +3,7 @@ package scienceWork.dataBase;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.ml.SVM;
-import scienceWork.objects.CommonML.AlgorithmML;
+import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.data.BOWVocabulary;
 import scienceWork.objects.data.Vocabulary;
 

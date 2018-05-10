@@ -44,7 +44,7 @@ public class FileWorker {
     private long number;
 
     private FileWorker() {
-
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
     public static FileWorker getInstance() {
@@ -166,19 +166,11 @@ public class FileWorker {
         Mat imageMat = null;
         try {
             image = ImageIO.read(file);
-//            imageMat = Imgcodecs.imread(file + "/split/14.jpg");
             byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
             imageMat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
             imageMat.put(0, 0, data);
             if (grayScale) {
                 Imgproc.cvtColor(imageMat, imageMat, Imgproc.COLOR_RGB2GRAY);
-//                Mat mat1 = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC1);
-//                Imgproc.cvtColor(imageMat, mat1, Imgproc.COLOR_RGB2GRAY);
-//
-//                byte[] data1 = new byte[mat1.rows() * mat1.cols() * (int) (mat1.elemSize())];
-//                mat1.get(0, 0, data1);
-//
-//                imageMat = mat1;
             }
 
             if (resize) {
@@ -217,24 +209,29 @@ public class FileWorker {
         return imageMat;//если не надо уменьшать
     }
 
-    public void saveImageToGroups(Picture picture, File file) throws IOException {
+    public void saveImageToGroups(Picture picture, File file, String temp) throws IOException {
 
-        long createdDate = Calendar.getInstance().getTimeInMillis();
-        String date = LocalDateTime.ofInstant(Instant.ofEpochMilli(createdDate),
-                TimeZone.getDefault().toZoneId()).format(DateTimeFormatter.ofPattern("dd_MM_yyyy H_m_s"));
-        String picturePath = "\\grouping " + date + "\\" + picture.getExitPictureType()+ "\\";
-        File dir = file == null ? new File(picture.getPicFile().getParent() + picturePath) : new File(file.getAbsolutePath() + picturePath);
-        String newFileName = dir + "\\" + picture.getName();
-        if (!dir.exists()) {
-//            dir.mkdir();
-            dir.mkdirs();
+        String pictureGroup = picture.getExitPictureType();
+        if (!pictureGroup.isEmpty()) {
+            String picturePath = "\\grouping " + temp + "\\" + pictureGroup + "\\";
+            File dir = file == null ? new File(picture.getPicFile().getParent() + picturePath) : new File(file.getAbsolutePath() + picturePath);
+            String newFileName = dir + "\\" + picture.getName();
+
+            boolean existDirectory = dir.exists();
+
+            if (!existDirectory) {
+                existDirectory = dir.mkdir();
+                if (!existDirectory) {
+                    existDirectory = dir.mkdirs();
+                }
+            }
+
+            BufferedImage loadImg = ImageIO.read(picture.getPicFile());
+            ImageIO.write(loadImg, "jpg", new File(newFileName));
+
+            System.out.println(newFileName);
+
         }
-
-        BufferedImage loadImg = ImageIO.read(picture.getPicFile());
-        ImageIO.write(loadImg, "jpg", new File(newFileName));
-
-        System.out.println(newFileName);
-
     }
 
 //    //уменьшение больших изображений

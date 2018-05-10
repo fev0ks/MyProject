@@ -1,4 +1,4 @@
-package scienceWork.objects.constants;
+package scienceWork.objects.machineLearning.mlSettings;
 
 import org.opencv.core.TermCriteria;
 import org.opencv.ml.SVM;

@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import scienceWork.objects.Picture;
 import scienceWork.view.*;
 
@@ -58,6 +59,8 @@ public class Main extends Application {
             // Отображаем сцену, содержащую корневой макет.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
+
+            primaryStage.setOnCloseRequest((WindowEvent event1) -> System.exit(0));
 
             // Даём контроллеру доступ к главному прилодению.
             RootLayoutController controller = loader.getController();
@@ -188,6 +191,7 @@ public class Main extends Application {
             controller.setDialogStage(startMenuStage);
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             startMenuStage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
-package scienceWork.objects.CommonML;
+package scienceWork.objects.machineLearning.CommonML;
 
 import org.opencv.core.Mat;
+import org.opencv.ml.StatModel;
 import org.opencv.ml.TrainData;
 import scienceWork.Exceptions.VocabularyNotFoundException;
 

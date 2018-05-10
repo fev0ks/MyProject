@@ -1,17 +1,15 @@
-package scienceWork.objects;
+package scienceWork.objects.machineLearning;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 import org.opencv.ml.LogisticRegression;
 import org.opencv.ml.Ml;
 import org.opencv.ml.TrainData;
 import scienceWork.Exceptions.VocabularyNotFoundException;
-import scienceWork.objects.CommonML.AlgorithmMLImpl;
-import scienceWork.objects.constants.SettingsLR;
+import scienceWork.objects.machineLearning.CommonML.AlgorithmMLImpl;
+import scienceWork.objects.machineLearning.mlSettings.SettingsLR;
 
 import java.util.Arrays;
 
-import static org.opencv.core.CvType.CV_32F;
 import static org.opencv.core.CvType.CV_32FC1;
 
 public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
@@ -32,7 +30,7 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
         return LRInstance;
     }
 
-    private void initSVM() {
+    private void initLR() {
         logisticRegression = LogisticRegression.create();
         SettingsLR.setSettings(logisticRegression);
     }
@@ -77,42 +75,16 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
     }
 
     public void train() {
-        initSVM();
-//        trainingData = new Mat();
-//        byte classNumber = 0;
-//        classes = new Mat();
-//        Mat label = new Mat(1, 1, CvType.CV_8UC1);
-//        if (!BOWVocabulary.vocabularies.isEmpty()) {
-//            for (Map.Entry<String, Mat> trainData : BOWVocabulary.vocabularies.entrySet()) {
-//                BOWVocabulary.classesNumbers.add(trainData.getKey());
-//                trainingData.push_back(trainData.getValue());
-//                label.put(0, 0, classNumber);
-//                for (int i = 0; i < trainData.getValue().rows(); i++) {
-//                    classes.push_back(label);
-//                }
-//                classNumber++;
-//            }
-//
+        initLR();
+        TrainData trainData = trainingData();
+        Mat samples = trainData.getSamples();
+        Mat response = trainData.getResponses();
+        samples.convertTo(samples, CV_32FC1);
+        response.convertTo(response, CV_32FC1);
 
+//        logisticRegression.train(samples, Ml.ROW_SAMPLE, response);
+        train(logisticRegression, TrainData.create(samples, Ml.ROW_SAMPLE, response));
 //
-//            classes.convertTo(classes, CV_32S);
-//            System.out.println("trainingDataType: " + CvType.typeToString(trainingData.type()));
-//            System.out.println("classesType: " + CvType.typeToString(classes.type()));
-//            System.out.println(trainingData.rows() == classes.rows());
-//            TrainData trainData = TrainData.create(trainingData, Ml.ROW_SAMPLE, classes);
-        try {
-            TrainData trainData = trainingData();
-            Mat samples = trainData.getSamples();
-            Mat response = trainData.getResponses();
-            samples.convertTo(samples, CV_32FC1);
-            response.convertTo(response, CV_32FC1);
-            logisticRegression.train(samples, Ml.ROW_SAMPLE, response);
-            System.out.println("LogisticRegression finish " + logisticRegression.getLearningRate() );
-        } catch (VocabularyNotFoundException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -120,7 +92,7 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
         return logisticRegression.predict(template);
     }
 
-    private TrainData trainingData() throws VocabularyNotFoundException {
+    private TrainData trainingData() {
         return super.intiTrainData();
     }
 

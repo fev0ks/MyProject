@@ -1,21 +1,28 @@
-package scienceWork.algorithms;
+package scienceWork;
 
+import javafx.scene.control.Alert;
 import org.apache.commons.lang.time.StopWatch;
+import scienceWork.FxWorker.FxHelper;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.bow.BOWClusterer;
 import scienceWork.algorithms.bow.BOWTeacher;
-import scienceWork.algorithms.bow.VocabularyHelper.VocabularyWorker;
-import scienceWork.objects.CommonML.AlgorithmML;
+import scienceWork.algorithms.bow.VocabularyHelper.VocabularyCreator;
+import scienceWork.dataBase.SaveDataHelper;
+import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
-import scienceWork.objects.constants.Settings;
 import scienceWork.objects.data.BOWVocabulary;
 import scienceWork.objects.data.Vocabulary;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by mixa1 on 04.04.2018.
@@ -55,7 +62,7 @@ public class MainOperations {
         classifier.train();
         stopWatch.stop();
 
-        System.out.println("Finish SVM ");
+        System.out.println("Finish");
         long finishTime = stopWatch.getTime();
         System.out.println("Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
 
@@ -137,7 +144,7 @@ public class MainOperations {
     public void executeInitVocabulary(List<List<Picture>> pictLists, Progress progress) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        new VocabularyWorker(progress).createVocabulary(pictLists);
+        new VocabularyCreator(progress).createVocabulary(pictLists);
         stopWatch.stop();
         Vocabulary vocabulary = BOWVocabulary.vocabulary;
         viewWorkTime(stopWatch.getTime(), "Vocabulary size " + vocabulary.getMat().size(), progress);
@@ -151,10 +158,14 @@ public class MainOperations {
             progress.addMessage("Pictures will be saved to default folder: " + pictureLists.get(0).get(0).getPicFile().getParent());
         }
         int count = 0;
+        long createdDate = Calendar.getInstance().getTimeInMillis();
+        String temp = LocalDateTime.ofInstant(Instant.ofEpochMilli(createdDate),
+                TimeZone.getDefault().toZoneId()).format(DateTimeFormatter.ofPattern("dd_MM_yyyy H_m_s"));
+
         try {
             for (List<Picture> pictures : pictureLists)
                 for (Picture picture : pictures) {
-                    FileWorker.getInstance().saveImageToGroups(picture, file);
+                    FileWorker.getInstance().saveImageToGroups(picture, file, temp);
                     progress.setProgress(++count, countPhotos);
                 }
             progress.setProgress(0, countPhotos);
@@ -169,5 +180,33 @@ public class MainOperations {
         String message = title + "; Finished for " + finishTime / 1000 / 60 + " min, " + finishTime / 1000 % 60 + " sec, " + finishTime % 1000 + " ms;";
         progress.addMessage(message);
     }
+
+    public boolean checkExistVocabulary() {
+        boolean exist = true;
+        if (BOWVocabulary.vocabulary.getMat() == null) {
+            FxHelper.showMessage("Error", "Vocabulary is empty!", "Please load or create", Alert.AlertType.ERROR, new Main());
+            exist = false;
+        }
+        return exist;
+    }
+
+    public boolean checkExistTrainData() {
+        boolean exist = true;
+        if (BOWVocabulary.vocabularies.isEmpty()) {
+            FxHelper.showMessage("Error", "Train data is empty!", "Please create", Alert.AlertType.ERROR, new Main());
+            exist = false;
+        }
+        return exist;
+    }
+
+    public boolean checkExistMLInstance(AlgorithmML algorithmML) {
+        boolean exist = true;
+        if (algorithmML == null) {
+            FxHelper.showMessage("Error", "Classifier Instance is not exist!", "Please create", Alert.AlertType.ERROR, new Main());
+            exist = false;
+        }
+        return exist;
+    }
+
 
 }

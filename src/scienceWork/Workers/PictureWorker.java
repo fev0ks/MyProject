@@ -1,18 +1,12 @@
 package scienceWork.Workers;
 
-
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.opencv.core.*;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
 import scienceWork.objects.Picture;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PictureWorker {
     public static Image getImage(Picture picture, boolean grayScale, boolean printKeyPoint) throws Exception{

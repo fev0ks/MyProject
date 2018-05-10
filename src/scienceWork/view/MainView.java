@@ -1,7 +1,5 @@
 package scienceWork.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -10,16 +8,15 @@ import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.FxWorker.ProgressImp;
 import scienceWork.Main;
 import scienceWork.Workers.FileWorker;
-import scienceWork.algorithms.MainOperations;
-import scienceWork.dataBase.WorkerDB;
-import scienceWork.objects.CommonML.AlgorithmML;
+import scienceWork.MainOperations;
+import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.FeatureTypes;
-import scienceWork.objects.LRInstance;
+import scienceWork.objects.machineLearning.LRInstance;
 import scienceWork.objects.Picture;
-import scienceWork.objects.SVMInstance;
+import scienceWork.objects.machineLearning.SVMInstance;
 import scienceWork.objects.constants.Settings;
 import scienceWork.objects.data.BOWVocabulary;
-import scienceWork.objects.data.ImgTypesClusters;
+import scienceWork.objects.machineLearning.SVMSGDInstance;
 import scienceWork.objects.pictureData.Directory;
 
 import java.io.File;
@@ -89,6 +86,8 @@ public class MainView {
     @FXML
     private RadioButton svmClassifierType;
     @FXML
+    private RadioButton svmsgdClassifierType;
+    @FXML
     private RadioButton lrClassifierType;
     @FXML
     private RadioButton nnlassifierType;
@@ -105,6 +104,7 @@ public class MainView {
     private List<List<Picture>> pictLists;
     private String message = "";
     private AlgorithmML classifierAlgorithm;
+
 
     public void setDir(File dir) {
         directory = new Directory();
@@ -157,29 +157,19 @@ public class MainView {
 
     @FXML
     private void choseNewDirectory() {
-//        new Main().showToolsScene();
-//    }
-//        MainView controller = new MainView();
-//        MainView controller = loader.getController();
-//        controller.setMainApp(this);
+
         File file = showDirectorySelector();
         if (file != null) {
+            setDir(file);
             clearTable();
         }
         if (file == null && pictLists.isEmpty()) {
             System.exit(0);
         }
-        setDir(showDirectorySelector());
+
     }
 
-    private File showDirectorySelector(){
-//        Main main = new Main();
-        //        if (file != null) {
-//            clearTable();
-//        }
-//        if (file == null && main.getStatus()) {
-//            System.exit(0);
-//        }
+    private File showDirectorySelector() {
         return new Main().showChooseDir();
     }
 
@@ -242,34 +232,39 @@ public class MainView {
      */
     @FXML
     private void groupingImagesToClasses() {
-        setDisabledButtons(true);
-        Thread groupingThread = new Thread(() -> {
-            if (classifierAlgorithm == null) {
-                initClassifier(getSelectedClassifier());
-                classifierAlgorithm.setCountClusters(pictLists.size());
-                classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
-            }
-            mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA), classifierAlgorithm);
-            clearTable();
-            updateTable();
-            setDisabledButtons(false);
-        });
-        threads.add(groupingThread);
-        groupingThread.start();
+        if(mainOperations.checkExistMLInstance(classifierAlgorithm)) {
+            setDisabledButtons(true);
+            Thread groupingThread = new Thread(() -> {
+//                if (classifierAlgorithm == null) {
+//                    initSelectedClassifier();
+//                    classifierAlgorithm.setCountClusters(pictLists.size());
+//                    classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
+//                }
+                mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA), classifierAlgorithm);
+                clearTable();
+                updateTable();
+                setDisabledButtons(false);
+            });
+            threads.add(groupingThread);
+            groupingThread.start();
+        }
     }
 
 
     @FXML
     private void analysis() {
-        setDisabledButtons(true);
-        Thread analysisThread = new Thread(() -> {
-            mainOperations.executeTraining(pictLists, new ProgressImp(progressBar, infoTA));
-            clearTable();
-            updateTable();
-            setDisabledButtons(false);
-        });
-        threads.add(analysisThread);
-        analysisThread.start();
+
+        if (mainOperations.checkExistVocabulary()) {
+            setDisabledButtons(true);
+            Thread analysisThread = new Thread(() -> {
+                mainOperations.executeTraining(pictLists, new ProgressImp(progressBar, infoTA));
+                clearTable();
+                updateTable();
+                setDisabledButtons(false);
+            });
+            threads.add(analysisThread);
+            analysisThread.start();
+        }
     }
 
     @FXML
@@ -299,17 +294,22 @@ public class MainView {
 
     @FXML
     private void initClassifierData() {
-        setDisabledButtons(true);
-        Thread classifierThread = new Thread(() -> {
-            initClassifier(getSelectedClassifier());
-            classifierAlgorithm.setCountClusters(pictLists.size());
-            classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
-            mainOperations.executeInitClassifier(new ProgressImp(progressBar, infoTA), classifierAlgorithm);
 
-            setDisabledButtons(false);
-        });
-        threads.add(classifierThread);
-        classifierThread.start();
+        if (mainOperations.checkExistVocabulary()) {
+            if (mainOperations.checkExistTrainData()) {
+                setDisabledButtons(true);
+                Thread classifierThread = new Thread(() -> {
+                    initSelectedClassifier();
+                    classifierAlgorithm.setCountClusters(pictLists.size());
+                    classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
+                    mainOperations.executeInitClassifier(new ProgressImp(progressBar, infoTA), classifierAlgorithm);
+
+                    setDisabledButtons(false);
+                });
+                threads.add(classifierThread);
+                classifierThread.start();
+            }
+        }
     }
 
     @FXML
@@ -317,7 +317,7 @@ public class MainView {
         setDisabledButtons(true);
         File file = showDirectorySelector();
         Thread saveGroupsThread = new Thread(() -> {
-            if(file != null) {
+            if (file != null) {
                 mainOperations.executeSavingGroups(pictLists, file, countPhotos, progress);
             }
             setDisabledButtons(false);
@@ -325,28 +325,19 @@ public class MainView {
         saveGroupsThread.start();
     }
 
-    private void initClassifier(int type) {
 
-        if (type == 1) {
+    private void initSelectedClassifier() {
+        if (svmClassifierType.isSelected()) {
             classifierAlgorithm = SVMInstance.getSVMInstance();
         }
-        if (type == 2) {
-            classifierAlgorithm = LRInstance.getLRInstance();
-        }
-    }
-
-    private int getSelectedClassifier() {
-        int type = 0;
-        if (svmClassifierType.isSelected()) {
-            type = 1;
+        if (svmsgdClassifierType.isSelected()) {
+            progress.addMessage("\nSVM SGD doesn't work using 3.4.1 OpenCv :(((");
+            classifierAlgorithm = SVMSGDInstance.getSVMSGDInstance();
         }
         if (lrClassifierType.isSelected()) {
-            type = 2;
+            classifierAlgorithm = LRInstance.getLRInstance();
         }
-
-//        disablClassifiereRadiButtons(true);
-        System.out.println("getSelectedClassifier " + type);
-        return type;
+        System.out.println(classifierAlgorithm.toString());
     }
 
     private void disablClassifiereRadiButtons(boolean disable) {
@@ -395,11 +386,6 @@ public class MainView {
     }
 
 
-    @FXML
-    private void showAlgorithmHistogram() {
-
-//        mainApp.showAlgorithmStatistics(pictLists.get(0), "dimensions");
-    }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;

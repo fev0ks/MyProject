@@ -1,6 +1,7 @@
 package scienceWork.algorithms.DescriptorProcess;
 
 import scienceWork.FxWorker.Interfaces.Progress;
+import scienceWork.algorithms.DescriptorsOfPictureClustering;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
 
