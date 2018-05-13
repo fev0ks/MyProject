@@ -17,12 +17,12 @@ public class WorkerDB {
     private ConnectorDB connectorDB;
 
 
-    private WorkerDB() {
+    private WorkerDB() throws SQLException, ClassNotFoundException {
         connectorDB = new ConnectorDB();
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    public static WorkerDB getInstance() {
+    public static WorkerDB getInstance() throws SQLException, ClassNotFoundException {
         if (instance == null)
             synchronized (ManagerDB.class) {
                 if (instance == null)
@@ -71,7 +71,7 @@ public class WorkerDB {
         return id;
     }
 
-    public List<Vocabulary> loadVocabulary(int size, int featureId) {
+    public List<Vocabulary> loadVocabulary(int size, int featureId) throws SQLException {
         String loadVocabulary = "select \n" +
                 "v.clusters, v.date, v.used_descr, m.rows, m.cols, m.cv_type, v.used_images, m.mat " +
                 "from vocabulary v " +
@@ -90,8 +90,9 @@ public class WorkerDB {
         long descriptors = 0;
         byte[] bytes = null;
         Timestamp date = null;
+
         List<Vocabulary> vocabularies = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(loadVocabulary)) {
+        PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(loadVocabulary);
             preparedStatement.setInt(1, size);
             preparedStatement.setInt(2, featureId);
 
@@ -113,11 +114,9 @@ public class WorkerDB {
                 Vocabulary vocabulary = new Vocabulary(rows, cols, cvType, featureId, size, picCount, descriptors, date.getTime(), mat, countClusters);
 
                 vocabularies.add(vocabulary);
-            }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            }
+        preparedStatement.close();
         System.out.println("Load vocabularies: " + vocabularies.size());
         return vocabularies;
     }

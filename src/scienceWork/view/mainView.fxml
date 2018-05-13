@@ -12,8 +12,9 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="680.0" stylesheets="@../resources/bootstrap3.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.MainView">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="680.0" stylesheets="@../resources/bootstrap3.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.MainController">
    <children>
       <AnchorPane layoutX="10.0" layoutY="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="498.0" prefWidth="218.0" style="-fx-background-color: CDCDCD; -fx-border-color: black;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
          <effect>
@@ -24,37 +25,43 @@
          </cursor>
          <children>
             <Button fx:id="newDirBT" layoutX="65.0" layoutY="88.0" mnemonicParsing="false" onAction="#choseNewDirectory" styleClass="btn-long" text="Select Folder" AnchorPane.leftAnchor="63.0" AnchorPane.topAnchor="90.0" />
-            <Button fx:id="groupingBT" layoutX="25.0" layoutY="323.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" prefWidth="44.0" styleClass="btn-short" text="Sort" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="323.0" />
-            <Button fx:id="analysisBT" layoutX="25.0" layoutY="283.0" mnemonicParsing="false" onAction="#analysis" styleClass="btn-short" text="Train" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="283.0" />
+            <Button fx:id="groupingBT" layoutX="29.0" layoutY="380.0" mnemonicParsing="false" onAction="#groupingImagesToClasses" prefWidth="44.0" styleClass="btn-short" text="sort" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="380.0" />
+            <Button fx:id="analysisBT" layoutX="53.0" layoutY="249.0" maxWidth="112.0" mnemonicParsing="false" onAction="#analysis" prefWidth="112.0" text="create TrainData" AnchorPane.leftAnchor="53.0" AnchorPane.topAnchor="249.0" />
             <Button layoutX="124.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettingsMenu" styleClass="btn-long" text="Settings" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
             <Button fx:id="resetDataBT" layoutX="5.0" layoutY="14.0" mnemonicParsing="false" onAction="#resetData" styleClass="btn-long" text="Reset Data" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
             <Button fx:id="createVocabulary" layoutX="8.0" layoutY="128.0" mnemonicParsing="false" onAction="#createVocabulary" styleClass="btn-long" text="createBOW" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="130.0" />
-            <Button fx:id="initSVM" layoutX="106.0" layoutY="283.0" mnemonicParsing="false" onAction="#initClassifierData" prefHeight="32.0" prefWidth="67.0" styleClass="btn-long" text="Classifier" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="283.0" />
+            <Button fx:id="initSVM" layoutX="65.0" layoutY="294.0" mnemonicParsing="false" onAction="#initClassifierData" prefHeight="32.0" prefWidth="67.0" styleClass="btn-long" text="teach" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="294.0" />
             <RadioButton fx:id="svmClassifierType" layoutX="8.0" layoutY="178.0" mnemonicParsing="false" selected="true" style="-fx-font-size: 14px;" text="SVM" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="180.0">
                <toggleGroup>
                   <ToggleGroup fx:id="classifier" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="lrClassifierType" layoutX="8.0" layoutY="198.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="LR" toggleGroup="$classifier" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="220.0" />
+            <RadioButton fx:id="lrClassifierType" layoutX="8.0" layoutY="198.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="LR" toggleGroup="$classifier" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="200.0" />
             <Button fx:id="loadVocabulary" layoutX="122.0" layoutY="128.0" mnemonicParsing="false" onAction="#showVocabularyMenu" styleClass="btn-long" text="loadBOW" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0" />
-            <Button fx:id="saveGroups" layoutX="106.0" layoutY="323.0" maxWidth="88.0" mnemonicParsing="false" onAction="#initSaveGroups" prefWidth="88.0" styleClass="btn-long" text="Save groups" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="323.0" />
+            <Button fx:id="saveGroups" layoutX="65.0" layoutY="420.0" maxWidth="88.0" mnemonicParsing="false" onAction="#initSaveGroups" prefWidth="88.0" styleClass="btn-long" text="Save groups" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="420.0" />
             <CheckBox layoutX="12.0" layoutY="458.0" mnemonicParsing="false" selected="true" text="Test mod" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-            <RadioButton fx:id="svmsgdClassifierType" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="SVMSGD" toggleGroup="$classifier" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="200.0" />
+            <RadioButton fx:id="svmsgdClassifierType" layoutX="115.0" layoutY="204.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="SVMSGD" toggleGroup="$classifier" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="200.0" />
+            <RadioButton fx:id="annMplClassifierType" layoutX="119.0" layoutY="184.0" mnemonicParsing="false" text="ANN MLP" toggleGroup="$classifier" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="180.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </RadioButton>
+            <Button layoutX="141.0" layoutY="380.0" mnemonicParsing="false" onAction="#checkResults" styleClass="btn-short" text="check" AnchorPane.rightAnchor="30.0" />
          </children>
       </AnchorPane>
-      <TableView fx:id="picTable" layoutX="231.0" layoutY="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#selectRowInTable" prefHeight="498.0" prefWidth="440.0" style="-fx-border-color: black;" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+      <TableView fx:id="picTable" layoutX="231.0" layoutY="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#selectRowInTable" prefHeight="498.0" prefWidth="436.0" style="-fx-border-color: black;" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
         <columns>
-            <TableColumn fx:id="countColumn" prefWidth="35.0" resizable="false" text="№" />
-            <TableColumn fx:id="inputType" prefWidth="60.0" text="inpType" />
-            <TableColumn fx:id="groupColumn" prefWidth="74.0" text="exitType" />
-            <TableColumn fx:id="namePicColumn" prefWidth="109.0" text="name" />
-          <TableColumn fx:id="sizePicColumn" prefWidth="71.0" text="size" />
-            <TableColumn fx:id="dimensionsColumn" prefWidth="89.0" text="dimmenson" />
+            <TableColumn fx:id="countColumn" minWidth="50.0" prefWidth="-1.0" resizable="false" text="№" />
+            <TableColumn fx:id="inputType" prefWidth="75.0" text="inpType" visible="false" />
+          <TableColumn fx:id="sizePicColumn" prefWidth="53.0" text="size" visible="false" />
+            <TableColumn fx:id="dimensionsColumn" prefWidth="67.0" text="dim" visible="false" />
+            <TableColumn fx:id="namePicColumn" prefWidth="300.0" text="name" />
+            <TableColumn fx:id="groupColumn" prefWidth="88.0" text="exitType" />
         </columns>
       </TableView>
       <ProgressBar fx:id="progressBar" layoutX="7.0" layoutY="477.0" prefHeight="18.0" prefWidth="614.0" progress="0.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
       <TextArea fx:id="infoTA" editable="false" layoutX="9.0" layoutY="411.0" maxHeight="125.0" prefHeight="125.0" prefWidth="655.0" wrapText="true" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="505.0" />
       <ProgressIndicator fx:id="progressIndicator" blendMode="HARD_LIGHT" cache="true" cacheHint="ROTATE" layoutX="612.0" layoutY="584.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="46.0" progress="0.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="22.0" />
-      <Button fx:id="clearBT" layoutX="620.0" layoutY="516.0" minWidth="0.0" mnemonicParsing="false" onAction="#clearTextArea" prefHeight="20.0" prefWidth="0.0" style="-fx-font-size: 10; -fx-padding: 0; -fx-font-weight: bold; -fx-border-radius: 50%; -fx-background-radius: 50%;" text="X" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="515.0" />
+      <Button fx:id="clearBT" layoutX="635.0" layoutY="510.0" maxHeight="17.0" maxWidth="24.0" minHeight="15.0" minWidth="0.0" mnemonicParsing="false" onAction="#clearTextArea" prefHeight="18.0" prefWidth="0.0" style="-fx-font-size: 10; -fx-padding: 0%; -fx-font-weight: bold; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-max-width: 20; -fx-max-height: 20; -fx-min-height: 20; -fx-min-width: 20;" text="X" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="510.0" />
    </children>
 </AnchorPane>

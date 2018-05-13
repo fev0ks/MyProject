@@ -5,12 +5,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="191.0" prefWidth="308.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.VocabularyController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="191.0" prefWidth="308.0" stylesheets="@../resources/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scienceWork.view.VocabularyController">
    <children>
-      <Button fx:id="loadBT" layoutX="254.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadSelectedVocabulary" text="load" AnchorPane.rightAnchor="10.0" />
-      <Button fx:id="cancelBT" layoutX="237.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancel" text="cancel" AnchorPane.rightAnchor="10.0" />
+      <Button fx:id="loadBT" layoutX="254.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadSelectedVocabulary" styleClass="btn-short" text="load" AnchorPane.rightAnchor="10.0" />
+      <Button fx:id="cancelBT" layoutX="237.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancel" styleClass="btn-short" text="cancel" AnchorPane.rightAnchor="10.0" />
       <ChoiceBox fx:id="vocabulariesCB" layoutX="14.0" layoutY="14.0" prefHeight="49.0" prefWidth="215.0" />
       <TextField fx:id="textField" disable="true" editable="false" layoutX="15.0" layoutY="152.0" prefHeight="25.0" prefWidth="145.0" />
-      <Button fx:id="deleteBT" layoutX="250.0" layoutY="63.0" mnemonicParsing="false" text="delete" AnchorPane.rightAnchor="10.0" />
+      <Button fx:id="deleteBT" layoutX="250.0" layoutY="63.0" mnemonicParsing="false" styleClass="btn-short" text="delete" AnchorPane.rightAnchor="10.0" />
    </children>
 </AnchorPane>

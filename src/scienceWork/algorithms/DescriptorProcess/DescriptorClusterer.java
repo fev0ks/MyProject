@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+@Deprecated
 public class DescriptorClusterer {
     private Progress progress;
     private ClusterTools clusterTools;

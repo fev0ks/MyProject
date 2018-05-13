@@ -2,74 +2,71 @@ package scienceWork.algorithms.bow;
 
 import org.opencv.core.Mat;
 import scienceWork.FxWorker.Interfaces.Progress;
-import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.algorithms.Interfaces.Teacher;
 import scienceWork.algorithms.bow.bowTools.BOWImgDescriptorExtractor;
+import scienceWork.objects.GeneralPicturesInformation;
 import scienceWork.objects.Picture;
 import scienceWork.objects.data.BOWVocabulary;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mixa1 on 23.02.2018.
  */
 public class BOWTeacher implements Teacher {
-    private List<Picture> pictureList;
+    //    private List<Picture> pictureList;
+    private List<List<Picture>> pictureLists;
     private Progress progress;
     private BOWImgDescriptorExtractor extractor;
+    private VocabularyTools vocabularyTools;
 
-    public BOWTeacher(List<Picture> pictureList, Progress progress) {
-        this.pictureList = pictureList;
+    //    public BOWTeacher(List<Picture> pictureList, Progress progress) {
+    public BOWTeacher(List<List<Picture>> pictureLists, Progress progress) {
+        this.pictureLists = pictureLists;
         this.progress = progress;
         this.extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
+        this.vocabularyTools = new VocabularyTools();
     }
 
     @Override
     public void findFeatures() {
-        execute();
+        executeCalculateGroupHistograms();
     }
 
-    private void execute() {
-        String pictureType = pictureList.get(0).getPictureType();
-        BOWVocabulary.vocabularies.put(pictureType, getGroupHistograms());
-    }
-
-    private Mat getGroupHistograms() {
-        extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
-        Mat groupHistograms = new Mat();
-        long countPictures = pictureList.size();
+    private void executeCalculateGroupHistograms() {
         long count = 0;
-        for (Picture picture : pictureList) {
+        int countPictures = GeneralPicturesInformation.getInstance().getPictureCount();
+        BOWVocabulary.countUsedPictures = countPictures;
+        for (List<Picture> pictureList : pictureLists) {
+            extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
+            Mat groupHistograms = new Mat();
 
-            progress.setProgress(count++, countPictures);
-            try {
-                picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
-                Mat descriptors = picture.getDescriptorProperty().getMatOfDescription();
-                Mat outMat = new Mat();
-                List<List<Integer>> pointIdxsOfClusters = null;
-                extractor.compute(descriptors, outMat, pointIdxsOfClusters);
-                picture.setDescriptorProperty(null);
-//                outMat = normalizeByRows(outMat);
-                groupHistograms.push_back(outMat);
-            } catch (Exception e) {
-                System.out.println(picture.toString());
-                e.printStackTrace();
+            for (Picture picture : pictureList) {
+                progress.setProgress(count++, countPictures);
+
+                Mat pictureHist = vocabularyTools.getPictureHistogram(picture, extractor);
+                if (pictureHist != null) {
+                    groupHistograms.push_back(pictureHist);
+                }
             }
 
+            String pictureType = pictureList.get(0).getPictureType();
+            BOWVocabulary.vocabularies.put(pictureType, groupHistograms);
         }
-        System.out.println("groupHistograms " + groupHistograms.size());
         progress.setProgress(0, countPictures);
-        return groupHistograms;
     }
 
-    private Mat normalizeByRows(Mat mat) {
-        double normalize = mat.cols();
-        for (int i = 0; i < normalize; i++) {
-            mat.put(0, i, (double)(mat.get(0, i)[0]/normalize));
-        }
-//        showMat(mat);
-        return mat;
-    }
+//    private Mat executeCalculateGroupHistograms(Picture picture) {
+//
+//        GeneralPicturesInformation.getInstance().clearKPData();
+//
+//
+//    }
+//
+//        return groupHistograms;
+//}
+
+
 }

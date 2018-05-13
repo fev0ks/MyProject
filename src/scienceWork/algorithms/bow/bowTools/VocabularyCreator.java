@@ -1,11 +1,9 @@
-package scienceWork.algorithms.bow.VocabularyHelper;
+package scienceWork.algorithms.bow.bowTools;
 
 import org.opencv.core.Mat;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
-import scienceWork.algorithms.bow.bowTools.BOWKMeansTrainer;
-import scienceWork.algorithms.bow.bowTools.BOWTrainer;
-import scienceWork.objects.FeatureTypes;
+import scienceWork.objects.constants.FeatureTypes;
 import scienceWork.objects.Picture;
 import scienceWork.objects.constants.Settings;
 import scienceWork.objects.data.BOWVocabulary;
@@ -43,7 +41,7 @@ public class VocabularyCreator {
         for (List<Picture> pictList : pictLists) {
             addDescriptorsToBowTrainer(pictList);
         }
-        progress.addMessage("Start BOW clustering from " + bowTrainer.descriptorsCount() + " descriptors; size " + Settings.getCountClusters() + ";");
+        progress.addMessage("Start BOW clustering from " + bowTrainer.descriptorsCount() + " descriptors; size " + Settings.getCountWords() + ";");
         Mat vacMat = getCommonVocabulary();
 //        BOWVocabulary.commonVocabulary = vacMat;
         BOWVocabulary.vocabulary = new Vocabulary(
@@ -51,7 +49,7 @@ public class VocabularyCreator {
                 vacMat.cols(),
                 vacMat.type(),
                 FeatureTypes.getFeatureId(Settings.getMethodKP()),
-                Settings.getCountClusters(),
+                Settings.getCountWords(),
                 countPhotos,
                 bowTrainer.descriptorsCount(),
                 vacMat,

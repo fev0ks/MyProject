@@ -6,13 +6,12 @@ import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
 
 public class Settings {
-    private static int countThreads = 4;
-    private static int countClusters = 500;
+    private static int countWords = 500;
     private static int countBOWClusters = 10;
     private static int methodKP = FeatureDetector.ORB;
     private static int methodDescr = DescriptorExtractor.ORB;
     private static int methodMatcher = DescriptorMatcher.FLANNBASED;
-    private static int scaleImageRatio = 600;
+    private static int scaleImageRatio = 800;
 
     public static final boolean SAVE_DATA = true;
 
@@ -33,8 +32,7 @@ public class Settings {
     }
 
     public void resetSettingsToDefault() {
-        countThreads = 4;
-        countClusters = 500;
+        countWords = 500;
         methodKP = FeatureDetector.ORB;
         methodDescr = DescriptorExtractor.ORB;
         method = Constants.ORB;
@@ -52,20 +50,12 @@ public class Settings {
         Settings.scaleImageRatio = scaleImageRatio;
     }
 
-    public static int getCountThreads() {
-        return countThreads;
-    }
-
-    public static void setCountOfThreads(int countThreads) {
-        Settings.countThreads = countThreads;
-    }
-
-    public static int getCountClusters() {
-        return countClusters;
+    public static int getCountWords() {
+        return countWords;
     }
 
     public static void setCountOfClusters(int countClusters) {
-        Settings.countClusters = countClusters;
+        Settings.countWords = countClusters;
     }
 
     public static int getMethodKP() {
@@ -94,7 +84,7 @@ public class Settings {
 
 
     public static int getCountBOWClusters() {
-        return countClusters;
+        return countWords;
     }
 
     public static void setCountBOWClusters(int countBOWClusters) {
@@ -114,8 +104,7 @@ public class Settings {
     public String toString() {
         return "Settings{ " +
                 "Method search KP/Desc: "+ method +
-                "; Count of threads: "+ countThreads +
-                "; Count of clusters: "+ countClusters +
+                "; Count of words: "+ countWords +
                  "; }";
     }
 }

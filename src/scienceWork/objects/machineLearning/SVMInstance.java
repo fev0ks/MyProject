@@ -93,7 +93,13 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
     @Override
     public void train() {
         initSVM();
-        train(svm, trainingData());
+        TrainData trainData = trainingData();
+        Mat samples = trainData.getSamples();
+        Mat response = trainData.getResponses();
+        samples.convertTo(samples, CV_32F);
+        response.convertTo(response, CV_32S);
+        svm.train(samples, Ml.ROW_SAMPLE, response);
+//        train(svm, trainingData());
     }
 
     @Override

@@ -8,16 +8,16 @@ public class ConnectorDB {
 
     private Connection connection;
 
-     ConnectorDB() {
-        try {
+     ConnectorDB() throws SQLException, ClassNotFoundException{
+//        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
                String URL = "jdbc:mysql://localhost:3306/scientific_work";
                String USERNAME = "root";
                String PASSWORD = "root";
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        } catch (SQLException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     Connection getConnection() {

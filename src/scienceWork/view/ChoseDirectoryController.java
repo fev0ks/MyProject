@@ -29,6 +29,7 @@ public class ChoseDirectoryController {
 
     @FXML
     private void chooseDirectory() {
+        loadDirB.setDisable(true);
         DirectoryChooser directoryChooser = new DirectoryChooser();
         dir = directoryChooser.showDialog(mainApp.getPrimaryStage());
         if (dir == null) {
@@ -37,6 +38,7 @@ public class ChoseDirectoryController {
             dirPathTF.setText(dir.getAbsolutePath());
             nextB.setDisable(false);
         }
+        loadDirB.setDisable(false);
     }
     @FXML
     private void nextStep(){

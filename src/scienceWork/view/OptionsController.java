@@ -24,8 +24,6 @@ public class OptionsController implements Initializable {
 //    private final int METHOD_NUMBER = 3;
     private final int SIZE_ITEM_IN_LISTVIEW = 22;
     @FXML
-    private TextField countOfThreadsTF;
-    @FXML
     private TextField countOfClustersTF;
     @FXML
     private TextField messageTF;
@@ -39,8 +37,7 @@ public class OptionsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 //        messageTF.setVisible(false);
-        countOfThreadsTF.setText(Settings.getCountThreads()+"");
-        countOfClustersTF.setText(Settings.getCountClusters()+"");
+        countOfClustersTF.setText(Settings.getCountWords()+"");
 
         methodsChoiceB.setItems(FXCollections.observableArrayList(
                 new LinkedList<>(Arrays.asList(Constants.AKAZE, Constants.ORB, Constants.BRISK))));
@@ -57,7 +54,6 @@ public class OptionsController implements Initializable {
     private void saveOptions() {
         boolean error = false;
         try {
-            Settings.setCountOfThreads(Integer.parseInt(countOfThreadsTF.getText()));
             Settings.setCountOfClusters(Integer.parseInt(countOfClustersTF.getText()));
         } catch (Exception e) {
             error = true;
@@ -65,6 +61,7 @@ public class OptionsController implements Initializable {
             messageTF.setText("Number Format Exception");
             System.out.println("saveOptions: NumberFormatException");
         }
+
         if (methodsChoiceB.getSelectionModel().getSelectedItem() != null)
             switch (methodsChoiceB.getSelectionModel().getSelectedItem()) {
                 case Constants.AKAZE:

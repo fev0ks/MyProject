@@ -1,15 +1,11 @@
 package scienceWork.objects.data;
 
 import org.opencv.core.Mat;
-import scienceWork.objects.FeatureTypes;
+import scienceWork.objects.constants.FeatureTypes;
 
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 /**

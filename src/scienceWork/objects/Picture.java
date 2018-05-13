@@ -1,6 +1,5 @@
 package scienceWork.objects;
 
-import javafx.beans.property.*;
 import scienceWork.objects.pictureData.DescriptorProperty;
 import scienceWork.objects.pictureData.DimensionsProperty;
 
@@ -20,7 +19,7 @@ public class Picture {
     private Dimension dimension;
     private LinkedList<Integer> groups;
     private DescriptorProperty descriptorProperty;
-    private int countOfDescr;
+//    private int countOfDescr;
 
     public Picture() {
         this.id = count++;
@@ -30,22 +29,17 @@ public class Picture {
         this.pictureType ="";
     }
 
-    public int getCountOfDescr() {
-        return countOfDescr;
-    }
+//    public int getCountOfDescr() {
+//        return countOfDescr;
+//    }
 
     public static void clearCount() {
         Picture.count = 1;
     }
 
-    public void setCountOfDescr(int countOfDescr) {
-        this.countOfDescr = countOfDescr;
-    }
-
-    public SimpleIntegerProperty getCountOfDescrProperty() {
-        return new SimpleIntegerProperty(this.countOfDescr);
-    }
-
+//    public void setCountOfDescr(int countOfDescr) {
+//        this.countOfDescr = countOfDescr;
+//    }
 
     public DescriptorProperty getDescriptorProperty() {
         return descriptorProperty;
@@ -85,10 +79,6 @@ public class Picture {
         return new DimensionsProperty(dimension);
     }
 
-    public IntegerProperty getIdProperty() {
-        return new SimpleIntegerProperty(this.id);
-    }
-
     public String getDir() {
         return dir;
     }
@@ -113,14 +103,6 @@ public class Picture {
         this.size = size;
     }
 
-    public StringProperty getNameProperty() {
-        return new SimpleStringProperty(this.name);
-    }
-
-    public DoubleProperty getSizeProperty() {
-        return new SimpleDoubleProperty(this.size);
-    }
-
     public String getPictureType() {
         return pictureType;
     }
@@ -128,9 +110,6 @@ public class Picture {
     public void setPictureType(String pictureType) {
         this.pictureType = pictureType;
     }
-
-    public StringProperty getGroupProperty(){ return new SimpleStringProperty(this.exitPictureType);}
-    public StringProperty getInpGroupProperty(){ return new SimpleStringProperty(this.pictureType);}
 
     public String getExitPictureType() {
         return exitPictureType;

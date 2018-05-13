@@ -9,14 +9,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import scienceWork.FxWorker.FxHelper;
 import scienceWork.Main;
 import scienceWork.dataBase.WorkerDB;
-import scienceWork.objects.FeatureTypes;
+import scienceWork.objects.constants.FeatureTypes;
 import scienceWork.objects.constants.Settings;
 import scienceWork.objects.data.BOWVocabulary;
 import scienceWork.objects.data.Vocabulary;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,15 +44,25 @@ public class VocabularyController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        textField.setText("Type: " + FeatureTypes.getLabel(Settings.getMethodKP()) + "; Size: " + Settings.getCountClusters());
+        textField.setText("Type: " + FeatureTypes.getLabel(Settings.getMethodKP()) + "; Size: " + Settings.getCountWords());
         updateChoiceBox();
     }
 
     private void updateChoiceBox() {
-        vocabularies = WorkerDB.getInstance().loadVocabulary(
-                Settings.getCountClusters(),
-                FeatureTypes.getFeatureId(Settings.getMethodKP()));
-        vocabulariesCB.setItems(convertListsToObservableList(vocabularies));
+        try {
+            vocabularies = WorkerDB.getInstance().loadVocabulary(
+                    Settings.getCountWords(),
+                    FeatureTypes.getFeatureId(Settings.getMethodKP()));
+            vocabulariesCB.setItems(FxHelper.convertListToObservableList(vocabularies));
+        } catch (SQLException | ClassNotFoundException e){
+            FxHelper.showMessage(
+                    "Data Base error",
+                    "Failed to connect to Data Base",
+                    "Please check DB settings or status connection",
+                    Alert.AlertType.ERROR,
+                    new Main());
+            dialogStage.close();
+        }
     }
 
     @FXML
@@ -81,14 +93,14 @@ public class VocabularyController implements Initializable {
         alert.showAndWait();
     }
 
-    private ObservableList<String> convertListsToObservableList(List<Vocabulary> vocabularies) {
-        ObservableList<String> observableListPicures = FXCollections.observableArrayList();
-        for (Vocabulary vocabulary : vocabularies) {
-            observableListPicures.add(vocabulary.toString());
-        }
-
-        return observableListPicures;
-    }
+//    private ObservableList<String> convertListsToObservableList(List<Vocabulary> vocabularies) {
+//        ObservableList<String> observableListPicures = FXCollections.observableArrayList();
+//        for (Vocabulary vocabulary : vocabularies) {
+//            observableListPicures.add(vocabulary.toString());
+//        }
+//
+//        return observableListPicures;
+//    }
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
     }

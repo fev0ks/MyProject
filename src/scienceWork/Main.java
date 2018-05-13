@@ -3,25 +3,31 @@ package scienceWork;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import scienceWork.FxWorker.FxHelper;
 import scienceWork.objects.Picture;
 import scienceWork.view.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class Main extends Application {
     private Stage primaryStage;
     private static boolean firstSelect = true;
     private BorderPane rootLayout;
-    private final int HEIGHT_MENU = 25;
-    private final int WIDTH_ROOT_LAYOUT = 680;
-    private final int HEIGHT_ROOT_LAYOUT = 655;
+
+    private final int HEIGHT_ROOT_LAYOUT;
+
+    public Main() {
+        HEIGHT_ROOT_LAYOUT = 655;
+    }
 
     public static void main(String[] args) {
         //  System.out.println(5/0);
@@ -49,12 +55,14 @@ public class Main extends Application {
         pane.getStylesheets().add(Main.class.getResource("resources/bootstrap3.css").toExternalForm());
     }
 
-    public void initRootLayout() {
+    private void initRootLayout() {
         try {
             //  System.err.println("FXML resource: " + Main.class.getResource("view/rootBorder.fxml"));
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("view/rootBorder.fxml"));
 
-            rootLayout = (BorderPane) loader.load();
+            rootLayout = loader.load();
+            int HEIGHT_MENU = 25;
+            int WIDTH_ROOT_LAYOUT = 680;
             rootLayout.setPrefSize(WIDTH_ROOT_LAYOUT, HEIGHT_ROOT_LAYOUT + HEIGHT_MENU);
             // Отображаем сцену, содержащую корневой макет.
             Scene scene = new Scene(rootLayout);
@@ -69,6 +77,7 @@ public class Main extends Application {
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            showErrorPage();
         }
     }
 
@@ -77,7 +86,7 @@ public class Main extends Application {
             // System.err.println("FXML resource: " + Main.class.getResource("view/mainView.fxml"));
             // Загружаем сведения об адресатах.
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("view/mainView.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane page =  loader.load();
 
             rootLayout.setCenter(page);
 //            Scene scene = new Scene(page);
@@ -85,7 +94,7 @@ public class Main extends Application {
 
 //            primaryStage.setScene(scene);
             // Даём контроллеру доступ к главному приложению.
-            MainView controller = loader.getController();
+            MainController controller = loader.getController();
             controller.setMainApp(this);
 //            controller.setDialogStage(startMenuStage);
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
@@ -113,7 +122,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader();
             //System.out.println("FXML resource: " + Main.class.getResource("view/choseDIrectoryView.fxml"));
             loader.setLocation(Main.class.getResource("view/choseDIrectoryView.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane page = loader.load();
 
             // Создаём диалоговое окно Stage.
             Stage startMenuStage = new Stage();
@@ -136,21 +145,22 @@ public class Main extends Application {
             return controller.isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();
+            showErrorPage();
             return null;
         }
     }
 
-    public String setNameOfTypeImages() {
+    public void showResultPage(List<List<Picture>> pictureLists) {
         try {
             // Загружаем fxml-файл и создаём новую сцену
             // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/selectImagesTypeView.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            loader.setLocation(Main.class.getResource("view/resultsView.fxml"));
+            AnchorPane page = loader.load();
 
             // Создаём диалоговое окно Stage.
             Stage startMenuStage = new Stage();
-            startMenuStage.setTitle("Choose name of type images");
+            startMenuStage.setTitle("Check results");
             startMenuStage.initModality(Modality.WINDOW_MODAL);
             startMenuStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
@@ -158,14 +168,19 @@ public class Main extends Application {
             startMenuStage.setScene(scene);
 
             // Передаём адресата в контроллер.
-            SelectImagesTypeController controller = loader.getController();
+            ResultController controller = loader.getController();
             controller.setDialogStage(startMenuStage);
+            controller.setMainApp(this);
+            controller.initDataPage(pictureLists);
+
+            startMenuStage.heightProperty().addListener((obs, oldVal, newVal) -> controller.resizeImageView());
+            startMenuStage.widthProperty().addListener((obs, oldVal, newVal) -> controller.resizeImageView());
+
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             startMenuStage.showAndWait();
-            return controller.isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            showErrorPage();
         }
     }
 
@@ -175,7 +190,7 @@ public class Main extends Application {
             // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/optionsView.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane page = loader.load();
 
             // Создаём диалоговое окно Stage.
             Stage startMenuStage = new Stage();
@@ -194,6 +209,7 @@ public class Main extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
+            showErrorPage();
         }
     }
 
@@ -203,7 +219,7 @@ public class Main extends Application {
             // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/vocabularyView.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane page = loader.load();
 
             // Создаём диалоговое окно Stage.
             Stage startMenuStage = new Stage();
@@ -222,6 +238,7 @@ public class Main extends Application {
             startMenuStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+            showErrorPage();
         }
     }
 
@@ -231,7 +248,7 @@ public class Main extends Application {
             // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/pictureView.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane page =  loader.load();
 
             // Создаём диалоговое окно Stage.
             Stage startMenuStage = new Stage();
@@ -248,27 +265,15 @@ public class Main extends Application {
             controller.setMainApp(this);
             controller.initFirstWindow();
             controller.setDialogStage(startMenuStage);
-            System.out.println(startMenuStage.getMinHeight());
-            System.out.println(startMenuStage.getMinWidth());
-//            startMenuStage.fullScreenProperty().addListener((obs, oldVal, newVal) -> {
-//                controller.resizeWindowListener();
-//            });
-            startMenuStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-                controller.resizeWindowListener();
-            });
-            startMenuStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-                controller.resizeWindowListener();
-            });
-//            startMenuStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-//                controller.resizeWindowListener();
-//            });
-//            startMenuStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-//                controller.resizeWindowListener();
-//            });
+
+            startMenuStage.heightProperty().addListener((obs, oldVal, newVal) -> controller.resizeWindowListener());
+            startMenuStage.widthProperty().addListener((obs, oldVal, newVal) -> controller.resizeWindowListener());
+
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             startMenuStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+            showErrorPage();
         }
     }
 
@@ -277,7 +282,7 @@ public class Main extends Application {
             // Загружает fxml-файл и создаёт новую сцену для всплывающего окна.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/histogram.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Data");
             dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -296,14 +301,19 @@ public class Main extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
+            showErrorPage();
         }
     }
 
-    public boolean getStatus() {
-        return firstSelect;
-    }
+//    public boolean getStatus() {
+//        return firstSelect;
+//    }
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    private void showErrorPage(){
+        FxHelper.showMessage("Error", "Failed load a page", "Please check your code", Alert.AlertType.ERROR, this);
     }
 }

@@ -18,8 +18,8 @@ public abstract class AlgorithmMLImpl<T> implements AlgorithmML<T> {
     public void train(StatModel model, TrainData trainData){
             Mat samples = trainData.getSamples();
             Mat response = trainData.getResponses();
-//            samples.convertTo(samples, CV_32F);
-//            response.convertTo(response, CV_32S);
+            samples.convertTo(samples, CV_32F);
+            response.convertTo(response, CV_32S);
             model.train(samples, Ml.ROW_SAMPLE, response);
     }
 

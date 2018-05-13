@@ -29,8 +29,6 @@ public class KeyPointsAndDescriptors {
     private MatOfKeyPoint createKeyPoint(Mat matImage, int numberOfMethodKP) {
         MatOfKeyPoint keyPoint = new MatOfKeyPoint();
         FeatureDetector detector = FeatureDetector.create(numberOfMethodKP);
-//        FastFeatureDetector detector = FastFeatureDetector.create(25, true,0);
-//        FastFeatureDetector detector = FastFeatureDetector.create();
         detector.detect(matImage, keyPoint);
         return keyPoint;
     }

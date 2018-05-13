@@ -82,8 +82,8 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
         samples.convertTo(samples, CV_32FC1);
         response.convertTo(response, CV_32FC1);
 
-//        logisticRegression.train(samples, Ml.ROW_SAMPLE, response);
-        train(logisticRegression, TrainData.create(samples, Ml.ROW_SAMPLE, response));
+        logisticRegression.train(samples, Ml.ROW_SAMPLE, response);
+//        train(logisticRegression, TrainData.create(samples, Ml.ROW_SAMPLE, response));
 //
     }
 
@@ -106,15 +106,5 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
                 " \ngetTrainMethod " + logisticRegression.getTrainMethod();
     }
 
-    public void showMat(Mat mat) {
-        long[][] newMat = new long[mat.rows()][mat.cols()];
-        for (int i = 0; i < mat.rows(); i++) {
-            for (int j = 0; j < mat.cols(); j++) {
-                System.out.print(Math.round(mat.get(i, j)[0]) + " ");
-//                newMat[i][j] = Math.round(mat.get(i, j)[0]);
-            }
-            System.out.println();
-        }
-        System.out.println(Arrays.deepToString(newMat));
-    }
+
 }

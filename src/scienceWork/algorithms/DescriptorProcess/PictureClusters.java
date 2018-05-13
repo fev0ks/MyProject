@@ -14,12 +14,13 @@ import java.util.concurrent.Future;
 /**
  * Created by mixa1 on 21.02.2018.
  */
+@Deprecated
 public class PictureClusters {
 
     //найти особые точки их дескрипторы, по ним найти центры кластеров дескрипторов изображения
     public void findPicturesClusters(List<Picture> pictList, Progress progress) {
 //        ExecutorService executor = Executors.newFixedThreadPool(Settings.getCountThreads());
-        ExecutorService executor = Executors.newFixedThreadPool(Settings.getInstance().getCountThreads());
+        ExecutorService executor = Executors.newFixedThreadPool(4);
 
         List<Future> futureList = new LinkedList<>();
         System.out.println("start find KP/Descr");

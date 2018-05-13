@@ -12,11 +12,11 @@ public class ManagerDB {
     private static volatile ManagerDB instance;
     private ConnectorDB connectorDB;
 
-    private ManagerDB() {
+    private ManagerDB() throws SQLException, ClassNotFoundException {
         connectorDB = new ConnectorDB();
     }
 
-    public static ManagerDB getInstance() {
+    public static ManagerDB getInstance() throws SQLException, ClassNotFoundException {
         if (instance == null)
             synchronized (ManagerDB.class) {
                 if (instance == null)

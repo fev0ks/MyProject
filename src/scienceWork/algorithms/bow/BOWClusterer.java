@@ -5,11 +5,17 @@ import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
 import scienceWork.algorithms.Interfaces.Clusterer;
 import scienceWork.algorithms.bow.bowTools.BOWImgDescriptorExtractor;
+import scienceWork.objects.GeneralPicturesInformation;
 import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
 import scienceWork.objects.data.BOWVocabulary;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static org.opencv.core.CvType.CV_32F;
 
@@ -19,83 +25,79 @@ import static org.opencv.core.CvType.CV_32F;
 public class BOWClusterer implements Clusterer {
     private Progress progress;
     private AlgorithmML classifier;
-    private List<Picture> pictureList;
+    private List<List<Picture>> pictureLists;
     private BOWImgDescriptorExtractor extractor;
+    private VocabularyTools vocabularyTools;
 
-    public BOWClusterer(List<Picture> pictureList, Progress progress, AlgorithmML classifier) {
-        this.extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
-        extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
-        this.pictureList = pictureList;
+    public BOWClusterer(List<List<Picture>> pictureLists, Progress progress, AlgorithmML classifier) {
+
+        this.pictureLists = pictureLists;
         this.progress = progress;
         this.classifier = classifier;
-//        System.out.println("getVarCount "+svm.getVarCount());
+        this.vocabularyTools = new VocabularyTools();
     }
 
     @Override
-    public void findPictureType(List<Picture> pictureList) {
-        execute();
+    public void findPictureType() {
+
+        classifiedPictures();
     }
 
-    private void execute() {
-        long countPictures = pictureList.size();
+    private void classifiedPictures() {
+        long countPictures = GeneralPicturesInformation.getInstance().getPictureCount();
         long count = 0;
-        for (Picture picture : pictureList) {
-//
-            progress.setProgress(count++, countPictures);
-            float prediction;
-            Mat vocabularyTemp = findVocabularyTemp(picture);
-            vocabularyTemp.convertTo(vocabularyTemp, CV_32F);
-            if (vocabularyTemp.empty()) {
-                picture.setExitPictureType("failed");
-                continue;
+//        ExecutorService executor = Executors.newFixedThreadPool(2);
+//        List<Future> futureList = new LinkedList<>();
+
+        for (List<Picture> pictureList : pictureLists) {
+            extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
+            extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
+
+            for (Picture picture : pictureList) {
+//                extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
+//                extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
+
+                executeCalculatePictureType(picture);
+                progress.setProgress(count++, countPictures);
+//                Thread thread = new Thread(() -> executeCalculatePictureType(picture));
+//                futureList.add(executor.submit(thread));
+//                thread.start();
+
+
             }
-            prediction = classifier.predict(vocabularyTemp);
-            System.out.println(count + "\\" + countPictures + " " + picture.getPictureType() + " prediction " + prediction);
-            String typeImage = BOWVocabulary.classesNumbers.get((int) prediction);
-            picture.setExitPictureType(typeImage);
-            picture.setDescriptorProperty(null);
+
         }
+//
+//        System.out.println(" " + futureList.size());
+//            for (int i = 0; i < countPictures; i++) {
+//                System.out.println(" " +  futureList.get(i).isDone());
+//                try {
+//                    futureList.get(i).get();
+//                } catch (InterruptedException | ExecutionException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                }
+
+//            }
+
+//        executor.shutdown();
         progress.setProgress(0, countPictures);
     }
 
-    private Mat findVocabularyTemp(Picture picture) {
-        Mat outMat = new Mat();
-//        MatOfKeyPoint keyPoints = picture.getDescriptorProperty().getMatOfKeyPoint();
-        try {
-//            if (keyPoints == null) {
-            picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture)); //**********************
-//            }
-            Mat descriptors = picture.getDescriptorProperty().getMatOfDescription();
-            List<List<Integer>> pointIdxsOfClusters = null;
-            extractor.compute(descriptors, outMat, pointIdxsOfClusters);
-            picture.setDescriptorProperty(null);
-//            outMat = normalizeByRows(outMat);
-//            System.gc();
-        } catch (Exception e) {
-            System.out.println(picture.toString());
-            e.printStackTrace();
-        }
-        return outMat;
-    }
+    private void executeCalculatePictureType(Picture picture) {
+        float prediction;
+        Mat vocabularyTemp = vocabularyTools.getPictureHistogram(picture, extractor);
+        vocabularyTemp.convertTo(vocabularyTemp, CV_32F);
 
-    private Mat normalizeByRows(Mat mat) {
-        double normalize = mat.cols();
-        for (int i = 0; i < normalize; i++) {
-            mat.put(0, i, (double)(mat.get(0, i)[0]/normalize));
-        }
-//        showMat(mat);
-        return mat;
-    }
+        prediction = classifier.predict(vocabularyTemp);
 
-    public void showMat(Mat mat) {
-//        long[][] newMat = new long[mat.rows()][mat.cols()];
-        for (int i = 0; i < mat.rows(); i++) {
-            for (int j = 0; j < mat.cols(); j++) {
-                System.out.print(mat.get(i, j)[0] + " ");
-//                newMat[i][j] = Math.round(mat.get(i, j)[0]);
-            }
-            System.out.println();
+        if (prediction != -1) {
+            String typeImage = BOWVocabulary.classesNumbers.get((int) prediction);
+            picture.setExitPictureType(typeImage);
+        } else {
+            picture.setExitPictureType("");
         }
-//        System.out.println(Arrays.deepToString(newMat));
+
     }
 }

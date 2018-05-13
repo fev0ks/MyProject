@@ -5,6 +5,7 @@ import org.opencv.core.Core;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.algorithms.DescriptorProcess.ClusterTools;
 
+@Deprecated
 public class ClusteringThroughDescriptionClusters {
 //    private List<Picture> pictList;
     private Progress progress;

@@ -13,6 +13,7 @@ import java.util.*;
  * Created by mixa1 on 25.02.2018.
  */
 public class BOWVocabulary {
+    public static int countUsedPictures;
     public static Map<String, Mat> vocabularies = new HashMap<>();
     public static Vocabulary vocabulary = new Vocabulary();
 //    public static Mat commonVocabulary = new Mat();
@@ -24,6 +25,7 @@ public class BOWVocabulary {
         }
         return types;
     }
+
     public static BOWImgDescriptorExtractor getBOWImgDescriptorExtractor() {
         DescriptorExtractor descriptor = DescriptorExtractor.create(Settings.getMethodDescr());
         DescriptorMatcher matcher = DescriptorMatcher.create(Settings.getMethodMatcher());

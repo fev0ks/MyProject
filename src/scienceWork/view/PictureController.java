@@ -12,6 +12,7 @@ import org.opencv.core.Core;
 import scienceWork.Main;
 import scienceWork.Workers.PictureWorker;
 import scienceWork.algorithms.DescriptorProcess.KeyPointsAndDescriptors;
+import scienceWork.objects.constants.Settings;
 import scienceWork.objects.data.BOWVocabulary;
 import scienceWork.objects.Picture;
 
@@ -30,7 +31,6 @@ public class PictureController implements Initializable {
     private Picture picture;
     private int size;
     private boolean isShown = false;
-    private Image image;
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -79,7 +79,7 @@ public class PictureController implements Initializable {
     @FXML
     private void showPicture() {
         System.out.println("showing: " + picture.getDir() + "\\" + picture.getName());
-        getImage();
+        getSelectedPicture();
         setSizeImageView();
         setPictureToImageView();
     }
@@ -92,17 +92,18 @@ public class PictureController implements Initializable {
     }
 
     private void setPictureToImageView() {
-        Platform.runLater(() -> imageView.setImage(image));
+        Platform.runLater(() -> imageView.setImage(getSelectedPicture()));
     }
 
-    private void getImage() {
+    private Image getSelectedPicture() {
         boolean isGrayScale = grayScaleCB.isSelected();
         boolean printKeyPoints = keyPointsCB.isSelected();
         try {
-            image = PictureWorker.getImage(picture, isGrayScale, printKeyPoints);
+            return PictureWorker.getImage(picture, isGrayScale, printKeyPoints);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
 
     }
 
@@ -121,6 +122,9 @@ public class PictureController implements Initializable {
         stringBuilder.append("\n");
         stringBuilder.append("Features: ");
         stringBuilder.append(picture.getDescriptorProperty().getCountOfDescr());
+        stringBuilder.append("\n");
+        stringBuilder.append("Picture is resized: ");
+        stringBuilder.append(Settings.getScaleImageRatio());
         infoTA.setText(stringBuilder.toString());
     }
 
@@ -134,8 +138,8 @@ public class PictureController implements Initializable {
         }
 
         setSizeImageView();
-        getImage();
-        imageView.setImage(image);
+        getSelectedPicture();
+        imageView.setImage(getSelectedPicture());
     }
 
     public void resizeWindowListener() {

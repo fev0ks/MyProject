@@ -18,6 +18,7 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+//import java.awt.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -130,15 +131,15 @@ public class FileWorker {
 //        return pictures;
 //    }
 
-//    public BufferedImage loadBufferedImage(File file) {
-//        BufferedImage loadImg = null;
-//        try {
-//            loadImg = ImageIO.read(file);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return resizeLoadBitmap(loadImg);
-//    }
+    public BufferedImage loadBufferedImage(File file) {
+        BufferedImage loadImg = null;
+        try {
+            loadImg = ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return loadImg;
+    }
 //
 //    public BufferedImage loadGrayScaleBufferedImage(File file) {
 //        BufferedImage grayImage = null;
@@ -179,20 +180,20 @@ public class FileWorker {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         return imageMat;
     }
 
-//    public Image loadImage(File file) {
-//        Image image = null;
-//        try {
-//            image = ImageIO.read(file);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return image;
-//    }
+
+
+    public Image loadImage(File file) {
+        Image image = null;
+        try {
+            image = ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
 
     private Mat resizeImageMat(Mat imageMat) {
         int compression = Settings.getScaleImageRatio();
@@ -208,6 +209,43 @@ public class FileWorker {
 
         return imageMat;//если не надо уменьшать
     }
+
+//    public Mat getMatFromFileOfImage(File file, boolean grayScale, boolean resize) {
+//        BufferedImage loadImg = null;
+//        try {
+////            System.out.println(file);
+//            loadImg = ImageIO.read(file);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return resizeLoadBitmap(loadImg, 600);
+//    }
+//
+//    private Mat resizeLoadBitmap(BufferedImage image, int compression) {
+//        BufferedImage newImage = image;
+//        int height = image.getHeight();
+//        int width = image.getWidth();
+//        if (height > compression || width > compression) {
+//            int w1 = width / compression, h1 = height / compression;
+//            int power = w1;
+//            if (h1 > w1) power = h1;
+//            try {
+//                newImage = Thumbnails.of(image).size(width / power, height / power).asBufferedImage();
+//                avrgH += newImage.getHeight();
+//                avrgW += newImage.getWidth();
+//                count++;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        Mat imageMat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
+//        byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+//        imageMat.put(0, 0, data);
+//
+//        return imageMat;//если не надо уменьшать
+//    }
+
 
     public void saveImageToGroups(Picture picture, File file, String temp) throws IOException {
 

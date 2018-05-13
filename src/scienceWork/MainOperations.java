@@ -2,13 +2,16 @@ package scienceWork;
 
 import javafx.scene.control.Alert;
 import org.apache.commons.lang.time.StopWatch;
+import org.opencv.core.Mat;
 import scienceWork.FxWorker.FxHelper;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.bow.BOWClusterer;
 import scienceWork.algorithms.bow.BOWTeacher;
-import scienceWork.algorithms.bow.VocabularyHelper.VocabularyCreator;
+import scienceWork.algorithms.bow.VocabularyTools;
+import scienceWork.algorithms.bow.bowTools.VocabularyCreator;
 import scienceWork.dataBase.SaveDataHelper;
+import scienceWork.objects.GeneralPicturesInformation;
 import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
 import scienceWork.objects.data.BOWVocabulary;
@@ -33,18 +36,28 @@ public class MainOperations {
         StopWatch stopWatchAll = new StopWatch();
         stopWatchAll.start();
         System.out.println(pictLists.size());
-        for (List<Picture> pictList : pictLists) {
+//        for (List<Picture> pictList : pictLists) {
 //            System.out.println("analysis " + pictList.size());
 //            System.out.println("analysis " + pictList.get(0).toString());
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
-            new BOWTeacher(pictList, progress).findFeatures();
-            stopWatch.stop();
-            viewWorkTime(stopWatch.getTime(), pictList.get(0).getPictureType(), progress);
-        }
+//            StopWatch stopWatch = new StopWatch();
+//            stopWatch.start();
+        new BOWTeacher(pictLists, progress).findFeatures();
+//        normalizeVocabularyData(progress);
+
+//            stopWatch.stop();
+//            viewWorkTime(stopWatch.getTime(), pictList.get(0).getPictureType(), progress);
+//        }
 //        executeInitClassifier(progress);
         stopWatchAll.stop();
-        viewWorkTime(stopWatchAll.getTime(), "Total teach ", progress);
+        viewWorkTime(stopWatchAll.getTime(), "Total time that was spent on creating training data:", progress);
+    }
+
+    private void normalizeVocabularyData(Progress progress) {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        new VocabularyTools().normalizeVocabulary();
+        stopWatch.stop();
+        viewWorkTime(stopWatch.getTime(), "Total time that was spent on normalization data:", progress);
     }
 
     public void executeInitClassifier(Progress progress, AlgorithmML classifier) {
@@ -62,10 +75,8 @@ public class MainOperations {
         classifier.train();
         stopWatch.stop();
 
-        System.out.println("Finish");
-        long finishTime = stopWatch.getTime();
-        System.out.println("Время: " + finishTime / 1000 + " сек, " + finishTime % 1000 + " мс;");
-
+//        System.out.println("Finish");
+//        long finishTime = stopWatch.getTime();
 
 //        Mat mat = BOWVocabulary.vocabularies.get("forest");
 //                long[][] newMat = new long[mat.rows()][mat.cols()];
@@ -91,31 +102,19 @@ public class MainOperations {
 //        }
 //        System.out.println(Arrays.deepToString(newMat));
 
-        viewWorkTime(stopWatch.getTime(), "SVM train ", progress);
+        viewWorkTime(stopWatch.getTime(), "Classifier trained ", progress);
 
         SaveDataHelper.saveClassifier(classifier, progress);
 
     }
 
-//    public void showMat(Mat mat) {
-//        long[][] newMat = new long[mat.rows()][mat.cols()];
-//        for (int i = 0; i < mat.rows(); i++) {
-//            for (int j = 0; j < mat.cols(); j++) {
-////                System.out.print(Math.round(mat.get(i, j)[0]) + " ");
-//                newMat[i][j] = Math.round(mat.get(i, j)[0]);
-//            }
-////            System.out.println();
-//        }
-//        System.out.println(Arrays.deepToString(newMat));
-//    }
-
     public void executeClustering(List<List<Picture>> pictLists, Progress progress, AlgorithmML classifier) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         try {
-            for (List<Picture> pictList : pictLists) {
-                new BOWClusterer(pictList, progress, classifier).findPictureType(pictList);
-            }
+//            for (List<Picture> pictList : pictLists) {
+            new BOWClusterer(pictLists, progress, classifier).findPictureType();
+//            }
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
@@ -153,11 +152,11 @@ public class MainOperations {
 
     }
 
-    public void executeSavingGroups(List<List<Picture>> pictureLists, File file, int countPhotos, Progress progress) {
-        if (file == null) {
-            progress.addMessage("Pictures will be saved to default folder: " + pictureLists.get(0).get(0).getPicFile().getParent());
-        }
+    public void executeSavingGroups(List<List<Picture>> pictureLists, File file, Progress progress) {
+
         int count = 0;
+        int notSavedCount = 0;
+        int countPictures = GeneralPicturesInformation.getInstance().getPictureCount();
         long createdDate = Calendar.getInstance().getTimeInMillis();
         String temp = LocalDateTime.ofInstant(Instant.ofEpochMilli(createdDate),
                 TimeZone.getDefault().toZoneId()).format(DateTimeFormatter.ofPattern("dd_MM_yyyy H_m_s"));
@@ -165,26 +164,35 @@ public class MainOperations {
         try {
             for (List<Picture> pictures : pictureLists)
                 for (Picture picture : pictures) {
-                    FileWorker.getInstance().saveImageToGroups(picture, file, temp);
-                    progress.setProgress(++count, countPhotos);
+                    if (checkPictureType(picture)) {
+                        FileWorker.getInstance().saveImageToGroups(picture, file, temp);
+                        progress.setProgress(++count, countPictures);
+                    } else {
+                        notSavedCount++;
+                    }
                 }
-            progress.setProgress(0, countPhotos);
-            progress.addMessage("\nImages were saved\n");
+            progress.setProgress(0, countPictures);
+            progress.addMessage("* Images were saved: " + (countPictures - notSavedCount) + "; not saved: " + notSavedCount+ " *");
         } catch (IOException e) {
             e.printStackTrace();
-            progress.addMessage("Failed to save pictures!\n");
+            progress.addMessage("* Failed to save pictures! *");
         }
     }
 
+    private boolean checkPictureType(Picture picture) {
+        String pictureType = picture.getExitPictureType();
+        return pictureType != null && !pictureType.equals("");
+    }
+
     private void viewWorkTime(long finishTime, String title, Progress progress) {
-        String message = title + "; Finished for " + finishTime / 1000 / 60 + " min, " + finishTime / 1000 % 60 + " sec, " + finishTime % 1000 + " ms;";
+        String message = title + " " + finishTime / 1000 / 60 + " min, " + finishTime / 1000 % 60 + " sec, " + finishTime % 1000 + " ms;";
         progress.addMessage(message);
     }
 
     public boolean checkExistVocabulary() {
         boolean exist = true;
         if (BOWVocabulary.vocabulary.getMat() == null) {
-            FxHelper.showMessage("Error", "Vocabulary is empty!", "Please load or create", Alert.AlertType.ERROR, new Main());
+            FxHelper.showMessage("Warning", "Vocabulary is empty!", "Please load or create", Alert.AlertType.WARNING, new Main());
             exist = false;
         }
         return exist;
@@ -193,7 +201,7 @@ public class MainOperations {
     public boolean checkExistTrainData() {
         boolean exist = true;
         if (BOWVocabulary.vocabularies.isEmpty()) {
-            FxHelper.showMessage("Error", "Train data is empty!", "Please create", Alert.AlertType.ERROR, new Main());
+            FxHelper.showMessage("Warning", "Train data is empty!", "Please create", Alert.AlertType.WARNING, new Main());
             exist = false;
         }
         return exist;
@@ -202,11 +210,28 @@ public class MainOperations {
     public boolean checkExistMLInstance(AlgorithmML algorithmML) {
         boolean exist = true;
         if (algorithmML == null) {
-            FxHelper.showMessage("Error", "Classifier Instance is not exist!", "Please create", Alert.AlertType.ERROR, new Main());
+            FxHelper.showMessage("Warning", "Classifier Instance is not exist!", "Please create", Alert.AlertType.WARNING, new Main());
             exist = false;
         }
         return exist;
     }
 
+    public boolean checkLoadedPictures(List<List<Picture>> pictureLists) {
+        boolean exist = true;
+        if (pictureLists == null) {
+            FxHelper.showMessage("Warning", "Pictures were not loaded yet", "Please wait", Alert.AlertType.WARNING, new Main());
+            exist = false;
+        }
+        return exist;
+    }
+
+    public void showMat(Mat mat) {
+        for (int i = 0; i < mat.rows(); i++) {
+            for (int j = 0; j < mat.cols(); j++) {
+                System.out.print((mat.get(i, j)[0]) + " ");
+            }
+            System.out.println();
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-package scienceWork.objects;
+package scienceWork.objects.constants;
 
 import java.util.HashMap;
 import java.util.Map;

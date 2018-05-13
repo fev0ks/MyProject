@@ -20,10 +20,10 @@
             </ImageView>
          </children>
       </AnchorPane>
-    <AnchorPane maxWidth="-Infinity" prefHeight="384.0" prefWidth="175.0" scaleShape="false" style="-fx-background-color: CDCDCD; -fx-border-color: black;" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+    <AnchorPane maxWidth="-Infinity" prefHeight="287.0" prefWidth="175.0" scaleShape="false" style="-fx-background-color: CDCDCD; -fx-border-color: black;" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <Button fx:id="showBt" layoutX="68.0" layoutY="119.0" mnemonicParsing="false" onAction="#showPicture" text="show" AnchorPane.topAnchor="90.0" />
-            <TextArea fx:id="infoTA" layoutY="199.0" prefHeight="200.0" prefWidth="175.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+            <TextArea fx:id="infoTA" layoutX="8.0" layoutY="173.0" prefHeight="108.0" prefWidth="161.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" />
             <Slider fx:id="sizePictureSlider" blockIncrement="5.0" layoutX="20.0" layoutY="80.0" max="150.0" min="20.0" onMouseClicked="#resizePicture" value="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
             <Button layoutX="52.0" layoutY="161.0" mnemonicParsing="false" onAction="#showAlgorithmHistogram" text="Histogram" AnchorPane.topAnchor="130.0" />
             <CheckBox fx:id="grayScaleCB" layoutX="5.0" layoutY="37.0" mnemonicParsing="false" text="Gray Scale" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="35.0" />

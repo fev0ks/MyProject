@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.opencv.core.CvType.CV_32FC3;
 
+@Deprecated
 public class ClusterTools {
 
     public Mat createClusters(Mat matDescriptor) {
@@ -47,11 +48,11 @@ public class ClusterTools {
          */
 
 //            System.out.println("matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
-            if (matDescriptor.height() < Settings.getCountClusters()) {
+            if (matDescriptor.height() < Settings.getCountWords()) {
                 setFictitiousDescriptors(matDescriptor);
             }
             try {
-                Core.kmeans(matDescriptor, Settings.getCountClusters(), clusteredHSV, criteria, 100, Core.KMEANS_PP_CENTERS, clusteredCenter);
+                Core.kmeans(matDescriptor, Settings.getCountWords(), clusteredHSV, criteria, 100, Core.KMEANS_PP_CENTERS, clusteredCenter);
             } catch (Exception e) {
                 System.out.println("ClusterTools.clusteringDescriptors -  Core.kmeans");
                 System.out.println("matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
@@ -71,11 +72,11 @@ public class ClusterTools {
     }
 
     private Mat setFictitiousDescriptors(Mat matDescriptor) {
-//        System.out.println("setFictitiousDescriptors " + Settings.getCountClusters() / matDescriptor.height());
+//        System.out.println("setFictitiousDescriptors " + Settings.getCountWords() / matDescriptor.height());
         int countOfNeedRows;
-        while ((countOfNeedRows = Settings.getCountClusters() / matDescriptor.height()) != 0) {
+        while ((countOfNeedRows = Settings.getCountWords() / matDescriptor.height()) != 0) {
             matDescriptor.push_back(matDescriptor);
-//            System.out.println(countOfNeedRows + " " + Settings.getCountClusters() / matDescriptor.height() + " matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
+//            System.out.println(countOfNeedRows + " " + Settings.getCountWords() / matDescriptor.height() + " matDescriptor " + matDescriptor.height() + "x" + matDescriptor.width());
         }
         return matDescriptor;
     }

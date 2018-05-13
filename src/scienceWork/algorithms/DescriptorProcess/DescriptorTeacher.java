@@ -8,7 +8,7 @@ import scienceWork.objects.Picture;
 
 import java.util.List;
 
-
+@Deprecated
 public class DescriptorTeacher implements Teacher {
     private List<Picture> pictList;
     private Progress progress;
