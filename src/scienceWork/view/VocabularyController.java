@@ -1,7 +1,5 @@
 package scienceWork.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -48,12 +46,17 @@ public class VocabularyController implements Initializable {
         updateChoiceBox();
     }
 
+    /* todo no need load all mats, only text */
     private void updateChoiceBox() {
         try {
             vocabularies = WorkerDB.getInstance().loadVocabulary(
                     Settings.getCountWords(),
                     FeatureTypes.getFeatureId(Settings.getMethodKP()));
             vocabulariesCB.setItems(FxHelper.convertListToObservableList(vocabularies));
+
+//            if(BOWVocabulary.vocabulary != null) {
+//                vocabulariesCB.setValue(BOWVocabulary.vocabulary.toString());
+//            }
         } catch (SQLException | ClassNotFoundException e){
             FxHelper.showMessage(
                     "Data Base error",
@@ -67,14 +70,18 @@ public class VocabularyController implements Initializable {
 
     @FXML
     private void loadSelectedVocabulary() {
-        boolean error = false;
         int indx = vocabulariesCB.getSelectionModel().getSelectedIndex();
 
         if (indx >= 0){
-            System.out.println("Loaded with indx: "+indx);
             BOWVocabulary.vocabulary = vocabularies.get(indx);
+            FxHelper.showMessage(
+                    "Load Vocabulary",
+                    "Vocabulary was loaded",
+                    BOWVocabulary.vocabulary.toString(),
+                    Alert.AlertType.INFORMATION,
+                    mainApp);
         }
-        showMessage("Success");
+
         dialogStage.close();
     }
 
@@ -83,24 +90,7 @@ public class VocabularyController implements Initializable {
         dialogStage.close();
     }
 
-    private void showMessage(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(mainApp.getPrimaryStage());
-        alert.setTitle("result");
-        alert.setHeaderText(message);
-        alert.setContentText(":-|");
 
-        alert.showAndWait();
-    }
-
-//    private ObservableList<String> convertListsToObservableList(List<Vocabulary> vocabularies) {
-//        ObservableList<String> observableListPicures = FXCollections.observableArrayList();
-//        for (Vocabulary vocabulary : vocabularies) {
-//            observableListPicures.add(vocabulary.toString());
-//        }
-//
-//        return observableListPicures;
-//    }
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
     }

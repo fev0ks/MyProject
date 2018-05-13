@@ -8,7 +8,6 @@ import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.Workers.FileWorker;
 import scienceWork.algorithms.bow.BOWClusterer;
 import scienceWork.algorithms.bow.BOWTeacher;
-import scienceWork.algorithms.bow.VocabularyTools;
 import scienceWork.algorithms.bow.bowTools.VocabularyCreator;
 import scienceWork.dataBase.SaveDataHelper;
 import scienceWork.objects.GeneralPicturesInformation;
@@ -52,13 +51,13 @@ public class MainOperations {
         viewWorkTime(stopWatchAll.getTime(), "Total time that was spent on creating training data:", progress);
     }
 
-    private void normalizeVocabularyData(Progress progress) {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        new VocabularyTools().normalizeVocabulary();
-        stopWatch.stop();
-        viewWorkTime(stopWatch.getTime(), "Total time that was spent on normalization data:", progress);
-    }
+//    private void normalizeVocabularyData(Progress progress) {
+//        StopWatch stopWatch = new StopWatch();
+//        stopWatch.start();
+//        new VocabularyTools().normalizeVocabulary();
+//        stopWatch.stop();
+//        viewWorkTime(stopWatch.getTime(), "Total time that was spent on normalization data:", progress);
+//    }
 
     public void executeInitClassifier(Progress progress, AlgorithmML classifier) {
         StopWatch stopWatch = new StopWatch();

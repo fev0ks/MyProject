@@ -23,10 +23,7 @@ public class Main extends Application {
     private static boolean firstSelect = true;
     private BorderPane rootLayout;
 
-    private final int HEIGHT_ROOT_LAYOUT;
-
     public Main() {
-        HEIGHT_ROOT_LAYOUT = 655;
     }
 
     public static void main(String[] args) {
@@ -56,13 +53,16 @@ public class Main extends Application {
     }
 
     private void initRootLayout() {
+        int HEIGHT_MENU = 25;
+        int WIDTH_ROOT_LAYOUT = 680;
+        int HEIGHT_ROOT_LAYOUT  = 655;
+
         try {
             //  System.err.println("FXML resource: " + Main.class.getResource("view/rootBorder.fxml"));
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("view/rootBorder.fxml"));
 
             rootLayout = loader.load();
-            int HEIGHT_MENU = 25;
-            int WIDTH_ROOT_LAYOUT = 680;
+
             rootLayout.setPrefSize(WIDTH_ROOT_LAYOUT, HEIGHT_ROOT_LAYOUT + HEIGHT_MENU);
             // Отображаем сцену, содержащую корневой макет.
             Scene scene = new Scene(rootLayout);
@@ -96,7 +96,7 @@ public class Main extends Application {
             // Даём контроллеру доступ к главному приложению.
             MainController controller = loader.getController();
             controller.setMainApp(this);
-//            controller.setDialogStage(startMenuStage);
+//            controller.setDialogStage(primaryStage);
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
 //            startMenuStage.showAndWait();
 

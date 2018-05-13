@@ -372,7 +372,7 @@ public class MainController {
 //        progressBar.setProgress(0);
     }
 
-    void clearTable() {
+    private void clearTable() {
         List<List<Picture>> newPictList = new LinkedList<>();
         newPictList.addAll(pictLists);
 //            List list2 = ((List) ((ArrayList) list).clone());

@@ -109,8 +109,8 @@ public class Vocabulary {
     @Override
     public String toString() {
         return "Type: " + FeatureTypes.getLabelById(featureId) +
-                " Size: " + size +
-                " Pictures: " + picCounts;
+                ", Words: " + size +
+                ", Used pictures: " + picCounts;
 //                " \nDate: " + getFormateddate();
 
     }
