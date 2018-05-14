@@ -1,6 +1,7 @@
 package scienceWork;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -175,6 +176,7 @@ public class Main extends Application {
 
             startMenuStage.heightProperty().addListener((obs, oldVal, newVal) -> controller.resizeImageView());
             startMenuStage.widthProperty().addListener((obs, oldVal, newVal) -> controller.resizeImageView());
+
 
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             startMenuStage.showAndWait();

@@ -18,7 +18,7 @@ public class BOWVocabulary {
     public static Vocabulary vocabulary = new Vocabulary();
 //    public static Mat commonVocabulary = new Mat();
     public static List<String> classesNumbers = new ArrayList<>();
-    public static List getClustersTypes(){
+    public static List<String> getClustersTypes(){
         List<String> types = new LinkedList();
         for(Map.Entry<String, Mat> entry: vocabularies.entrySet()){
             types.add(entry.getKey());

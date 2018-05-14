@@ -98,6 +98,11 @@ public class SVMSGDInstance extends AlgorithmMLImpl<SVMSGD> {
     }
 
     @Override
+    public boolean isTrained() {
+        return svmsgd.isTrained();
+    }
+
+    @Override
     public float predict(Mat template) {
         return svmsgd.predict(template);
     }

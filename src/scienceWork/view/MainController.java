@@ -3,6 +3,7 @@ package scienceWork.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import scienceWork.Exceptions.DataStateChecker;
 import scienceWork.FxWorker.FxHelper;
 import scienceWork.FxWorker.Interfaces.Progress;
 import scienceWork.FxWorker.ProgressImp;
@@ -87,8 +88,17 @@ public class MainController {
 
     private Progress progress;
     private MainOperations mainOperations;
+    private DataStateChecker dataStateChecker;
     private List<List<Picture>> pictLists;
     private AlgorithmML classifierAlgorithm;
+
+    @FXML
+    public void initialize() {
+        progressIndicator.setProgress(-1f);
+        progressIndicator.setVisible(false);
+        progress = new ProgressImp(progressBar, infoTA);
+        mainOperations = new MainOperations();
+    }
 
 
     public void setDir(File dir) {
@@ -121,16 +131,6 @@ public class MainController {
 //        return progressBar;
 //    }
 
-
-    @FXML
-    public void initialize() {
-        progressIndicator.setProgress(-1f);
-//        clearBT.setVisible(false);
-        progressIndicator.setVisible(false);
-        progress = new ProgressImp(progressBar, infoTA);
-        mainOperations = new MainOperations();
-//        threads = new ArrayList<>();
-    }
 
     @FXML
     private void resetData() {
@@ -219,32 +219,35 @@ public class MainController {
      */
     @FXML
     private void groupingImagesToClasses() {
-        if (mainOperations.checkExistMLInstance(classifierAlgorithm)) {
-            setDisabledButtons(true);
-            Thread groupingThread = new Thread(() -> {
+        if (dataStateChecker.checkExistClassifierInstance(classifierAlgorithm)) {
+            if (dataStateChecker.checkTrainedClassifier(classifierAlgorithm)) {
+                setDisabledButtons(true);
+                Thread groupingThread = new Thread(() -> {
 //                if (classifierAlgorithm == null) {
 //                    initSelectedClassifier();
 //                    classifierAlgorithm.setCountClusters(pictLists.size());
 //                    classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
 //                }
-                mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA), classifierAlgorithm);
-                clearTable();
-                updateTable();
-                setDisabledButtons(false);
-            });
+                    mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA), classifierAlgorithm);
+                    clearTable();
+                    updateTable();
+                    setDisabledButtons(false);
+                });
 //            threads.add(groupingThread);
-            groupingThread.start();
+                groupingThread.start();
+            }
         }
     }
 
 
     @FXML
-    private void analysis() {
+    private void createTrainData() {
 
-        if (mainOperations.checkExistVocabulary()) {
+        if (dataStateChecker.checkExistVocabulary()) {
+
             setDisabledButtons(true);
             Thread analysisThread = new Thread(() -> {
-                mainOperations.executeTraining(pictLists, new ProgressImp(progressBar, infoTA));
+                mainOperations.executeCreateTrainData(pictLists, new ProgressImp(progressBar, infoTA));
                 clearTable();
                 updateTable();
                 setDisabledButtons(false);
@@ -256,7 +259,7 @@ public class MainController {
 
     @FXML
     private void createVocabulary() {
-        if (mainOperations.checkLoadedPictures(pictLists)) {
+        if (dataStateChecker.checkLoadedPictures(pictLists)) {
             setDisabledButtons(true);
             Thread vocabularyThread = new Thread(() -> {
 //            for(int type = 2; type < 3; type++) {
@@ -284,8 +287,8 @@ public class MainController {
     @FXML
     private void initClassifierData() {
 
-        if (mainOperations.checkExistVocabulary()) {
-            if (mainOperations.checkExistTrainData()) {
+        if (dataStateChecker.checkExistVocabulary()) {
+            if (dataStateChecker.checkExistTrainData()) {
                 setDisabledButtons(true);
                 Thread classifierThread = new Thread(() -> {
                     initSelectedClassifier();
@@ -316,7 +319,7 @@ public class MainController {
 
     @FXML
     private void checkResults() {
-        if (mainOperations.checkLoadedPictures(pictLists)) {
+        if (dataStateChecker.checkLoadedPictures(pictLists)) {
             mainApp.showResultPage(pictLists);
             updateTable();
         }
@@ -388,6 +391,7 @@ public class MainController {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+        this.dataStateChecker = new DataStateChecker(mainApp);
     }
 
     public void setDialogStage(Stage dialogStage) {

@@ -11,23 +11,20 @@ import scienceWork.objects.data.BOWVocabulary;
 public class SettingsANNMLP {
 
     public static void setSettings(ANN_MLP annMlp) {
-        annMlp.setActivationFunction(ANN_MLP.SIGMOID_SYM);
 
-        Mat layers = new Mat(1,10,CvType.CV_32F);
+        Mat layers = new Mat(1,4, CvType.CV_32S);
         layers.put(0,0, Settings.getCountBOWClusters());
-        layers.put(0,1, Settings.getCountBOWClusters()*2);
-        layers.put(0,2, Settings.getCountBOWClusters()*2);
-        layers.put(0,3, Settings.getCountBOWClusters()*2);
-        layers.put(0,4, Settings.getCountBOWClusters());
-        layers.put(0,5, Settings.getCountBOWClusters()/2);
-        layers.put(0,6, Settings.getCountBOWClusters()/4);
-        layers.put(0,7, Settings.getCountBOWClusters()/6);
-        layers.put(0,8, Settings.getCountBOWClusters()/8);
-        layers.put(0,9,  BOWVocabulary.vocabularies.size());
-
+        layers.put(0,1, BOWVocabulary.vocabularies.size()*2);
+        layers.put(0,2, BOWVocabulary.vocabularies.size()*2);
+        layers.put(0,3,  BOWVocabulary.vocabularies.size());
+//        layers.put(0,4,  BOWVocabulary.vocabularies.size());
         annMlp.setLayerSizes(layers);
-        annMlp.setTrainMethod(ANN_MLP.BACKPROP);
-        annMlp.setTermCriteria(new TermCriteria(TermCriteria.MAX_ITER, 10000, 0.0000001));
+
+        annMlp.setActivationFunction(ANN_MLP.GAUSSIAN, 1, 1);
+        annMlp.setTrainMethod(ANN_MLP.BACKPROP, 0.01, 0.01);
+
+
+        annMlp.setTermCriteria(new TermCriteria(TermCriteria.EPS, 100000, 0.00001));
     }
 
 //    enum  	ActivationFunctions {

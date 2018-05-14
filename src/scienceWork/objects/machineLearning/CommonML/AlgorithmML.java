@@ -9,6 +9,7 @@ public interface AlgorithmML<T> {
     int getClassifierId();
 
     void train();
+    boolean isTrained();
 
     float predict(Mat template);
 

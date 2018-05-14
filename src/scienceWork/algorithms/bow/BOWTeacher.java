@@ -9,6 +9,7 @@ import scienceWork.objects.GeneralPicturesInformation;
 import scienceWork.objects.Picture;
 import scienceWork.objects.data.BOWVocabulary;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ public class BOWTeacher implements Teacher {
         this.progress = progress;
         this.extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
         this.vocabularyTools = new VocabularyTools();
+        BOWVocabulary.vocabularies = new HashMap<>();
     }
 
     @Override
@@ -53,6 +55,7 @@ public class BOWTeacher implements Teacher {
             }
 
             String pictureType = pictureList.get(0).getPictureType();
+            progress.addMessage("Label: "+pictureType);
             BOWVocabulary.vocabularies.put(pictureType, groupHistograms);
         }
         progress.setProgress(0, countPictures);

@@ -88,6 +88,11 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
     }
 
     @Override
+    public boolean isTrained() {
+        return logisticRegression.isTrained();
+    }
+
+    @Override
     public float predict(Mat template) {
         return logisticRegression.predict(template);
     }

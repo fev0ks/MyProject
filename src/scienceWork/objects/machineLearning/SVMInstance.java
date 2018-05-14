@@ -5,6 +5,7 @@ import org.opencv.ml.Ml;
 import org.opencv.ml.SVM;
 import org.opencv.ml.TrainData;
 import scienceWork.Exceptions.VocabularyNotFoundException;
+import scienceWork.MainOperations;
 import scienceWork.objects.machineLearning.CommonML.AlgorithmMLImpl;
 import scienceWork.objects.machineLearning.mlSettings.SettingsSVM;
 
@@ -103,7 +104,15 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
     }
 
     @Override
+    public boolean isTrained() {
+        return svm.isTrained();
+    }
+
+    @Override
     public float predict(Mat template) {
+//        Mat res = new Mat();
+//        float predict = svm.predict(template, res, 0);
+        //        new MainOperations().showMat(res);
         return svm.predict(template);
     }
 

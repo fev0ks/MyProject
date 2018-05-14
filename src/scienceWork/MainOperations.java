@@ -31,10 +31,9 @@ import java.util.TimeZone;
  */
 public class MainOperations {
 
-    public void executeTraining(List<List<Picture>> pictLists, Progress progress) {
+    public void executeCreateTrainData(List<List<Picture>> pictLists, Progress progress) {
         StopWatch stopWatchAll = new StopWatch();
         stopWatchAll.start();
-        System.out.println(pictLists.size());
 //        for (List<Picture> pictList : pictLists) {
 //            System.out.println("analysis " + pictList.size());
 //            System.out.println("analysis " + pictList.get(0).toString());
@@ -62,6 +61,7 @@ public class MainOperations {
     public void executeInitClassifier(Progress progress, AlgorithmML classifier) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+        progress.addMessage("Please wait, classifier is learning...");
 //        SVM svm = SVM.load("E:\\YandexDisk\\JavaProject\\SDiplom\\123.xml");
 //        svm.save("E:\\YandexDisk\\JavaProject\\SDiplom\\123ssss.xml");
 //        classifier.setInstance(SVM.load("E:\\YandexDisk\\JavaProject\\SDiplom\\123.xml"));
@@ -188,46 +188,10 @@ public class MainOperations {
         progress.addMessage(message);
     }
 
-    public boolean checkExistVocabulary() {
-        boolean exist = true;
-        if (BOWVocabulary.vocabulary.getMat() == null) {
-            FxHelper.showMessage("Warning", "Vocabulary is empty!", "Please load or create", Alert.AlertType.WARNING, new Main());
-            exist = false;
-        }
-        return exist;
-    }
-
-    public boolean checkExistTrainData() {
-        boolean exist = true;
-        if (BOWVocabulary.vocabularies.isEmpty()) {
-            FxHelper.showMessage("Warning", "Train data is empty!", "Please create", Alert.AlertType.WARNING, new Main());
-            exist = false;
-        }
-        return exist;
-    }
-
-    public boolean checkExistMLInstance(AlgorithmML algorithmML) {
-        boolean exist = true;
-        if (algorithmML == null) {
-            FxHelper.showMessage("Warning", "Classifier Instance is not exist!", "Please create", Alert.AlertType.WARNING, new Main());
-            exist = false;
-        }
-        return exist;
-    }
-
-    public boolean checkLoadedPictures(List<List<Picture>> pictureLists) {
-        boolean exist = true;
-        if (pictureLists == null) {
-            FxHelper.showMessage("Warning", "Pictures were not loaded yet", "Please wait", Alert.AlertType.WARNING, new Main());
-            exist = false;
-        }
-        return exist;
-    }
-
     public void showMat(Mat mat) {
         for (int i = 0; i < mat.rows(); i++) {
             for (int j = 0; j < mat.cols(); j++) {
-                System.out.print((mat.get(i, j)[0]) + " ");
+                System.out.format("%.2f ",mat.get(i, j)[0]);
             }
             System.out.println();
         }

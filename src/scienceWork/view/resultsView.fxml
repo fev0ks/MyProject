@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.ImageView?>
@@ -18,13 +19,14 @@
          <children>
             <TableView fx:id="picTable" onMouseClicked="#selectRowInTable" prefHeight="341.0" prefWidth="161.0" AnchorPane.bottomAnchor="101.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
               <columns>
-                  <TableColumn fx:id="countColumn" prefWidth="34.0" text="№" />
-                <TableColumn fx:id="namePicColumn" prefWidth="154.0" text="Pictures" />
+                  <TableColumn fx:id="typePicture" prefWidth="48.0" text="type" />
+                <TableColumn fx:id="namePicColumn" prefWidth="140.0" text="Pictures" />
               </columns>
             </TableView>
             <Button fx:id="saveBT" layoutX="109.0" layoutY="424.0" minWidth="44.0" mnemonicParsing="false" onAction="#saveTitle" prefHeight="25.0" prefWidth="44.0" style="-fx-border-color: green;" styleClass="btn-short" text="save" textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-            <ChoiceBox fx:id="pictureTypeCB" layoutX="27.0" layoutY="371.0" maxHeight="25.0" prefHeight="25.0" prefWidth="148.0" style="-fx-max-height: 24px; -fx-font-weight: bold; -fx-background-color: yellow; -fx-text-align: center;" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="27.0" />
+            <ChoiceBox fx:id="pictureTypeCB" layoutX="27.0" layoutY="378.0" maxHeight="25.0" minWidth="-Infinity" prefHeight="25.0" prefWidth="148.0" style="-fx-max-height: 24px; -fx-font-weight: bold; -fx-background-color: FFEC8C; -fx-text-alignment: center;" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="27.0" />
             <Button fx:id="exitBT" layoutX="29.0" layoutY="406.0" minWidth="36.0" mnemonicParsing="false" onAction="#closePage" prefHeight="32.0" prefWidth="36.0" style="-fx-border-color: red;" styleClass="btn-short" text="exit" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" />
+            <Label layoutX="46.0" layoutY="358.0" text="Check installed type:" AnchorPane.bottomAnchor="80.0" />
          </children>
       </AnchorPane>
    </children>
