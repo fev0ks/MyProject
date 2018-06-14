@@ -3,6 +3,8 @@ package scienceWork.algorithms.bow.bowTools;
 import org.opencv.core.*;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
+import scienceWork.MainOperations;
+import scienceWork.algorithms.bow.VocabularyTools;
 
 import java.util.*;
 
@@ -116,11 +118,21 @@ public class BOWImgDescriptorExtractor {
             if(pointIdxsOfClusters != null) pointIdxsOfClusters.get(trainIdx).add(queryIdx);
         }
         // Normalize descriptor
-        Core.divide(keypointDescriptors.size().height, imgDescriptor, imgDescriptor);
+//        imgDescriptor = imgDescriptor/keypointDescriptors.size().height;
+//        imgDescriptor /= keypointDescriptors.size().height;
+
+//        Core.divide(keypointDescriptors.size().height, imgDescriptor, imgDescriptor);
+        for (int i = 0; i < imgDescriptor.rows(); i++) {
+            for (int j = 0; j < imgDescriptor.cols(); j++) {
+                imgDescriptor.put(i,j, (double)(imgDescriptor.get(i,j)[0]/keypointDescriptors.size().height));
+            }
+        }
+//        new MainOperations().showMat(imgDescriptor);
     }
 
-    public void compute2(Mat image, List<KeyPoint> keypoints, Mat imgDescriptor) {
-        compute(image, new MatOfKeyPoint(keypoints.toArray(new KeyPoint[keypoints.size()])), imgDescriptor, null, null);
+
+    public void compute2(Mat image, MatOfKeyPoint keypoints, Mat imgDescriptor) {
+        compute(image, keypoints, imgDescriptor, null, null);
     }
 
     /**

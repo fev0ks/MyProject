@@ -27,7 +27,7 @@ public class BOWTeacher implements Teacher {
     public BOWTeacher(List<List<Picture>> pictureLists, Progress progress) {
         this.pictureLists = pictureLists;
         this.progress = progress;
-        this.extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
+//        this.extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
         this.vocabularyTools = new VocabularyTools();
         BOWVocabulary.vocabularies = new HashMap<>();
     }
@@ -42,10 +42,13 @@ public class BOWTeacher implements Teacher {
         int countPictures = GeneralPicturesInformation.getInstance().getPictureCount();
         BOWVocabulary.countUsedPictures = countPictures;
         for (List<Picture> pictureList : pictureLists) {
-            extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
+//            extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
             Mat groupHistograms = new Mat();
 
             for (Picture picture : pictureList) {
+                extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
+                extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
+
                 progress.setProgress(count++, countPictures);
 
                 Mat pictureHist = vocabularyTools.getPictureHistogram(picture, extractor);

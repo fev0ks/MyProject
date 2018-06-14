@@ -83,6 +83,16 @@ public class ANNMLPInstance extends AlgorithmMLImpl<ANN_MLP> {
         this.countClusters = countClusters;
     }
 
+    @Override
+    public String getPath() {
+        return null;
+    }
+
+    @Override
+    public void setPath(String path) {
+
+    }
+
     public void setANNMLP(ANN_MLP svmsgd) {
         this.annMlp = svmsgd;
     }
@@ -90,6 +100,11 @@ public class ANNMLPInstance extends AlgorithmMLImpl<ANN_MLP> {
     @Override
     public int getClassifierId() {
         return classifierID;
+    }
+
+    @Override
+    public String getType() {
+        return null;
     }
 
     @Override

@@ -1,8 +1,13 @@
 package scienceWork.dataBase;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.ml.SVM;
+import scienceWork.objects.GeneralPicturesInformation;
+import scienceWork.objects.constants.Settings;
 import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.data.BOWVocabulary;
 import scienceWork.objects.data.Vocabulary;
@@ -122,24 +127,39 @@ public class WorkerDB {
     }
 
     public boolean saveClassifier(AlgorithmML classifier) {
-        String saveClassifier = " insert into classifier_data(clusters, settings, date, classifier_id, mat_id) values(?,?,?,?,?)";
+
+        String saveClassifier = " insert into classifier_data(clusters, settings, date, path_data, classifier_id) values(?,?,?,?,?)";
         boolean saved = false;
 
-        long matId = saveMat(classifier.getSupportVectors(), classifier.getFeatureID());
         Timestamp date = new java.sql.Timestamp(Calendar.getInstance().getTimeInMillis());
-
-        try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(saveClassifier)) {
-            preparedStatement.setInt(1, classifier.getCountClusters());
-            preparedStatement.setString(2, "");
-            preparedStatement.setTimestamp(3, date);
-            preparedStatement.setInt(4, classifier.getClassifierId());
-            preparedStatement.setLong(5, matId);
-            preparedStatement.execute();
-            saved = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String path = saveClassifierData(classifier);
+        if(path!=null) {
+            JSONArray classes = new JSONArray(BOWVocabulary.getClustersTypes());
+            try (PreparedStatement preparedStatement = connectorDB.getConnection().prepareStatement(saveClassifier)) {
+                preparedStatement.setString(1, classes.toString());
+                preparedStatement.setString(2, "");
+                preparedStatement.setTimestamp(3, date);
+                preparedStatement.setString(4, path);
+                preparedStatement.setInt(5, classifier.getClassifierId());
+                preparedStatement.execute();
+                saved = true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return saved;
+    }
+
+    private String saveClassifierData(AlgorithmML classifier) {
+        if (classifier.getInstance() instanceof SVM) {
+            SVM svm = (SVM) classifier.getInstance();
+            long time = Calendar.getInstance().getTimeInMillis();
+            String s = "E:\\YandexDisk\\JavaProject\\SDiplom\\classifiers\\"+classifier.getType()+"_method "+Settings.getMethod()+"_words "+Settings.getCountWords()+"_clusters "+BOWVocabulary.vocabularies.size()+"_usedPic "+GeneralPicturesInformation.getInstance().getPictureCount()+"_"+time+".xml";
+            svm.save(s);
+            if(svm.load(s).isClassifier())
+            return s;
+        }
+        return null;
     }
 
     private byte[] convertMatToBytes(Mat mat) {

@@ -47,7 +47,7 @@ public class VocabularyTools {
     }
 
     public Mat getPictureHistogram(Picture picture, BOWImgDescriptorExtractor extractor){
-        Mat outMat = new Mat();
+        Mat histogram = new Mat();
         try {
             picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
 //                    GeneralPicturesInformation.getInstance().updateGeneralInformation(picture);
@@ -55,14 +55,15 @@ public class VocabularyTools {
             Mat descriptors = picture.getDescriptorProperty().getMatOfDescription();
 
             List<List<Integer>> pointIdxsOfClusters = null;
-            extractor.compute(descriptors, outMat, pointIdxsOfClusters);
+            extractor.compute(descriptors, histogram, pointIdxsOfClusters);
             picture.setDescriptorProperty(null);
+            System.gc();
 //                    outMat = normalizeByRows(outMat);
 
         } catch (Exception e) {
             System.out.println(picture.toString());
             e.printStackTrace();
         }
-        return outMat;
+        return histogram;
     }
 }

@@ -6,12 +6,16 @@ import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
 
 public class Settings {
-    private static int countWords = 500;
+    private static int countWords = 600;
+
+
     private static int countBOWClusters = 10;
     private static int methodKP = FeatureDetector.ORB;
     private static int methodDescr = DescriptorExtractor.ORB;
     private static int methodMatcher = DescriptorMatcher.FLANNBASED;
     private static int scaleImageRatio = 800;
+    private static boolean saveBOW = true;
+    private static boolean saveClassifier = false;
 
     public static final boolean SAVE_DATA = true;
 
@@ -26,6 +30,23 @@ public class Settings {
             return settings;
         }
     }
+
+    public static boolean isSaveBOW() {
+        return saveBOW;
+    }
+
+    public static void setSaveBOW(boolean saveBOW) {
+        Settings.saveBOW = saveBOW;
+    }
+
+    public static boolean isSaveClassifier() {
+        return saveClassifier;
+    }
+
+    public static void setSaveClassifier(boolean saveClassifier) {
+        Settings.saveClassifier = saveClassifier;
+    }
+
 
     private void Settings() {
 

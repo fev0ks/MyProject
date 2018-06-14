@@ -37,7 +37,7 @@ public class DataStateChecker {
     public  boolean checkLoadedPictures(List<List<Picture>> pictureLists) {
         boolean exist = true;
         if (pictureLists == null) {
-            FxHelper.showMessage("Warning", "Pictures were not loaded yet", "Please wait", Alert.AlertType.WARNING, mainStage);
+            FxHelper.showMessage("Warning", "Pictures is not loaded", "Please wait loading or choose folder", Alert.AlertType.WARNING, mainStage);
             exist = false;
         }
         return exist;

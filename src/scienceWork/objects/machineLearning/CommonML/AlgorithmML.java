@@ -7,7 +7,7 @@ import scienceWork.Exceptions.VocabularyNotFoundException;
 
 public interface AlgorithmML<T> {
     int getClassifierId();
-
+    String getType();
     void train();
     boolean isTrained();
 
@@ -23,6 +23,8 @@ public interface AlgorithmML<T> {
 
     void setFeatureID(int featureID);
     void setCountClusters(int countClusters);
+    String getPath();
+    void setPath(String path);
 
     String toString();
 

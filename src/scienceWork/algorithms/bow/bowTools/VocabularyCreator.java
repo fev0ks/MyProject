@@ -65,7 +65,7 @@ public class VocabularyCreator {
             try {
                 picture.setDescriptorProperty(new KeyPointsAndDescriptors().calculateDescriptorProperty(picture));
                 Mat descriptor = picture.getDescriptorProperty().getMatOfDescription();
-                System.out.println(picture.getName() + " " + picture.getDimension() + "; desc: " + descriptor.size());
+//                System.out.println(picture.getName() + " " + picture.getDimension() + "; desc: " + descriptor.size());
                 bowTrainer.add(descriptor);
                 picture.setDescriptorProperty(null);
                 System.gc();

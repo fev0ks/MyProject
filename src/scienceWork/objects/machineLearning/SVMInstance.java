@@ -21,7 +21,7 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
     private int countClusters;
     private int featureID;
     private final int classifierID = 1;
-
+    private String pathSavedData = null;
 
     private static SVMInstance SVMInstance;
 
@@ -82,6 +82,17 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
         this.countClusters = countClusters;
     }
 
+
+    @Override
+    public String getPath() {
+        return pathSavedData;
+    }
+
+    @Override
+    public void setPath(String path) {
+        pathSavedData =path;
+    }
+
     public void setSvm(SVM svm) {
         this.svm = svm;
     }
@@ -92,6 +103,11 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
     }
 
     @Override
+    public String getType() {
+        return "SVM";
+    }
+
+    @Override
     public void train() {
         initSVM();
         TrainData trainData = trainingData();
@@ -99,7 +115,8 @@ public class SVMInstance extends AlgorithmMLImpl<SVM> {
         Mat response = trainData.getResponses();
         samples.convertTo(samples, CV_32F);
         response.convertTo(response, CV_32S);
-        svm.train(samples, Ml.ROW_SAMPLE, response);
+//        svm.train(samples, Ml.ROW_SAMPLE, response);
+        svm.trainAuto(samples, Ml.ROW_SAMPLE, response);
 //        train(svm, trainingData());
     }
 

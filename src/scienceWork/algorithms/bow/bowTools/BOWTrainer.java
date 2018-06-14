@@ -5,15 +5,12 @@ import org.opencv.core.Mat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by juan on 08/05/16.
- */
 public abstract class BOWTrainer {
     protected List<Mat> descriptors;
     protected int size;
 
     public BOWTrainer() {
-        descriptors = new ArrayList<Mat>();
+        descriptors = new ArrayList<>();
         size = 0;
     }
 
@@ -30,7 +27,7 @@ public abstract class BOWTrainer {
     }
 
     public List<Mat> getDescriptors() {
-        return new ArrayList<Mat>(descriptors);
+        return new ArrayList<>(descriptors);
     }
 
     public int descriptorsCount() {

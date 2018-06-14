@@ -50,10 +50,11 @@ public class BOWClusterer implements Clusterer {
 //        List<Future> futureList = new LinkedList<>();
 
         for (List<Picture> pictureList : pictureLists) {
-            extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
-            extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
+
 
             for (Picture picture : pictureList) {
+                extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
+                extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
 //                extractor = BOWVocabulary.getBOWImgDescriptorExtractor();
 //                extractor.setVocabulary(BOWVocabulary.vocabulary.getMat());
 
@@ -86,17 +87,25 @@ public class BOWClusterer implements Clusterer {
     }
 
     private void executeCalculatePictureType(Picture picture) {
-        float prediction;
+        float prediction = -1;
         Mat vocabularyTemp = vocabularyTools.getPictureHistogram(picture, extractor);
         vocabularyTemp.convertTo(vocabularyTemp, CV_32F);
-
-        prediction = classifier.predict(vocabularyTemp);
+        try {
+            prediction = classifier.predict(vocabularyTemp);
+            System.out.println(" pred- " + prediction + " " + picture.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (prediction != -1) {
-            String typeImage = BOWVocabulary.classesNumbers.get((int) prediction);
-            picture.setExitPictureType(typeImage);
+            try {
+                String typeImage = BOWVocabulary.classesNumbers.get((int) prediction);
+                picture.setExitPictureType(typeImage);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(e.getMessage());
+            }
         } else {
-            picture.setExitPictureType("");
+            picture.setExitPictureType("< empty >");
         }
 
     }

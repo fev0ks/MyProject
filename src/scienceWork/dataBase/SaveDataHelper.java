@@ -20,11 +20,19 @@ public class SaveDataHelper {
 //        svm.getSupportVectors().size();
 //        svm.getUncompressedSupportVectors().size();
 
-//        return   WorkerDB.getInstance().saveClassifier(classifier);
 
         boolean saved = false;
-        if (Settings.SAVE_DATA) {
-//            saved = WorkerDB.getInstance().saveClassifier(classifier);
+        if (Settings.isSaveClassifier()) {
+            try {
+                saved = WorkerDB.getInstance().saveClassifier(classifier);
+            } catch (SQLException | ClassNotFoundException e) {
+                FxHelper.showMessage(
+                        "Data Base error",
+                        "Failed to connect to Data Base",
+                        "Please check DB settings or status connection",
+                        Alert.AlertType.ERROR,
+                        new Main());
+            }
             if (saved) {
                 progress.addMessage("* Classifier saved: " + classifier.toString() + " *");
             } else {
@@ -36,7 +44,7 @@ public class SaveDataHelper {
 
     public static boolean saveVocabulary(Vocabulary vocabulary, Progress progress) {
         boolean saved = false;
-        if (Settings.SAVE_DATA) {
+        if (Settings.isSaveBOW()) {
             try {
                 saved = WorkerDB.getInstance().saveVocabulary(vocabulary);
                 if (saved) {

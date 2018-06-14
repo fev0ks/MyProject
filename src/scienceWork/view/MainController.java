@@ -80,6 +80,8 @@ public class MainController {
     @FXML
     private RadioButton nnlassifierType;
     @FXML
+    private CheckBox createBOWModCB;
+    @FXML
     private ProgressIndicator progressIndicator;
     @FXML
     private Button saveGroups;
@@ -148,9 +150,9 @@ public class MainController {
             setDir(file);
             clearTable();
         }
-        if (file == null && pictLists.isEmpty()) {
-            System.exit(0);
-        }
+//        if (file == null && pictLists.isEmpty()) {
+//            System.exit(0);
+//        }
 
     }
 
@@ -163,6 +165,8 @@ public class MainController {
     private void updateTable() {
         System.out.println(" folders: " + Objects.requireNonNull(directory.getDirFile().listFiles()).length + " pic: " + GeneralPicturesInformation.getInstance().getPictureCount());
         if (pictLists.size() > 0) {
+            if (picTable.getItems() != null)
+                picTable.getItems().clear();
 
             picTable.setItems(FxHelper.convertListsToObservableList(pictLists));
 
@@ -221,7 +225,7 @@ public class MainController {
     private void groupingImagesToClasses() {
         if (dataStateChecker.checkExistClassifierInstance(classifierAlgorithm)) {
             if (dataStateChecker.checkTrainedClassifier(classifierAlgorithm)) {
-                setDisabledButtons(true);
+//                setDisabledButtons(true);
                 Thread groupingThread = new Thread(() -> {
 //                if (classifierAlgorithm == null) {
 //                    initSelectedClassifier();
@@ -229,9 +233,13 @@ public class MainController {
 //                    classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
 //                }
                     mainOperations.executeClustering(pictLists, new ProgressImp(progressBar, infoTA), classifierAlgorithm);
-                    clearTable();
-                    updateTable();
-                    setDisabledButtons(false);
+//                    clearTable();
+                    try {
+//                        updateTable();
+                    } catch (NullPointerException e) {
+                        System.out.println("Some sheet");
+                    }
+//                    setDisabledButtons(false);
                 });
 //            threads.add(groupingThread);
                 groupingThread.start();
@@ -244,16 +252,19 @@ public class MainController {
     private void createTrainData() {
 
         if (dataStateChecker.checkExistVocabulary()) {
+            if (dataStateChecker.checkLoadedPictures(pictLists)) {
 
-            setDisabledButtons(true);
-            Thread analysisThread = new Thread(() -> {
-                mainOperations.executeCreateTrainData(pictLists, new ProgressImp(progressBar, infoTA));
-                clearTable();
-                updateTable();
-                setDisabledButtons(false);
-            });
-//            threads.add(analysisThread);
-            analysisThread.start();
+                setDisabledButtons(true);
+                Thread analysisThread = new Thread(() -> {
+                    mainOperations.executeCreateTrainData(pictLists, new ProgressImp(progressBar, infoTA));
+
+//                initClassifierData(); /*********************/
+                    clearTable();
+                    updateTable();
+                    setDisabledButtons(false);
+                });
+                analysisThread.start();
+            }
         }
     }
 
@@ -262,24 +273,35 @@ public class MainController {
         if (dataStateChecker.checkLoadedPictures(pictLists)) {
             setDisabledButtons(true);
             Thread vocabularyThread = new Thread(() -> {
-//            for(int type = 2; type < 3; type++) {
-//                if(type == 1){
-//                    Settings.setMethodKP(12);
-//                    Settings.setMethodDescr(7);
-//                }
-//                if(type == 2){
-//                    Settings.setMethodKP(11);
-//                    Settings.setMethodDescr(5);
-//                }
-//                for (int i = 1500; i < 5000; i += 500) {
-//                    Settings.setCountOfClusters(i);
-                mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
-//                }
+                if(createBOWModCB.isSelected()) {
+                    for (int type = 0; type < 3; type++) {
+                        if (type == 0) {
+                            Settings.setMethodKP(5);
+                            Settings.setMethodDescr(3);
+                            Settings.setMethod("ORB");
+                        }
+                        if (type == 1) {
+                            Settings.setMethodKP(12);
+                            Settings.setMethodDescr(7);
+                            Settings.setMethod("AKAZE");
+                        }
+                        if (type == 2) {
+                            Settings.setMethodKP(11);
+                            Settings.setMethodDescr(5);
+                            Settings.setMethod("BRISK");
+                        }
+                        for (int i = 600; i <= 1000; i += 200) {
+                            Settings.setCountOfClusters(i);
+                            mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
+//                createTrainData();
 
-//            }
+                        }
+                    }
+                } else {
+                    mainOperations.executeInitVocabulary(pictLists, new ProgressImp(progressBar, infoTA));
+                }
                 setDisabledButtons(false);
             });
-//        threads.add(vocabularyThread);
             vocabularyThread.start();
         }
     }
@@ -290,16 +312,15 @@ public class MainController {
         if (dataStateChecker.checkExistVocabulary()) {
             if (dataStateChecker.checkExistTrainData()) {
                 setDisabledButtons(true);
-                Thread classifierThread = new Thread(() -> {
-                    initSelectedClassifier();
-                    classifierAlgorithm.setCountClusters(pictLists.size());
-                    classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
-                    mainOperations.executeInitClassifier(new ProgressImp(progressBar, infoTA), classifierAlgorithm);
+//                Thread classifierThread = new Thread(() -> {
+                initSelectedClassifier();
+                classifierAlgorithm.setCountClusters(pictLists.size());
+                classifierAlgorithm.setFeatureID(FeatureTypes.getFeatureId(Settings.getMethodKP()));
+                mainOperations.executeInitClassifier(new ProgressImp(progressBar, infoTA), classifierAlgorithm);
 
-                    setDisabledButtons(false);
-                });
-//                threads.add(classifierThread);
-                classifierThread.start();
+                setDisabledButtons(false);
+//                });
+//                classifierThread.start();
             }
         }
     }
@@ -322,6 +343,7 @@ public class MainController {
         if (dataStateChecker.checkLoadedPictures(pictLists)) {
             mainApp.showResultPage(pictLists);
             updateTable();
+            mainOperations.checkResults(pictLists, progress);
         }
     }
 
@@ -377,15 +399,17 @@ public class MainController {
 
     private void clearTable() {
         List<List<Picture>> newPictList = new LinkedList<>();
-        newPictList.addAll(pictLists);
+        if (pictLists != null) {
+            newPictList.addAll(pictLists);
 //            List list2 = ((List) ((ArrayList) list).clone());
 //            ObservableList<Picture> clone = pictLists.stream().collect(toList());
 
-        picTable.getItems().clear();
+            picTable.getItems().clear();
 //        System.out.println(pictLists);
-        Picture.clearCount();
-        pictLists = newPictList;
-        progressBar.setProgress(0);
+            Picture.clearCount();
+            pictLists = newPictList;
+            progressBar.setProgress(0);
+        }
     }
 
 

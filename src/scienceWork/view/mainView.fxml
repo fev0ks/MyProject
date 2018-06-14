@@ -38,8 +38,8 @@
             </RadioButton>
             <RadioButton fx:id="lrClassifierType" layoutX="8.0" layoutY="198.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="LR" toggleGroup="$classifier" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="200.0" />
             <Button fx:id="loadVocabulary" layoutX="122.0" layoutY="128.0" mnemonicParsing="false" onAction="#showVocabularyMenu" styleClass="btn-long" text="loadBOW" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0" />
-            <Button fx:id="saveGroups" layoutX="64.0" layoutY="423.0" maxWidth="88.0" mnemonicParsing="false" onAction="#initSaveGroups" prefWidth="88.0" styleClass="btn-long" text="save groups" AnchorPane.rightAnchor="64.0" AnchorPane.topAnchor="423.0" />
-            <CheckBox layoutX="12.0" layoutY="458.0" mnemonicParsing="false" selected="true" text="Test mod" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+            <Button fx:id="saveGroups" layoutX="65.0" layoutY="423.0" maxWidth="88.0" mnemonicParsing="false" onAction="#initSaveGroups" prefWidth="88.0" styleClass="btn-long" text="save groups" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="423.0" />
+            <CheckBox fx:id="createBOWModCB" layoutX="12.0" layoutY="458.0" mnemonicParsing="false" text="Test mod" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
             <RadioButton fx:id="svmsgdClassifierType" layoutX="115.0" layoutY="204.0" mnemonicParsing="false" style="-fx-font-size: 14px;" text="SVMSGD" toggleGroup="$classifier" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="200.0" />
             <RadioButton fx:id="annMplClassifierType" layoutX="119.0" layoutY="184.0" mnemonicParsing="false" text="ANN MLP" toggleGroup="$classifier" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="180.0">
                <font>
@@ -56,7 +56,7 @@
           <TableColumn fx:id="sizePicColumn" prefWidth="53.0" text="size" visible="false" />
             <TableColumn fx:id="dimensionsColumn" prefWidth="67.0" text="dim" visible="false" />
             <TableColumn fx:id="namePicColumn" prefWidth="300.0" text="name" />
-            <TableColumn fx:id="groupColumn" prefWidth="88.0" text="exitType" />
+            <TableColumn fx:id="groupColumn" prefWidth="88.0" text="Label" />
         </columns>
       </TableView>
       <ProgressBar fx:id="progressBar" layoutX="7.0" layoutY="477.0" prefHeight="18.0" prefWidth="614.0" progress="0.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />

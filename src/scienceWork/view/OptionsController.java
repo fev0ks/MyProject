@@ -3,11 +3,15 @@ package scienceWork.view;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.FeatureDetector;
+import scienceWork.FxWorker.FxHelper;
+import scienceWork.Main;
 import scienceWork.objects.constants.Constants;
 import scienceWork.objects.constants.Settings;
 
@@ -26,9 +30,13 @@ public class OptionsController implements Initializable {
     @FXML
     private TextField countOfClustersTF;
     @FXML
-    private TextField messageTF;
+    private TextField resizeImgTF;
     @FXML
     private ChoiceBox<String> methodsChoiceB;
+    @FXML
+    private CheckBox saveBOWCB;
+    @FXML
+    private CheckBox saveClassifierCB;
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -37,7 +45,10 @@ public class OptionsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 //        messageTF.setVisible(false);
-        countOfClustersTF.setText(Settings.getCountWords()+"");
+        countOfClustersTF.setText(Settings.getCountWords() + "");
+        resizeImgTF.setText(Settings.getScaleImageRatio() + "");
+        saveBOWCB.setSelected(Settings.isSaveBOW());
+        saveClassifierCB.setSelected(Settings.isSaveClassifier());
 
         methodsChoiceB.setItems(FXCollections.observableArrayList(
                 new LinkedList<>(Arrays.asList(Constants.AKAZE, Constants.ORB, Constants.BRISK))));
@@ -55,12 +66,15 @@ public class OptionsController implements Initializable {
         boolean error = false;
         try {
             Settings.setCountOfClusters(Integer.parseInt(countOfClustersTF.getText()));
+            Settings.setScaleImageRatio(Integer.parseInt(resizeImgTF.getText()));
         } catch (Exception e) {
             error = true;
-            messageTF.setVisible(true);
-            messageTF.setText("Number Format Exception");
+            FxHelper.showMessage("Error", "Number Format Exception", "Set only integer", Alert.AlertType.ERROR, new Main());
             System.out.println("saveOptions: NumberFormatException");
         }
+
+        Settings.setSaveBOW(saveBOWCB.isSelected());
+        Settings.setSaveClassifier(saveClassifierCB.isSelected());
 
         if (methodsChoiceB.getSelectionModel().getSelectedItem() != null)
             switch (methodsChoiceB.getSelectionModel().getSelectedItem()) {

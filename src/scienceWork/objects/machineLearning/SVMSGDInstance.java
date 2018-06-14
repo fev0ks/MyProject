@@ -77,6 +77,16 @@ public class SVMSGDInstance extends AlgorithmMLImpl<SVMSGD> {
         this.countClusters = countClusters;
     }
 
+    @Override
+    public String getPath() {
+        return null;
+    }
+
+    @Override
+    public void setPath(String path) {
+
+    }
+
     public void setSvmsgd(SVMSGD svmsgd) {
         this.svmsgd = svmsgd;
     }
@@ -84,6 +94,11 @@ public class SVMSGDInstance extends AlgorithmMLImpl<SVMSGD> {
     @Override
     public int getClassifierId() {
         return classifierID;
+    }
+
+    @Override
+    public String getType() {
+        return null;
     }
 
     @Override

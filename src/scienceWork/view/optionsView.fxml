@@ -20,13 +20,14 @@
          <font>
             <Font size="14.0" />
          </font></Text>
-      <TextField layoutX="65.0" layoutY="50.0" prefHeight="25.0" prefWidth="69.0" AnchorPane.leftAnchor="65.0" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="50.0" />
+      <TextField fx:id="resizeImgTF" layoutX="65.0" layoutY="50.0" prefHeight="25.0" prefWidth="69.0" AnchorPane.leftAnchor="65.0" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="50.0" />
       <Text layoutX="5.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Resize Picture" textAlignment="CENTER" wrappingWidth="50.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="45.0">
          <font>
             <Font size="14.0" />
          </font></Text>
         <Button layoutX="9.0" layoutY="162.0" mnemonicParsing="false" onAction="#resetToDefault" styleClass="btn-short" text="clear" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
         <Button layoutX="101.0" layoutY="160.0" mnemonicParsing="false" onAction="#saveOptions" styleClass="btn-short" text="save" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-      <CheckBox layoutX="198.0" layoutY="12.0" mnemonicParsing="false" text="Save data to BD" />
+      <CheckBox fx:id="saveBOWCB" layoutX="198.0" layoutY="12.0" mnemonicParsing="false" text="Save BOW" />
+      <CheckBox fx:id="saveClassifierCB" layoutX="198.0" layoutY="37.0" mnemonicParsing="false" text="Save Classifier" />
     </children>
 </AnchorPane>

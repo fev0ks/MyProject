@@ -110,8 +110,8 @@ public class Vocabulary {
     public String toString() {
         return "Type: " + FeatureTypes.getLabelById(featureId) +
                 ", Words: " + size +
-                ", Used pictures: " + picCounts;
-//                " \nDate: " + getFormateddate();
+                ", Used pictures: " + picCounts +
+                " \nDate: " + getFormateddate();
 
     }
 }

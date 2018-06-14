@@ -17,6 +17,7 @@ import scienceWork.objects.data.Vocabulary;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -26,6 +27,8 @@ public class VocabularyController implements Initializable {
     private Main mainApp;
     @FXML
     private ChoiceBox vocabulariesCB;
+    @FXML
+    private ChoiceBox classifierCB;
     @FXML
     private Button loadBT;
     @FXML
@@ -48,11 +51,16 @@ public class VocabularyController implements Initializable {
 
     /* todo no need load all mats, only text */
     private void updateChoiceBox() {
+        String hehmda = "SVM [\"forest\",\"mountains\",\"ocean\",\"city\",\"desert\",\"fields\"]";
+        List<String> heh = new ArrayList<>();
+        heh.add(hehmda);
         try {
             vocabularies = WorkerDB.getInstance().loadVocabulary(
                     Settings.getCountWords(),
                     FeatureTypes.getFeatureId(Settings.getMethodKP()));
             vocabulariesCB.setItems(FxHelper.convertListToObservableList(vocabularies));
+
+            classifierCB.setItems(FxHelper.convertListToObservableList(heh));
 
 //            if(BOWVocabulary.vocabulary != null) {
 //                vocabulariesCB.setValue(BOWVocabulary.vocabulary.toString());

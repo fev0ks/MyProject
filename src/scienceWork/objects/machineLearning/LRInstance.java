@@ -70,8 +70,23 @@ public class LRInstance extends AlgorithmMLImpl<LogisticRegression> {
     }
 
     @Override
+    public String getPath() {
+        return null;
+    }
+
+    @Override
+    public void setPath(String path) {
+
+    }
+
+    @Override
     public int getClassifierId() {
         return 0;
+    }
+
+    @Override
+    public String getType() {
+        return null;
     }
 
     public void train() {

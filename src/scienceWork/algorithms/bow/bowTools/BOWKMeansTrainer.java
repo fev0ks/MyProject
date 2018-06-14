@@ -4,9 +4,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.TermCriteria;
 
-/**
- * Created by juan on 08/05/16.
- */
+
 public class BOWKMeansTrainer extends BOWTrainer {
     private int clusterCount;
     private TermCriteria termCriteria;

@@ -36,7 +36,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Диплом");
+        this.primaryStage.setTitle("Diploma");
 //        Platform.setImplicitExit(false);
 
         // this.primaryStage.getIcons().add(new Image("resources/address_book.png"));
@@ -101,15 +101,15 @@ public class Main extends Application {
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
 //            startMenuStage.showAndWait();
 
-            File file = showChooseDir();
-            System.out.println("showToolsScene " + file + " " + firstSelect);
-            if (file != null) {
-                controller.setDir(file);
-                firstSelect = false;
-            }
-            if (file == null && firstSelect) {
-                System.exit(0);
-            }
+//            File file = showChooseDir();
+//            System.out.println("showToolsScene " + file + " " + firstSelect);
+//            if (file != null) {
+//                controller.setDir(file);
+//                firstSelect = false;
+//            }
+//            if (file == null && firstSelect) {
+//                System.exit(0);
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();

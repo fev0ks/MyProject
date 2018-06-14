@@ -11,6 +11,7 @@ import scienceWork.algorithms.bow.BOWTeacher;
 import scienceWork.algorithms.bow.bowTools.VocabularyCreator;
 import scienceWork.dataBase.SaveDataHelper;
 import scienceWork.objects.GeneralPicturesInformation;
+import scienceWork.objects.constants.Settings;
 import scienceWork.objects.machineLearning.CommonML.AlgorithmML;
 import scienceWork.objects.Picture;
 import scienceWork.objects.data.BOWVocabulary;
@@ -125,7 +126,7 @@ public class MainOperations {
 
     }
 
-    private void checkResults(List<List<Picture>> pictLists, Progress progress) {
+    public void checkResults(List<List<Picture>> pictLists, Progress progress) {
         int countPhotos = pictLists.stream().mapToInt(List::size).sum();
         DecimalFormat formatter = new DecimalFormat("#0.00");
         for (List<Picture> pictures : pictLists) {
@@ -145,7 +146,7 @@ public class MainOperations {
         new VocabularyCreator(progress).createVocabulary(pictLists);
         stopWatch.stop();
         Vocabulary vocabulary = BOWVocabulary.vocabulary;
-        viewWorkTime(stopWatch.getTime(), "Vocabulary size " + vocabulary.getMat().size(), progress);
+        viewWorkTime(stopWatch.getTime(), "Vocabulary size " + vocabulary.getMat().size()+"; "+Settings.getMethod(), progress);
 
         SaveDataHelper.saveVocabulary(BOWVocabulary.vocabulary, progress);
 
@@ -184,17 +185,23 @@ public class MainOperations {
     }
 
     private void viewWorkTime(long finishTime, String title, Progress progress) {
-        String message = title + " " + finishTime / 1000 / 60 + " min, " + finishTime / 1000 % 60 + " sec, " + finishTime % 1000 + " ms;";
+        String message = title + " " + finishTime / 1000 / 60 + " min, " + finishTime / 1000 % 60 + " sec, " + finishTime % 1000 + " ms;\n * "+finishTime+"* ";
         progress.addMessage(message);
     }
 
     public void showMat(Mat mat) {
+        double sum = 0;
+        int c=0;
         for (int i = 0; i < mat.rows(); i++) {
             for (int j = 0; j < mat.cols(); j++) {
-                System.out.format("%.2f ",mat.get(i, j)[0]);
+//                System.out.format("%.2f ",mat.get(i, j)[0]);
+                System.out.print(mat.get(i, j)[0]+" ");
+                sum+=mat.get(i, j)[0];
+                c++;
             }
             System.out.println();
         }
+        System.out.println(c+" SUM "+sum);
     }
 
 }
